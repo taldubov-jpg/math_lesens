@@ -11,16 +11,12 @@
             font-family: 'Heebo', sans-serif;
             scroll-behavior: smooth; 
         }
-        /* אפקט ה"זוהר" העדין לכפתור - מתאים למראה המקצועי */
-        .btn-glow:hover {
-            box-shadow: 0 0 15px rgba(139, 92, 246, 0.7); /* צל סגול עדין */
-        }
     </style>
 </head>
 <body class="bg-white text-gray-900">
 
     <!-- Header / Logo & Navigation - sticky top-0 גורם לו להידבק למעלה -->
-    <nav class="p-8 flex justify-between items-center border-b border-gray-100 sticky top-0 bg-white/90 backdrop-blur-sm z-10">
+    <nav class="p-8 flex justify-between items-center border-b border-gray-100 sticky top-0 bg-white shadow-lg z-10">
         <div class="text-4xl font-black tracking-tighter text-gray-900">MathBoost</div>
         <div class="hidden md:flex gap-10 font-bold text-gray-800">
             <!-- לינקים עם אפקט שינוי צבע מהיר בהובר -->
@@ -29,8 +25,8 @@
             <a href="#about" class="hover:text-purple-600 transition duration-150">מי אנחנו</a>
             <a href="#faq" class="hover:text-purple-600 transition duration-150">שאלות תשובות</a>
         </div>
-        <!-- כפתור צור קשר עם צל ואפקט זוהר בהובר -->
-        <button class="bg-purple-600 text-white px-6 py-3 rounded-xl text-sm font-bold hover:bg-purple-700 transition duration-300 transform hover:scale-105 shadow-xl btn-glow">צור קשר</button>
+        <!-- כפתור צור קשר עגול, בולט ועם צל בדיוק כמו בתמונה -->
+        <button class="bg-purple-600 text-white px-8 py-3 rounded-full text-base font-bold hover:bg-purple-700 transition duration-300 shadow-xl">צור קשר</button>
     </nav>
 
     <!-- Hero Section -->
