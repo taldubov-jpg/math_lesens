@@ -3,72 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathBoost - שיעורי מתמטיקה פרטיים ברמה גבוהה</title>
+    <title>MathBoost - מתמטיקה ברמה גבוהה עם תוצאות אמיתיות</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Heebo', system-ui, -apple-system, sans-serif;
-            scroll-behavior: smooth;
-        }
+        body { font-family: 'Heebo', system-ui, -apple-system, sans-serif; scroll-behavior: smooth; }
         .hero-bg {
             background: linear-gradient(135deg, #6b21a8 0%, #a855f7 100%);
-            clip-path: polygon(0 0, 100% 0, 100% 82%, 0 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
         }
-        .purple-glow {
-            box-shadow: 0 10px 25px -8px rgba(139, 92, 246, 0.35);
-        }
-        #menu-toggle:checked ~ .mobile-menu {
-            display: flex;
-        }
+        .purple-glow { box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.4); }
+        #menu-toggle:checked ~ .mobile-menu { display: flex; }
         .whatsapp-float {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
+            position: fixed; bottom: 24px; right: 24px; z-index: 1000;
         }
-        @media (min-width: 768px) {
-            .whatsapp-float { display: none; }
-        }
+        @media (min-width: 768px) { .whatsapp-float { display: none; } }
+        .card-hover:hover { transform: translateY(-8px); transition: all 0.3s ease; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased">
 
     <!-- Navbar -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-purple-100 shadow-sm">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-b border-purple-100 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16 sm:h-20">
-                <div class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-purple-700 to-purple-500 bg-clip-text text-transparent">
+                <div class="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-purple-700 to-purple-500 bg-clip-text text-transparent">
                     MathBoost
                 </div>
 
-                <div class="hidden md:flex items-center gap-8 lg:gap-10 font-medium text-gray-700">
+                <div class="hidden md:flex items-center gap-10 font-semibold text-gray-700 text-lg">
                     <a href="#aim" class="hover:text-purple-700 transition">המטרה</a>
-                    <a href="#program" class="hover:text-purple-700 transition">תוכנית</a>
-                    <a href="#about" class="hover:text-purple-700 transition">מי אנחנו</a>
+                    <a href="#unique" class="hover:text-purple-700 transition">מה מייחד אותנו</a>
+                    <a href="#program" class="hover:text-purple-700 transition">התוכנית</a>
                     <a href="#pricing" class="hover:text-purple-700 transition">מחירים</a>
                     <a href="#faq" class="hover:text-purple-700 transition">שאלות</a>
                 </div>
 
-                <a href="https://wa.me/972586276476?text=היי%2C%20אשמח%20לשמוע%20על%20שיעור%20ההיכרות%20החינמי"
-                   class="hidden md:flex bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full font-bold shadow-lg transition transform hover:scale-105 items-center gap-2">
-                    שיעור חינם
+                <a href="https://wa.me/972586276476?text=היי%2C%20אשמח%20לשמוע%20על%20שיעור%20האבחון%20החינמי"
+                   class="hidden md:flex bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-full font-bold shadow-lg transition transform hover:scale-105 items-center gap-3 text-lg">
+                    שיעור אבחון חינם
                 </a>
 
                 <label for="menu-toggle" class="md:hidden cursor-pointer">
-                    <svg class="w-8 h-8 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    <svg class="w-10 h-10 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
                     </svg>
                 </label>
             </div>
 
             <input type="checkbox" id="menu-toggle" class="hidden peer" />
-            <div class="mobile-menu hidden md:hidden flex-col bg-white border-t border-purple-100 py-4 px-4 space-y-4 font-medium text-gray-700 peer-checked:flex">
+            <div class="mobile-menu hidden md:hidden flex-col bg-white border-t border-purple-100 py-6 px-6 space-y-6 font-semibold text-gray-700 peer-checked:flex">
                 <a href="#aim" class="hover:text-purple-700 transition">המטרה שלנו</a>
+                <a href="#unique" class="hover:text-purple-700 transition">למה דווקא אנחנו</a>
                 <a href="#program" class="hover:text-purple-700 transition">התוכנית</a>
-                <a href="#about" class="hover:text-purple-700 transition">מי אנחנו</a>
                 <a href="#pricing" class="hover:text-purple-700 transition">מחירים</a>
                 <a href="#faq" class="hover:text-purple-700 transition">שאלות נפוצות</a>
             </div>
@@ -76,181 +65,168 @@
     </nav>
 
     <!-- Hero -->
-    <section class="relative pt-28 sm:pt-36 md:pt-48 pb-20 sm:pb-32 md:pb-40 text-center text-white hero-bg">
+    <section class="relative pt-32 sm:pt-40 md:pt-52 pb-24 sm:pb-36 text-center text-white hero-bg">
         <div class="max-w-5xl mx-auto px-5 sm:px-8">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-5 sm:mb-8 drop-shadow-md">
-                הציון האחרון <span class="text-yellow-200">שוב אכזב?</span>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 drop-shadow-lg">
+                הציון שוב אכזב?<br><span class="text-yellow-200">זה לא חייב להימשך.</span>
             </h1>
-            <p class="text-lg sm:text-xl md:text-2xl mb-8 sm:mb-10 max-w-3xl mx-auto font-light">
-                מתמטיקה הפכה למקור ללחץ בבית?<br class="sm:hidden">
-                <span class="font-medium">זה משתנה כאן.</span>
+            <p class="text-xl sm:text-2xl md:text-3xl mb-10 max-w-4xl mx-auto font-light leading-relaxed">
+                מתמטיקה הפכה ללחץ יומיומי?<br>
+                <span class="font-semibold text-white">ב-MathBoost משנים את זה – מהשיעור הראשון.</span>
             </p>
             <a href="https://wa.me/972586276476?text=היי%2C%20אני%20רוצה%20שיעור%20אבחון%20חינם"
-               class="inline-flex items-center bg-white text-purple-700 px-7 sm:px-10 py-4 rounded-full text-base sm:text-xl font-bold shadow-2xl hover:bg-gray-50 transition transform hover:scale-105 purple-glow gap-2">
-                שיעור אבחון חינם →
+               class="inline-flex items-center bg-white text-purple-800 px-10 sm:px-14 py-5 rounded-full text-xl sm:text-2xl font-extrabold shadow-2xl hover:bg-gray-100 transition transform hover:scale-105 purple-glow gap-3">
+                קבעו שיעור אבחון חינם עכשיו →
             </a>
         </div>
     </section>
 
-    <!-- סקשן משופר: מה מקבלים – מקצועי, עם תמונות רלוונטיות -->
-    <section class="py-16 sm:py-24 -mt-12 sm:-mt-20 relative z-10 px-5 sm:px-6 lg:px-8 bg-gray-100">
-        <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            <div class="bg-white p-8 sm:p-10 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-blue-600">
-                <img src="https://c.superprof.com/img/home/prof/6/us-home-superprof.jpg" alt="שיעור מתמטיקה אישי" class="w-20 h-20 mb-6 mx-auto object-cover rounded-full">
-                <h3 class="text-xl sm:text-2xl font-bold mb-4 text-blue-900">תמיכה אישית 24/7</h3>
-                <p class="text-gray-700 text-base sm:text-lg leading-relaxed">
-                    יחס 1:1 מלא – וואטסאפ פתוח תמיד להסברים מהירים, טיפים מותאמים אישית לפני מבחנים והתאמה מדויקת לצרכים של התלמיד.
-                </p>
-            </div>
+    <!-- מה מייחד אותנו – הסקשן החדש + החשוב -->
+    <section id="unique" class="py-20 sm:py-28 bg-white">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-800 mb-10">מה הופך את MathBoost לשונה באמת?</h2>
+            <p class="text-xl sm:text-2xl text-gray-700 max-w-4xl mx-auto mb-16 leading-relaxed">
+                בשיעור הראשון (חינם) אנחנו לא "מתחילים ללמד".<br>
+                אנחנו עושים <strong>אבחון מעמיק</strong> שמלווה את התלמיד לאורך כל הדרך – עם אותו מורה.
+            </p>
 
-            <div class="bg-white p-8 sm:p-10 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-blue-500">
-                <img src="https://cdn.revolutionprep.com/uploads/2021/05/21125419/002-Teacher-teaching-geometry-scaled.jpg" alt="מורה מסביר גיאומטריה" class="w-20 h-20 mb-6 mx-auto object-cover rounded-full">
-                <h3 class="text-xl sm:text-2xl font-bold mb-4 text-blue-900">שיטות מתקדמות ומותאמות</h3>
-                <p class="text-gray-700 text-base sm:text-lg leading-relaxed">
-                    טכניקות פתרון יעילות + כלים מנטליים לבניית ביטחון, מותאמות אישית לרמה, לסגנון הלמידה ולנקודות החולשה של כל תלמיד.
-                </p>
-            </div>
-
-            <div class="bg-white p-8 sm:p-10 rounded-2xl shadow-lg hover:shadow-xl transition border-t-4 border-blue-700">
-                <img src="https://principaltutors.com/wp-content/uploads/2023/08/shutterstock_1483205165-scaled.jpg.webp" alt="תלמיד מצליח במתמטיקה" class="w-20 h-20 mb-6 mx-auto object-cover rounded-full">
-                <h3 class="text-xl sm:text-2xl font-bold mb-4 text-blue-900">תוצאות מוכחות</h3>
-                <p class="text-gray-700 text-base sm:text-lg leading-relaxed">
-                    תלמידים מגיעים באופן עקבי לציונים של 90+ ומעלה, עם הבנה עמוקה וביטחון אמיתי במתמטיקה – בזכות גישה אישית וממוקדת.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- סקשן חדש: ביקורות תלמידים – דומה למתחרה, עם מקום נוח לסרטונים (השתמש ב-YouTube iframe – החלף את ה-URL ב-src) -->
-    <section id="reviews" class="py-16 sm:py-24 bg-white">
-        <div class="max-w-6xl mx-auto px-5 sm:px-8">
-            <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-800 mb-12 text-center">מה אומרים התלמידים שלנו?</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- קלף 1 – החלף את src ב-YouTube embed URL שלך (לדוגמה: https://www.youtube.com/embed/VIDEO_ID) -->
-                <div class="bg-beige-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition">
-                    <div class="relative mb-4">
-                        <iframe class="w-full h-48 rounded-lg" src="https://www.youtube.com/embed/VIDEO_ID_1?rel=0" title="ביקורת תלמיד 1" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <p class="text-gray-700 text-base leading-relaxed mb-4">"השיעורים שינו לי את החיים! הבנתי את המתמטיקה סוף סוף."</p>
-                    <p class="text-purple-700 font-semibold">יוסי, תלמיד 5 יחידות</p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-purple-50 p-8 rounded-2xl shadow-lg card-hover">
+                    <div class="text-5xl mb-6">🔍</div>
+                    <h3 class="text-2xl font-bold text-purple-900 mb-4">אבחון אחד – מלווה לכל אורך הדרך</h3>
+                    <p class="text-lg text-gray-700">
+                        המורה שמאבחן בשיעור הראשון נשאר איתכם עד הסוף. אין "מורה חדש כל פעם".
+                    </p>
                 </div>
 
-                <!-- קלף 2 – החלף את src ב-YouTube embed URL שלך -->
-                <div class="bg-beige-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition">
-                    <div class="relative mb-4">
-                        <iframe class="w-full h-48 rounded-lg" src="https://www.youtube.com/embed/VIDEO_ID_2?rel=0" title="ביקורת תלמיד 2" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <p class="text-gray-700 text-base leading-relaxed mb-4">"יחס אישי מדהים, המורה עזר לי להתגבר על הפחד ממבחנים."</p>
-                    <p class="text-purple-700 font-semibold">שרה, תלמידה 4 יחידות</p>
+                <div class="bg-purple-50 p-8 rounded-2xl shadow-lg card-hover">
+                    <div class="text-5xl mb-6">🗺️</div>
+                    <h3 class="text-2xl font-bold text-purple-900 mb-4">מפת דרכים אישית מדויקת</h3>
+                    <p class="text-lg text-gray-700">
+                        זיהוי חוזקות + חולשות, איפה באמת צריך לשים דגש, מה הסדר הנכון לסגור פערים – הכל כתוב ומתועד.
+                    </p>
                 </div>
 
-                <!-- קלף 3 – החלף את src ב-YouTube embed URL שלך -->
-                <div class="bg-beige-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition">
-                    <div class="relative mb-4">
-                        <iframe class="w-full h-48 rounded-lg" src="https://www.youtube.com/embed/VIDEO_ID_3?rel=0" title="ביקורת תלמיד 3" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <p class="text-gray-700 text-base leading-relaxed mb-4">"ציונים עלו מ-70 ל-95! ממליצה בחום."</p>
-                    <p class="text-purple-700 font-semibold">דנה, תלמידה 3 יחידות</p>
+                <div class="bg-purple-50 p-8 rounded-2xl shadow-lg card-hover">
+                    <div class="text-5xl mb-6">🎯</div>
+                    <h3 class="text-2xl font-bold text-purple-900 mb-4">שיטות מתקדמות + מותאמות אישית</h3>
+                    <p class="text-lg text-gray-700">
+                        טכניקות פתרון מהירות, כלים מנטליים לביטחון, התאמה לדרך החשיבה של התלמיד – לא "שיטה אחת לכולם".
+                    </p>
                 </div>
             </div>
-            <div class="text-center mt-10">
-                <a href="#more-reviews" class="bg-yellow-300 hover:bg-yellow-400 text-gray-800 px-8 py-4 rounded-full font-bold shadow-md transition">
-                    +90 ביקורות תלמידים נוספות
+
+            <div class="mt-16">
+                <a href="https://wa.me/972586276476?text=היי%2C%20מעניין%20אותי%20שיעור%20אבחון%20חינם"
+                   class="bg-purple-600 hover:bg-purple-700 text-white px-12 py-5 rounded-full text-xl font-bold shadow-xl transition transform hover:scale-105 inline-flex items-center gap-3">
+                    רוצים להתחיל באבחון מדויק? →
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- המטרה שלנו -->
-    <section id="aim" class="py-24 bg-gradient-to-b from-purple-50 to-white">
-        <div class="max-w-5xl mx-auto px-6 text-center">
-            <h2 class="text-5xl md:text-6xl font-extrabold text-purple-800 mb-10">המטרה האמיתית שלנו</h2>
-            <p class="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
-                לא רק לפתור תרגילים – אלא להחזיר לילד את <strong>הביטחון</strong>, את <strong>ההנאה</strong> ואת <strong>האמונה</strong> שהוא מסוגל.
-            </p>
+    <!-- מה מקבלים – 3 כרטיסים (עדכנתי טקסטים) -->
+    <section class="py-20 sm:py-28 bg-gray-100 -mt-10">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white p-10 rounded-3xl shadow-xl card-hover border-t-4 border-purple-600">
+                <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="שיעור אישי" class="w-24 h-24 mb-8 mx-auto object-cover rounded-full border-4 border-purple-100">
+                <h3 class="text-2xl font-bold mb-5 text-purple-900">תמיכה 24/7 אישית</h3>
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    וואטסאפ פתוח תמיד להסברים מהירים, טיפים לפני מבחן, התאמות בזמן אמת – אתם לא לבד.
+                </p>
+            </div>
+
+            <div class="bg-white p-10 rounded-3xl shadow-xl card-hover border-t-4 border-purple-600">
+                <img src="https://images.unsplash.com/photo-1588075592446-265fd1e6e76f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="מורה מסביר" class="w-24 h-24 mb-8 mx-auto object-cover rounded-full border-4 border-purple-100">
+                <h3 class="text-2xl font-bold mb-5 text-purple-900">שיטות מתקדמות ומותאמות</h3>
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    לא רק פתרונות – בונים ביטחון, חשיבה לוגית, טכניקות זמן מבחן. הכל מותאם לראש של התלמיד.
+                </p>
+            </div>
+
+            <div class="bg-white p-10 rounded-3xl shadow-xl card-hover border-t-4 border-purple-600">
+                <img src="https://images.unsplash.com/photo-1581093450021-4a7360e9a6b5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="תלמיד מצליח" class="w-24 h-24 mb-8 mx-auto object-cover rounded-full border-4 border-purple-100">
+                <h3 class="text-2xl font-bold mb-5 text-purple-900">תוצאות מוכחות</h3>
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    90+ בציונים, הבנה עמוקה, חיוך במקום לחץ – זה מה שקורה אצל רוב התלמידים שלנו.
+                </p>
+            </div>
         </div>
     </section>
 
-    <!-- מי אנחנו -->
-    <section id="about" class="py-24 bg-white">
-        <div class="max-w-6xl mx-auto px-6">
-            <h2 class="text-5xl md:text-6xl font-extrabold text-purple-800 mb-16 text-center">מי עומד מאחורי MathBoost</h2>
-           
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div class="order-2 md:order-1">
-                    <img src="profile_pic.jpeg"
-                         alt="טל דובוב"
-                         class="rounded-2xl shadow-2xl w-full object-cover aspect-[4/5] border-8 border-purple-100">
-                </div>
-                <div class="order-1 md:order-2 bg-purple-50 p-10 rounded-2xl shadow-xl">
-                    <h3 class="text-3xl font-bold mb-6 text-purple-900">הסיפור שלי – טל דובוב</h3>
-                    <p class="text-lg text-gray-700 leading-relaxed mb-6">
-                        במהלך מילואים נוסף שמעתי מחבר שאין לו בגרות במתמטיקה.
-                        אדם חכם מאוד – פשוט המערכת לא התאימה לו.
-                    </p>
-                    <p class="text-lg font-semibold text-purple-700 mb-6">
-                        הבנתי שיש כאן בעיה גדולה – ואפשר לפתור אותה.
-                    </p>
-                    <p class="text-lg text-gray-700 leading-relaxed">
-                        מאז אני בונה תוכניות אישיות שמתאימות בדיוק לתלמיד – לראש שלו, לקצב שלו, לאופי שלו.
-                        <br><br>
-                        <strong>ואנחנו לא מוותרים עד שרואים חיוך + ציון גבוה.</strong>
-                    </p>
-                </div>
-            </div>
+    <!-- המטרה שלנו -->
+    <section id="aim" class="py-24 bg-gradient-to-b from-purple-50 to-white text-center">
+        <div class="max-w-5xl mx-auto px-6">
+            <h2 class="text-5xl md:text-6xl font-extrabold text-purple-800 mb-12">המטרה האמיתית</h2>
+            <p class="text-2xl md:text-3xl text-gray-700 max-w-4xl mx-auto leading-relaxed font-medium">
+                לא רק ציון גבוה.<br>
+                להחזיר לילד את <span class="text-purple-700 font-bold">הביטחון</span>, את <span class="text-purple-700 font-bold">ההנאה</span> ואת <span class="text-purple-700 font-bold">האמונה</span> שהוא באמת מסוגל.
+            </p>
         </div>
     </section>
 
     <!-- מחירון -->
     <section id="pricing" class="py-24 bg-gradient-to-b from-white to-purple-50">
         <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="text-5xl md:text-6xl font-extrabold text-purple-800 mb-8">מחירים ושקיפות</h2>
-            <p class="text-xl text-gray-700 mb-12">הכל מתחיל בלי התחייבות</p>
-            <div class="bg-white p-12 rounded-3xl shadow-2xl purple-glow border-2 border-purple-200 max-w-2xl mx-auto">
-                <div class="text-6xl font-black text-purple-600 mb-6">חינם!</div>
-                <h3 class="text-3xl font-bold mb-6 text-gray-800">שיעור אבחון + תוכנית אישית</h3>
-                <p class="text-xl text-gray-600 mb-10">
-                    אבחון מעמיק • זיהוי פערים מדויק • בניית מפת דרכים מותאמת<br>
-                    <span class="font-bold text-purple-700">בלי שום התחייבות כספית</span>
+            <h2 class="text-5xl md:text-6xl font-extrabold text-purple-800 mb-10">הכל מתחיל בחינם</h2>
+            <div class="bg-white p-14 rounded-3xl shadow-2xl purple-glow border-2 border-purple-200 max-w-3xl mx-auto">
+                <div class="text-7xl font-black text-purple-600 mb-6">0 ₪</div>
+                <h3 class="text-4xl font-bold mb-8 text-gray-900">שיעור אבחון + תוכנית אישית מפורטת</h3>
+                <p class="text-2xl text-gray-700 mb-12 leading-relaxed">
+                    אבחון מעמיק • זיהוי מדויק של פערים וחוזקות<br>
+                    מפת דרכים ברורה • המלצות ממוקדות<br>
+                    <span class="font-extrabold text-purple-700 block mt-4">בלי שום התחייבות</span>
                 </p>
-                <a href="https://wa.me/972586276476?text=היי%2C%20אני%20מעוניין%20בשיעור%20אבחון%20חינם"
-                   class="block bg-purple-600 hover:bg-purple-700 text-white px-12 py-6 rounded-full text-xl font-bold shadow-xl transition transform hover:scale-105">
-                    קבעו עכשיו שיעור חינם בוואטסאפ →
+                <a href="https://wa.me/972586276476?text=היי%2C%20אני%20רוצה%20לקבוע%20שיעור%20אבחון%20חינם"
+                   class="block bg-purple-600 hover:bg-purple-700 text-white px-16 py-7 rounded-full text-2xl font-extrabold shadow-2xl transition transform hover:scale-105">
+                    קבעו עכשיו →
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- FAQ -->
+    <!-- שאלות נפוצות (עדכנתי + הוספתי אחת על האבחון) -->
     <section id="faq" class="py-24 bg-white">
         <div class="max-w-4xl mx-auto px-6">
-            <h2 class="text-5xl font-extrabold text-purple-800 mb-12 text-center">שאלות שכולם שואלים</h2>
-            <div class="space-y-5">
-                <details class="group bg-purple-50 rounded-xl overflow-hidden">
-                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-lg text-purple-900">
-                        האם זה מתאים גם ל-3 יחידות / 4 / 5?
-                        <span class="text-2xl transition group-open:rotate-180">▼</span>
+            <h2 class="text-5xl font-extrabold text-purple-800 mb-16 text-center">שאלות שכולם שואלים</h2>
+            <div class="space-y-6">
+                <details class="group bg-purple-50 rounded-2xl overflow-hidden shadow-sm">
+                    <summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl text-purple-900">
+                        מה בדיוק קורה בשיעור האבחון החינמי?
+                        <span class="text-3xl transition group-open:rotate-180">▼</span>
                     </summary>
-                    <div class="px-6 pb-6 text-gray-700">
-                        כן – אנחנו עובדים עם כל הרמות, כולל השלמת פערים רציניים והכנה ל-5 יחידות.
+                    <div class="px-8 pb-10 text-lg text-gray-700">
+                        המורה עובר איתכם על מבחנים אחרונים, שיחה על קשיים, כמה תרגילים מייצגים + ניתוח עמוק. בסוף מקבלים דו"ח כתוב + תוכנית עבודה מדויקת.
                     </div>
                 </details>
-                <details class="group bg-purple-50 rounded-xl overflow-hidden">
-                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-lg text-purple-900">
+
+                <details class="group bg-purple-50 rounded-2xl overflow-hidden shadow-sm">
+                    <summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl text-purple-900">
+                        מתאים ל-3, 4 או 5 יחידות?
+                        <span class="text-3xl transition group-open:rotate-180">▼</span>
+                    </summary>
+                    <div class="px-8 pb-10 text-lg text-gray-700">
+                        כן – מכל הרמות, כולל השלמות פערים גדולים והכנה ל-5 יחידות ברמה גבוהה.
+                    </div>
+                </details>
+
+                <details class="group bg-purple-50 rounded-2xl overflow-hidden shadow-sm">
+                    <summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl text-purple-900">
+                        השיעורים בזום או פרונטלי?
+                        <span class="text-3xl transition group-open:rotate-180">▼</span>
+                    </summary>
+                    <div class="px-8 pb-10 text-lg text-gray-700">
+                        רוב התלמידים בוחרים זום (נוח + הקלטה לשחזור). אפשר גם פרונטלי בתיאום.
+                    </div>
+                </details>
+
+                <details class="group bg-purple-50 rounded-2xl overflow-hidden shadow-sm">
+                    <summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl text-purple-900">
                         כמה עולה שיעור רגיל?
-                        <span class="text-2xl transition group-open:rotate-180">▼</span>
+                        <span class="text-3xl transition group-open:rotate-180">▼</span>
                     </summary>
-                    <div class="px-6 pb-6 text-gray-700">
-                        המחיר תלוי במספר השיעורים ובמסלול. אחרי האבחון החינמי נותנים הצעה מדויקת ושקופה.
-                    </div>
-                </details>
-                <details class="group bg-purple-50 rounded-xl overflow-hidden">
-                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-lg text-purple-900">
-                        השיעורים בזום או פנים אל פנים?
-                        <span class="text-2xl transition group-open:rotate-180">▼</span>
-                    </summary>
-                    <div class="px-6 pb-6 text-gray-700">
-                        רוב התלמידים בוחרים זום – נוח, יעיל וגם מאפשר הקלטה לשיעור חוזר. אפשר גם פרונטלי בתיאום.
+                    <div class="px-8 pb-10 text-lg text-gray-700">
+                        המחיר תלוי במסלול ובתדירות. אחרי האבחון מקבלים הצעה מדויקת ושקופה לגמרי.
                     </div>
                 </details>
             </div>
@@ -258,19 +234,19 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gradient-to-t from-purple-900 to-purple-800 text-white py-16">
+    <footer class="bg-gradient-to-t from-purple-900 to-purple-800 text-white py-20">
         <div class="max-w-6xl mx-auto px-6 text-center">
-            <div class="text-4xl font-extrabold tracking-tight mb-6">MathBoost</div>
-            <p class="mb-8 text-purple-200">שיעורי מתמטיקה פרטיים – עם תוצאות, חיוך וביטחון</p>
-            <a href="https://wa.me/972586276476" class="text-purple-200 hover:text-white underline">צרו קשר בוואטסאפ: 058-627-6476</a>
-            <p class="mt-10 text-sm opacity-70">&copy; 2026 MathBoost – כל הזכויות שמורות</p>
+            <div class="text-5xl font-extrabold mb-8">MathBoost</div>
+            <p class="text-xl mb-6 text-purple-200">מתמטיקה עם תוצאות, ביטחון וחיוך</p>
+            <a href="https://wa.me/972586276476" class="text-xl text-purple-200 hover:text-white underline block mb-10">וואטסאפ: 058-627-6476</a>
+            <p class="text-sm opacity-70">© 2026 MathBoost – כל הזכויות שמורות</p>
         </div>
     </footer>
 
-    <!-- כפתור וואטסאפ צף למובייל -->
-    <a href="https://wa.me/972586276476?text=היי%2C%20אני%20במובייל%20–%20רוצה%20שיעור%20חינם"
-       class="whatsapp-float flex items-center justify-center w-16 h-16 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-2xl transition transform hover:scale-110">
-        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+    <!-- כפתור וואטסאפ צף -->
+    <a href="https://wa.me/972586276476?text=היי%2C%20ראיתי%20את%20הדף%20–%20רוצה%20שיעור%20אבחון%20חינם"
+       class="whatsapp-float flex items-center justify-center w-20 h-20 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-2xl transition transform hover:scale-110">
+        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
         </svg>
     </a>
