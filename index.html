@@ -5,17 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MathBoost - שיעורי מתמטיקה</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- טעינת פונט Amatic SC עבור הכותרות -->
     <link href="https://fonts.googleapis.com" rel="stylesheet">
     <style>
         body { 
             font-family: 'Heebo', sans-serif;
             scroll-behavior: smooth; 
         }
+        /* סגנון מיוחד לכותרות הראשיות */
+        .handwriting-title {
+            font-family: 'Amatic SC', cursive;
+        }
     </style>
 </head>
 <body class="bg-white text-gray-900">
 
-    <!-- Header / Logo & Navigation - הרקע שונה לסגול בהיר -->
+    <!-- Header / Logo & Navigation -->
     <nav class="p-8 flex justify-between items-center border-b border-gray-100 sticky top-0 bg-purple-100 shadow-lg z-10">
         <div class="text-4xl font-black tracking-tighter text-gray-900">MathBoost</div>
         <div class="hidden md:flex gap-10 font-bold text-gray-800">
@@ -24,24 +29,24 @@
             <a href="#about" class="hover:text-purple-600 transition duration-150">מי אנחנו</a>
             <a href="#faq" class="hover:text-purple-600 transition duration-150">שאלות תשובות</a>
         </div>
-        <!-- כפתור צור קשר עגול, בולט ועם צל בדיוק כמו בתמונה -->
-        <button class="bg-purple-600 text-white px-8 py-3 rounded-full text-base font-bold hover:bg-purple-700 transition duration-300 shadow-xl">צור קשר</button>
+        <!-- כפתור חדש: "אני רוצה לקבוע שיעור" -->
+        <button class="bg-purple-600 text-white px-8 py-3 rounded-full text-base font-bold hover:bg-purple-700 transition duration-300 shadow-xl whitespace-nowrap">אני רוצה לקבוע שיעור</button>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section (עם הטקסט החדש ופונט מיוחד) -->
     <section class="py-24 px-8 max-w-5xl mx-auto text-center">
-        <h1 class="text-6xl md:text-8xl font-black mb-8 leading-[0.9]">
-            שיעורי מתמטיקה <br> <span class="text-purple-600">שפשוט עובדים.</span>
+        <h1 class="text-5xl md:text-6xl font-black mb-8 leading-[1.1] handwriting-title text-gray-900">
+            הילד שלכם עוד הפעם התבאס על הציון שקיבל במבחן? <br> האם מתמטיקה הפכה למילה מפחידה בבית?
         </h1>
-        <p class="text-xl text-gray-500 max-w-2xl mx-auto mb-12">
-            הכנה לבגרויות, שיפור ציונים והבנה אמיתית של החומר.
+        <p class="text-xl text-gray-700 max-w-3xl mx-auto mb-12">
+            בשביל זה הקמנו את **MathBoost** שנותן לילד שלכם להפסיק לסבול וללמוד עם חוסר ביטחון. אנחנו יצרנו מערכת אשר מעניקה לכל תלמיד יחס אישי ממורה והתאמה פרטנית לרמה, לאופי ולצרכים שלו.
         </p>
     </section>
 
     <!-- המטרה שלנו (Aim Section) -->
     <section id="aim" class="py-24 px-8 bg-gray-50">
         <div class="max-w-5xl mx-auto">
-            <h2 class="text-5xl font-black mb-4 text-purple-700">המטרה שלנו</h2>
+            <h2 class="text-5xl font-black mb-4 text-purple-700 handwriting-title">המטרה שלנו</h2>
             <p class="text-lg text-gray-600">המטרה העיקרית היא לא רק לפתור תרגילים, אלא להקנות כלים לחיים. אנו מאמינים שכל תלמיד יכול להצליח בממתמטיקה בעזרת הדרכה נכונה ותוכנית מותאמת אישית.</p>
         </div>
     </section>
@@ -49,7 +54,7 @@
     <!-- התוכנית (Program Section) -->
     <section id="program" class="py-24 px-8 bg-white">
         <div class="max-w-5xl mx-auto">
-            <h2 class="text-5xl font-black mb-4 text-purple-700">התוכנית שלנו</h2>
+            <h2 class="text-5xl font-black mb-4 text-purple-700 handwriting-title">התוכנית שלנו</h2>
             <p class="text-lg text-gray-600 mb-8">תוכנית הלימודים מותאמת אישית לכל תלמיד, תוך שימוש במתודולוגיות מתקדמות:</p>
             <ul class="space-y-4">
                 <li class="flex items-start bg-gray-50 p-4 rounded-lg shadow-sm">
@@ -71,13 +76,13 @@
     <!-- מי אנחנו (About Section) - הסיפור האישי והתמונה בתוך פאנל/קלף -->
     <section id="about" class="py-24 px-8 bg-gray-50">
         <div class="max-w-5xl mx-auto">
-            <h2 class="text-5xl font-black mb-10 text-purple-700">מי אנחנו</h2>
+            <h2 class="text-5xl font-black mb-10 text-purple-700 handwriting-title">מי אנחנו</h2>
             
             <div class="grid md:grid-cols-2 gap-12 items-center">
 
                 <!-- טקסט ותוכן מפורט בתוך פאנל לבן מעוצב (הקלף המשודרג) -->
                 <div class="text-right bg-white p-10 rounded-2xl shadow-xl transition duration-300 transform hover:-translate-y-1 hover:shadow-2xl border border-gray-100">
-                    <h3 class="text-3xl font-black mb-4 text-gray-900">הסיפור שלי - טל דובוב</h3>
+                    <h3 class="text-3xl font-black mb-4 text-gray-900 handwriting-title">הסיפור שלי - טל דובוב</h3>
                     <p class="text-lg text-gray-600 mb-6">
                         במהלך סבב מילואים נוסף, דיברתי עם חבר שלי על אוניברסיטה וגיליתי להפתעתי שאין לו בגרות. הוא אמר לי: "לא אהבתי ללמוד, עם אנגלית איכשהו הסתדרתי, אבל עם מתמטיקה, זה היה כבר אבוד".
                     </p>
@@ -100,7 +105,7 @@
     <!-- שאלות תשובות (FAQ Section) -->
     <section id="faq" class="py-24 px-8 bg-white">
         <div class="max-w-5xl mx-auto">
-            <h2 class="text-5xl font-black mb-8 text-purple-700">שאלות תשובות</h2>
+            <h2 class="text-5xl font-black mb-8 text-purple-700 handwriting-title">שאלות תשובות</h2>
             <div class="space-y-4">
                 <details class="group border border-gray-200 rounded-lg p-6 hover:bg-purple-50 transition duration-300 cursor-pointer">
                     <summary class="flex justify-between items-center font-semibold">
