@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MathBoost - שיעורי מתמטיקה</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- טעינת פונט Amatic SC עבור הכותרות -->
     <link href="https://fonts.googleapis.com" rel="stylesheet">
     <style>
         body { 
             font-family: 'Heebo', sans-serif;
             scroll-behavior: smooth; 
         }
-        /* סגנון מיוחד לכותרות הראשיות */
         .handwriting-title {
             font-family: 'Amatic SC', cursive;
         }
@@ -29,8 +27,7 @@
             <a href="#about" class="hover:text-purple-600 transition duration-150">מי אנחנו</a>
             <a href="#faq" class="hover:text-purple-600 transition duration-150">שאלות תשובות</a>
         </div>
-        <!-- כפתור חדש: "אני רוצה לקבוע שיעור" -->
-        <button class="bg-purple-600 text-white px-8 py-3 rounded-full text-base font-bold hover:bg-purple-700 transition duration-300 shadow-xl whitespace-nowrap">אני רוצה לקבוע שיעור</button>
+        <button class="bg-purple-600 text-white px-8 py-3 rounded-full text-base font-bold hover:bg-purple-700 transition duration-300 shadow-xl">אני רוצה לקבוע שיעור</button>
     </nav>
 
     <!-- Hero Section (עם הטקסט החדש ופונט מיוחד) -->
@@ -43,8 +40,46 @@
         </p>
     </section>
 
+    <!-- מה מקבלים בתוכנית - Section (הריבועים המגניבים החדשים) -->
+    <section class="pb-24 px-8 bg-white">
+        <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
+            
+            <!-- קלף 1: עיצוב בולט עם צבע רקע סגול בהיר וצל חזק -->
+            <div class="bg-purple-50 p-10 rounded-xl shadow-xl border-t-8 border-purple-600 transform transition duration-300 hover:scale-105">
+                <h3 class="text-2xl font-bold mb-4 text-purple-800">מה תקבלו בתוכנית - חלק א'</h3>
+                <ul class="space-y-3 text-gray-700">
+                    <li class="flex items-center">
+                        <span class="text-purple-600 mr-3">⭐</span> תמיכה אישית בוואטסאפ מסביב לשעון.
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-purple-600 mr-3">⭐</span> טיפים מנטליים לפני כל מבחן חשוב.
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-purple-600 mr-3">⭐</span> שיטות ייחודיות לפתרון תרגילים מסובכים.
+                    </li>
+                </ul>
+            </div>
+
+            <!-- קלף 2: עיצוב בולט עם צבע רקע אפור בהיר וצל חזק -->
+            <div class="bg-gray-50 p-10 rounded-xl shadow-xl border-t-8 border-gray-600 transform transition duration-300 hover:scale-105">
+                <h3 class="text-2xl font-bold mb-4 text-gray-800">תוצאות מובטחות - חלק ב'</h3>
+                <ul class="space-y-3 text-gray-700">
+                    <li class="flex items-center">
+                        <span class="text-gray-600 mr-3">🎓</span> תלמידים מגיעים לציונים של 90 פלוס.
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-gray-600 mr-3">🎓</span> למידה מותאמת אישית לצרכי התלמיד.
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-gray-600 mr-3">🎓</span> תלמידים מחייכים ומבינים את החומר!
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
     <!-- המטרה שלנו (Aim Section) -->
-    <section id="aim" class="py-24 px-8 bg-gray-50">
+    <section id="aim" class="py-24 px-8 bg-gray-100">
         <div class="max-w-5xl mx-auto">
             <h2 class="text-5xl font-black mb-4 text-purple-700 handwriting-title">המטרה שלנו</h2>
             <p class="text-lg text-gray-600">המטרה העיקרית היא לא רק לפתור תרגילים, אלא להקנות כלים לחיים. אנו מאמינים שכל תלמיד יכול להצליח בממתמטיקה בעזרת הדרכה נכונה ותוכנית מותאמת אישית.</p>
@@ -74,7 +109,7 @@
     </section>
 
     <!-- מי אנחנו (About Section) - הסיפור האישי והתמונה בתוך פאנל/קלף -->
-    <section id="about" class="py-24 px-8 bg-gray-50">
+    <section id="about" class="py-24 px-8 bg-gray-100">
         <div class="max-w-5xl mx-auto">
             <h2 class="text-5xl font-black mb-10 text-purple-700 handwriting-title">מי אנחנו</h2>
             
