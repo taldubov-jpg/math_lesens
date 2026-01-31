@@ -1,111 +1,35 @@
-<!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathBoost - שיעורי מתמטיקה</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- טעינת פונט Heebo החזק וסגנון גלובלי -->
-    <link href="https://fonts.googleapis.com" rel="stylesheet">
-    <style>
-        body { 
-            font-family: 'Heebo', sans-serif;
-            /* הוספנו גלילה חלקה בלחיצה על לינקים */
-            scroll-behavior: smooth; 
-        }
-        /* הסרנו את קוד ההשתקפות */
-    </style>
-</head>
-<body class="bg-white text-gray-900">
-
-    <!-- Header / Logo & Navigation -->
-    <nav class="p-8 flex justify-between items-center border-b border-gray-100 sticky top-0 bg-white/90 backdrop-blur-sm z-10">
-        <div class="text-4xl font-black tracking-tighter text-gray-900">MathBoost</div>
-        <!-- תפריט הניווט החדש - הוספנו אפקט קו תחתון בהובר -->
-        <div class="hidden md:flex gap-8 font-medium">
-            <a href="#aim" class="hover:text-purple-600 transition duration-300 border-b-2 border-transparent hover:border-purple-600 pb-1">המטרה שלנו</a>
-            <a href="#program" class="hover:text-purple-600 transition duration-300 border-b-2 border-transparent hover:border-purple-600 pb-1">התוכנית</a>
-            <a href="#about" class="hover:text-purple-600 transition duration-300 border-b-2 border-transparent hover:border-purple-600 pb-1">מי אנחנו</a>
-            <a href="#faq" class="hover:text-purple-600 transition duration-300 border-b-2 border-transparent hover:border-purple-600 pb-1">שאלות תשובות</a>
-        </div>
-        <button class="bg-purple-600 text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-purple-700 transition duration-300 transform hover:scale-105 shadow-lg">צור קשר</button>
-    </nav>
-
-    <!-- Hero Section (בלי השתקפות) -->
-    <section class="py-24 px-8 max-w-5xl mx-auto text-center">
-        <h1 class="text-6xl md:text-8xl font-black mb-8 leading-[0.9]">
-            שיעורי מתמטיקה <br> <span class="text-purple-600">שפשוט עובדים.</span>
-        </h1>
-        <p class="text-xl text-gray-500 max-w-2xl mx-auto mb-12">
-            הכנה לבגרויות, שיפור ציונים והבנה אמיתית של החומר.
-        </p>
-    </section>
-
-    <!-- המטרה שלנו (Aim Section) -->
-    <section id="aim" class="py-24 px-8 bg-gray-50">
-        <div class="max-w-5xl mx-auto">
-            <h2 class="text-5xl font-black mb-4 text-purple-700">המטרה שלנו</h2>
-            <p class="text-lg text-gray-600">המטרה העיקרית היא לא רק לפתור תרגילים, אלא להקנות כלים לחיים. אנו מאמינים שכל תלמיד יכול להצליח במתמטיקה בעזרת הדרכה נכונה ותוכנית מותאמת אישית.</p>
-        </div>
-    </section>
-
-    <!-- התוכנית (Program Section) -->
-    <section id="program" class="py-24 px-8 bg-white">
-        <div class="max-w-5xl mx-auto">
-            <h2 class="text-5xl font-black mb-4 text-purple-700">התוכנית שלנו</h2>
-            <p class="text-lg text-gray-600 mb-8">תוכנית הלימודים מותאמת אישית לכל תלמיד, תוך שימוש במתודולוגיות מתקדמות:</p>
-            <ul class="space-y-4">
-                <li class="flex items-start bg-gray-50 p-4 rounded-lg shadow-sm">
-                    <div class="flex-shrink-0 bg-purple-600 text-white rounded-full p-2">✅</div>
-                    <p class="ml-3">**שלב 1:** אבחון ראשוני ובניית תוכנית עבודה מפורטת.</p>
-                </li>
-                <li class="flex items-start bg-gray-50 p-4 rounded-lg shadow-sm">
-                    <div class="flex-shrink-0 bg-purple-600 text-white rounded-full p-2">✅</div>
-                    <p class="ml-3">**שלב 2:** שיעורים פרטיים ממוקדים ותרגול אינטנסיבי.</p>
-                </li>
-                <li class="flex items-start bg-gray-50 p-4 rounded-lg shadow-sm">
-                    <div class="flex-shrink-0 bg-purple-600 text-white rounded-full p-2">✅</div>
-                    <p class="ml-3">**שלב 3:** מבחני סימולציה ובדיקה חוזרת עד להשלמת הפערים.</p>
-                </li>
-            </ul>
-        </div>
-    </section>
-
-    <!-- מי אנחנו (About Section) -->
-    <section id="about" class="py-24 px-8 bg-gray-50">
-        <div class="max-w-5xl mx-auto">
-            <h2 class="text-5xl font-black mb-4 text-purple-700">מי אנחנו</h2>
-            <p class="text-lg text-gray-600">אנחנו צוות מורים למתמטיקה עם ניסיון של מעל 10 שנים בהכנה לבגרויות. אנחנו כאן כדי לתת לך את התמיכה שאתה צריך.</p>
-        </div>
-    </section>
-
-    <!-- שאלות תשובות (FAQ Section) -->
-    <section id="faq" class="py-24 px-8 bg-white">
-        <div class="max-w-5xl mx-auto">
-            <h2 class="text-5xl font-black mb-8 text-purple-700">שאלות תשובות</h2>
-            <div class="space-y-4">
-                <details class="group border border-gray-200 rounded-lg p-6 hover:bg-purple-50 transition duration-300 cursor-pointer">
-                    <summary class="flex justify-between items-center font-semibold">
-                        האם השיעורים מתאימים לכל הרמות?
-                        <span class="text-purple-600 group-open:text-gray-900">▼</span>
-                    </summary>
-                    <p class="mt-4 text-gray-600">כן, אנו עובדים עם תלמידים מ-3 יחידות ועד 5 יחידות, כולל השלמת פערים.</p>
-                </details>
-                <details class="group border border-gray-200 rounded-lg p-6 hover:bg-purple-50 transition duration-300 cursor-pointer">
-                    <summary class="flex justify-between items-center font-semibold">
-                        כמה עולה שיעור פרטי?
-                        <span class="text-purple-600 group-open:text-gray-900">▼</span>
-                    </summary>
-                    <p class="mt-4 text-gray-600">המחיר משתנה בהתאם למספר השיעורים הנדרש. צרו קשר לפרטים מדויקים.</p>
-                </details>
+<!-- מי אנחנו (About Section) -->
+<section id="about" class="py-24 px-8 bg-white">
+    <div class="max-w-5xl mx-auto">
+        <h2 class="text-5xl font-black mb-10 text-purple-700">מי אנחנו</h2>
+        
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <!-- טקסט ותוכן מפורט -->
+            <div>
+                <!-- שם המדריך בכתב שחור בוהק -->
+                <h3 class="text-3xl font-black mb-4 text-gray-900">אני טל דובוב, המייסד.</h3>
+                <p class="text-lg text-gray-600 mb-6">
+                    בניתי תוכנית אשר תעזור לכם ולילדכם **להפסיק לרדוף בפחד ממבחן למבחן**. 
+                    המטרה היא להבין ולהפוך את המתמטיקה למשהו פשוט שכל ילד יקבל בו ביטחון אמיתי.
+                </p>
+                <!-- עוד אלמנטים כדי שלא יהיה ריק -->
+                <ul class="space-y-3">
+                    <li class="flex items-center text-gray-800 font-semibold">
+                        <span class="text-purple-600 mr-3">✔</span> שיטה מוכחת להצלחה
+                    </li>
+                    <li class="flex items-center text-gray-800 font-semibold">
+                        <span class="text-purple-600 mr-3">✔</span> אלפי תלמידים מרוצים
+                    </li>
+                    <li class="flex items-center text-gray-800 font-semibold">
+                        <span class="text-purple-600 mr-3">✔</span> ליווי אישי ומקצועי
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- תמונה (Placeholder) - נחליף את זה בתמונה שלך בהמשך -->
+            <div class="bg-gray-100 h-96 rounded-xl shadow-lg flex items-center justify-center text-gray-500">
+                מקום לתמונה של טל דובוב
             </div>
         </div>
-    </section>
-    
-    <!-- Footer -->
-    <footer class="p-8 bg-black text-white text-center">
-        <p>&copy; 2026 כל הזכויות שמורות ל-MathBoost.</p>
-    </footer>
-
-</body>
-</html>
+    </div>
+</section>
