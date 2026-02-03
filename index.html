@@ -125,13 +125,33 @@
         </div>
     </section>
 
-    <!-- ביקורות -->
+    <!-- ביקורות – כאן השינוי -->
     <section id="reviews" class="py-16 sm:py-24 bg-white">
         <div class="max-w-6xl mx-auto px-5 sm:px-8">
             <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-800 mb-6 text-center">מה אומרים התלמידים, ההורים והמשפחות שלנו?</h2>
             <p class="text-xl text-gray-700 text-center mb-12">סיפורים אמיתיים מהשטח – על שינוי, ביטחון וציונים שקפצו</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- ביקורת 1 – הסרטון החדש עם תמונה מקדימה טובה -->
+
+                <!-- ביקורת 1 – הסרטון החדש שהוספת -->
+                <div class="bg-purple-50 p-6 rounded-xl shadow-lg card-hover flex flex-col">
+                    <div class="relative mb-4 flex-grow">
+                        <iframe 
+                            class="w-full rounded-lg aspect-video"
+                            src="https://www.youtube.com/embed/ITjR5q0zYNA?rel=0&modestbranding=1&iv_load_policy=3"
+                            title="המלצה חמה על MathBoost"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                    <p class="text-gray-700 text-base leading-relaxed mb-2">
+                        המלצה אמיתית ומשמחת – שווה צפייה!
+                    </p>
+                    <p class="text-purple-700 font-semibold text-right">תלמיד/ה MathBoost</p>
+                </div>
+
+                <!-- ביקורת 2 – הסרטון הקודם של אורי (הוזז למקום 2) -->
                 <div class="bg-purple-50 p-6 rounded-xl shadow-lg card-hover flex flex-col">
                     <div class="relative mb-4 flex-grow">
                         <iframe 
@@ -151,21 +171,7 @@
                     <p class="text-purple-700 font-semibold text-right">אורי</p>
                 </div>
 
-                <!-- ביקורת 2 – שמור כמו שהיה -->
-                <div class="bg-purple-50 p-6 rounded-xl shadow-lg card-hover flex flex-col">
-                    <div class="relative mb-4 flex-grow">
-                        <iframe class="w-full h-full rounded-lg aspect-video" 
-                                src="https://www.youtube.com/embed/VIDEO_ID_2?rel=0" 
-                                title="ביקורת 2" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen></iframe>
-                    </div>
-                    <p class="text-gray-700 text-base leading-relaxed mb-4">"יחס אישי מדהים, המורה עזר לי להתגבר על הפחד ממבחנים."</p>
-                    <p class="text-purple-700 font-semibold">שרה, תלמידה 4 יחידות</p>
-                </div>
-
-                <!-- ביקורת 3 – שמור כמו שהיה -->
+                <!-- ביקורת 3 – נשאר כמו שהיה (placeholder) -->
                 <div class="bg-purple-50 p-6 rounded-xl shadow-lg card-hover flex flex-col">
                     <div class="relative mb-4 flex-grow">
                         <iframe class="w-full h-full rounded-lg aspect-video" 
@@ -178,6 +184,7 @@
                     <p class="text-gray-700 text-base leading-relaxed mb-4">"ציונים עלו מ-70 ל-95! ממליצה בחום."</p>
                     <p class="text-purple-700 font-semibold">דנה, תלמידה 3 יחידות</p>
                 </div>
+
             </div>
         </div>
     </section>
