@@ -16,6 +16,17 @@
         .card-hover:hover { transform: translateY(-10px); transition: all 0.4s ease; box-shadow: 0 20px 40px -10px rgba(139, 92, 246, 0.25); }
         .btn-pair { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
         @media (min-width: 640px) { .btn-pair { flex-wrap: nowrap; } }
+
+        /* סטיילים לטופס */
+        .form-group { @apply mb-6; }
+        .form-label { @apply block text-lg font-medium text-gray-700 mb-2; }
+        .form-input, .form-select, .form-textarea {
+            @apply w-full px-5 py-4 border border-purple-200 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white/70 text-gray-900 placeholder-gray-500 shadow-sm;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            @apply outline-none ring-2 ring-purple-400 ring-opacity-50 shadow-purple-glow;
+        }
+        .form-checkbox { @apply h-5 w-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased">
@@ -32,6 +43,7 @@
                     <a href="#aim" class="hover:text-purple-700 transition">המטרה</a>
                     <a href="#unique" class="hover:text-purple-700 transition">מה מייחד אותנו</a>
                     <a href="#pricing" class="hover:text-purple-700 transition">מחירים</a>
+                    <a href="#contact" class="hover:text-purple-700 transition">צרו קשר</a>
                     <a href="#faq" class="hover:text-purple-700 transition">שאלות</a>
                 </div>
 
@@ -51,6 +63,7 @@
                 <a href="#aim" class="hover:text-purple-700 transition">המטרה שלנו</a>
                 <a href="#unique" class="hover:text-purple-700 transition">מה מייחד אותנו</a>
                 <a href="#pricing" class="hover:text-purple-700 transition">מחירים</a>
+                <a href="#contact" class="hover:text-purple-700 transition">צרו קשר</a>
                 <a href="#faq" class="hover:text-purple-700 transition">שאלות נפוצות</a>
                 <a href="#pricing" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full font-bold text-center">
                     לקביעת שיעור
@@ -132,7 +145,7 @@
         </div>
     </section>
 
-    <!-- ביקורות – עם מרווח גדול ועיצוב משופר -->
+    <!-- ביקורות -->
     <section id="reviews" class="py-20 sm:py-28 bg-white">
         <div class="max-w-7xl mx-auto px-5 sm:px-8">
             <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-800 mb-16 md:mb-20 text-center">
@@ -262,6 +275,139 @@
                     </a>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- טופס יצירת קשר / לידים – החלק החדש -->
+    <section id="contact" class="py-20 bg-gradient-to-b from-purple-50 to-white">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-800 mb-6 text-center">
+                רוצים להתחיל? מלאו פרטים ונחזור אליכם ממש מהר
+            </h2>
+            <p class="text-xl text-gray-700 text-center mb-12 max-w-3xl mx-auto leading-relaxed">
+                שיעור ההכרות הראשון + בניית תוכנית אישית – במחיר מיוחד.<br>
+                נתאים לכם מורה, שעות ודרך למידה בדיוק כמו שמתאים לכם.
+            </p>
+
+            <form 
+                action="https://formspree.io/f/mojnaqgb"
+                method="POST"
+                class="bg-white p-8 sm:p-12 rounded-3xl shadow-2xl purple-glow border border-purple-100 max-w-3xl mx-auto space-y-8"
+            >
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- שם פרטי -->
+                    <div class="form-group">
+                        <label for="firstName" class="form-label">שם פרטי</label>
+                        <input 
+                            type="text" 
+                            id="firstName" 
+                            name="שם פרטי" 
+                            required 
+                            class="form-input" 
+                            placeholder="למשל: דני"
+                        >
+                    </div>
+
+                    <!-- שם משפחה -->
+                    <div class="form-group">
+                        <label for="lastName" class="form-label">שם משפחה</label>
+                        <input 
+                            type="text" 
+                            id="lastName" 
+                            name="שם משפחה" 
+                            required 
+                            class="form-input" 
+                            placeholder="למשל: כהן"
+                        >
+                    </div>
+                </div>
+
+                <!-- טלפון -->
+                <div class="form-group">
+                    <label for="phone" class="form-label">מספר טלפון</label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="טלפון" 
+                        required 
+                        pattern="^05[0-9]{8}$|^0[2-9][0-9]{7}$" 
+                        title="מספר טלפון ישראלי תקין (למשל 0501234567)"
+                        class="form-input" 
+                        placeholder="050-123-4567"
+                    >
+                </div>
+
+                <!-- אימייל -->
+                <div class="form-group">
+                    <label for="email" class="form-label">כתובת אימייל</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="אימייל" 
+                        required 
+                        class="form-input" 
+                        placeholder="your@email.com"
+                    >
+                </div>
+
+                <!-- כיתה -->
+                <div class="form-group">
+                    <label for="grade" class="form-label">באיזה כיתה הלומד/ת?</label>
+                    <select 
+                        id="grade" 
+                        name="כיתה" 
+                        required 
+                        class="form-select"
+                    >
+                        <option value="" disabled selected>בחרו כיתה</option>
+                        <option value="ז׳">ז׳</option>
+                        <option value="ח׳">ח׳</option>
+                        <option value="ט׳">ט׳</option>
+                        <option value="י׳">י׳</option>
+                        <option value="י״א">י״א</option>
+                        <option value="י״ב">י״ב</option>
+                        <option value="אחר">אחר (השלמות, מבוגרים וכו')</option>
+                    </select>
+                </div>
+
+                <!-- סיפור קצר על המתמטיקה -->
+                <div class="form-group">
+                    <label for="mathHistory" class="form-label">ספרו קצת על העבר עם המתמטיקה</label>
+                    <textarea 
+                        id="mathHistory" 
+                        name="סיפור על המתמטיקה" 
+                        rows="5" 
+                        class="form-textarea" 
+                        placeholder="למשל: ציון אחרון 62, מתקשים בנגזרות / פונקציות, רוצים 90+ בבגרות, או פשוט אוהבים את המקצוע ומחפשים אתגר..."
+                    ></textarea>
+                </div>
+
+                <!-- האם רוצים שנחזור אליהם -->
+                <div class="form-group flex items-center gap-3">
+                    <input 
+                        type="checkbox" 
+                        id="callback" 
+                        name="רוצים שנחזור אליכם" 
+                        class="form-checkbox" 
+                        checked
+                    >
+                    <label for="callback" class="text-lg text-gray-700">
+                        כן, אני רוצה שיחת טלפון או הודעה חזרה בהקדם
+                    </label>
+                </div>
+
+                <!-- כפתור שליחה -->
+                <button 
+                    type="submit" 
+                    class="w-full bg-purple-600 hover:bg-purple-700 text-white px-10 py-5 rounded-full text-xl font-extrabold shadow-2xl transition transform hover:scale-105 mt-6"
+                >
+                    שלחו פרטים → נחזור אליכם ממש בקרוב!
+                </button>
+
+                <p class="text-center text-sm text-gray-600 mt-4">
+                    שליחה מאובטחת • הפרטים ישמשו רק לצורך יצירת קשר
+                </p>
+            </form>
         </div>
     </section>
 
