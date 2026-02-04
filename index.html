@@ -18,15 +18,23 @@
         @media (min-width: 640px) { .btn-pair { flex-wrap: nowrap; } }
 
         /* סטיילים לטופס */
-        .form-group { @apply mb-6; }
-        .form-label { @apply block text-lg font-medium text-gray-700 mb-2; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; font-size: 1.125rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem; }
         .form-input, .form-select, .form-textarea {
-            @apply w-full px-5 py-4 border border-purple-200 rounded-2xl focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all bg-white/70 text-gray-900 placeholder-gray-500 shadow-sm;
+            width: 100%;
+            padding: 1rem 1.25rem;
+            border: 1px solid #d1d5db;
+            border-radius: 1rem;
+            font-size: 1.125rem;
+            transition: all 0.2s;
+            background-color: rgba(255, 255, 255, 0.8);
         }
         .form-input:focus, .form-select:focus, .form-textarea:focus {
-            @apply outline-none ring-2 ring-purple-400 ring-opacity-50 shadow-purple-glow;
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
         }
-        .form-checkbox { @apply h-5 w-5 text-purple-600 border-gray-300 rounded focus:ring-purple-500; }
+        .form-checkbox { width: 1.25rem; height: 1.25rem; color: #8b5cf6; border: 1px solid #d1d5db; border-radius: 0.25rem; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased">
@@ -42,12 +50,11 @@
                 <div class="hidden md:flex items-center gap-10 font-semibold text-gray-700 text-lg">
                     <a href="#aim" class="hover:text-purple-700 transition">המטרה</a>
                     <a href="#unique" class="hover:text-purple-700 transition">מה מייחד אותנו</a>
-                    <a href="#pricing" class="hover:text-purple-700 transition">מחירים</a>
                     <a href="#contact" class="hover:text-purple-700 transition">צרו קשר</a>
                     <a href="#faq" class="hover:text-purple-700 transition">שאלות</a>
                 </div>
 
-                <a href="#pricing" class="hidden md:flex bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-full font-bold shadow-lg transition transform hover:scale-105 items-center gap-3 text-lg">
+                <a href="#contact" class="hidden md:flex bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-full font-bold shadow-lg transition transform hover:scale-105 items-center gap-3 text-lg">
                     לקביעת שיעור
                 </a>
 
@@ -62,10 +69,9 @@
             <div class="mobile-menu hidden md:hidden flex-col bg-white border-t border-purple-100 py-6 px-6 space-y-6 font-semibold text-gray-700 peer-checked:flex">
                 <a href="#aim" class="hover:text-purple-700 transition">המטרה שלנו</a>
                 <a href="#unique" class="hover:text-purple-700 transition">מה מייחד אותנו</a>
-                <a href="#pricing" class="hover:text-purple-700 transition">מחירים</a>
                 <a href="#contact" class="hover:text-purple-700 transition">צרו קשר</a>
                 <a href="#faq" class="hover:text-purple-700 transition">שאלות נפוצות</a>
-                <a href="#pricing" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full font-bold text-center">
+                <a href="#contact" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full font-bold text-center">
                     לקביעת שיעור
                 </a>
             </div>
@@ -90,7 +96,9 @@
                     שיחה טלפונית
                 </a>
                 <a href="https://wa.me/972586276476?text=היי%2C%20אני%20רוצה%20שיעור%20הכרות" class="flex-1 bg-green-500 hover:bg-green-600 text-white px-8 py-5 rounded-full text-xl font-extrabold shadow-2xl transition transform hover:scale-105 text-center flex items-center justify-center gap-2">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
                     שליחת הודעה בוואטסאפ
                 </a>
             </div>
@@ -152,7 +160,6 @@
                 הנה מה שהם אומרים עלינו
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-                <!-- ביקורת 1 – אופק -->
                 <div class="bg-purple-50 p-8 rounded-2xl shadow-xl card-hover flex flex-col transition-all duration-300 border border-purple-100">
                     <div class="relative mb-6 flex-grow">
                         <iframe 
@@ -173,7 +180,6 @@
                     </p>
                 </div>
 
-                <!-- ביקורת 2 – ניקה -->
                 <div class="bg-purple-50 p-8 rounded-2xl shadow-xl card-hover flex flex-col transition-all duration-300 border border-purple-100">
                     <div class="relative mb-6 flex-grow">
                         <iframe 
@@ -194,7 +200,6 @@
                     </p>
                 </div>
 
-                <!-- ביקורת 3 – גלית -->
                 <div class="bg-purple-50 p-8 rounded-2xl shadow-xl card-hover flex flex-col transition-all duration-300 border border-purple-100">
                     <div class="relative mb-6 flex-grow">
                         <iframe 
@@ -218,7 +223,7 @@
         </div>
     </section>
 
-    <!-- המטרה שלנו -->
+    <!-- המטרה שלנו – טקסט מעודכן -->
     <section id="aim" class="py-24 bg-gradient-to-b from-purple-50 to-white text-center">
         <div class="max-w-5xl mx-auto px-6">
             <h2 class="text-5xl sm:text-6xl md:text-7xl font-extrabold text-purple-800 mb-10 md:mb-16 leading-tight">
@@ -226,59 +231,21 @@
             </h2>
             
             <p class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-6 leading-relaxed">
-                לא רק ציון גבוה.<br>
+                אנחנו לא רק רוצים לשפר ציונים.<br>
                 <span class="text-purple-700">
-                    להחזיר לילד את <strong>הביטחון</strong>, את <strong>ההנאה</strong> ואת <strong>האמונה</strong> שהוא באמת מסוגל.
+                    אנחנו רוצים שהתלמיד ירגיש שוב מסוגל, נהנה וגאה במתמטיקה.
                 </span>
             </p>
 
             <div class="text-2xl sm:text-3xl text-gray-700 mt-12 max-w-4xl mx-auto leading-relaxed space-y-6 font-medium">
-                <p>אנחנו רוצים להנגיש את המתמטיקה לכל תלמיד – <strong>בגובה העיניים</strong>, בצורה צעירה, קלילה ומותאמת אישית.</p>
-                <p>כל אחד מקבל גישה שונה, שפה אחרת, קצב משלו – כי <strong>אין תלמיד אחד דומה לשני</strong>.</p>
-                <p>המטרה היא שהמתמטיקה תרגיש כמו משחק חכם ולא כמו עונש – ושכל תלמיד ירגיש: <strong>"וואו, אני באמת מבין את זה!"</strong></p>
-                <p>בסופו של דבר – אנחנו כאן כדי שכל ילד יוכל להסתכל על עצמו ולהגיד: <strong>"אני טוב במתמטיקה, וזה מרגיש מגניב."</strong></p>
+                <p>אנחנו בונים לכל תלמיד דרך למידה אישית – בגובה העיניים, בקצב שלו, בסגנון שמתאים לו.</p>
+                <p>המטרה היא להפוך את המתמטיקה מחוויה מתסכלת לחוויה של הצלחה וביטחון.</p>
+                <p>כשזה קורה – הציונים עולים כמעט מעצמם, והכי חשוב: הילד מתחיל להאמין בעצמו שוב.</p>
             </div>
         </div>
     </section>
 
-    <!-- מחירים -->
-    <section id="pricing" class="py-24 bg-gradient-to-b from-white to-purple-50">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="text-5xl md:text-6xl font-extrabold text-purple-800 mb-10">מחירים</h2>
-            <div class="bg-white p-10 sm:p-14 rounded-3xl shadow-2xl purple-glow border-2 border-purple-200 max-w-3xl mx-auto">
-                <h3 class="text-3xl sm:text-4xl font-bold mb-8 text-gray-900">שיעור הכרות + בניית תוכנית אישית</h3>
-                
-                <p class="text-xl sm:text-2xl text-gray-700 mb-8 leading-relaxed font-medium">
-                    השיעור הראשון הוא שיעור <strong>הכרות מעמיק + בניית תוכנית עבודה מדויקת</strong> – 
-                    <strong>במחיר מיוחד ומוזל</strong> שנועד לאפשר לכולם להתחיל בלי התלבטות.
-                </p>
-
-                <p class="text-lg sm:text-xl text-gray-700 mb-10 leading-relaxed">
-                    לאחר מכן, המחירים שלנו <strong>נוחים ונגישים</strong> – ומתוכננים כך שככל שמגדילים את כמות השיעורים, 
-                    <strong>המחיר לכל שיעור יורד משמעותית</strong>.<br>
-                    המטרה היא לאפשר לכל תלמיד לקבל את הכמות הנכונה של ליווי – בדיוק כמה שהוא צריך, 
-                    במחיר שמרגיש הוגן ונכון גם להורים וגם לנו.
-                </p>
-
-                <p class="text-xl font-semibold text-purple-700 mb-12">
-                    שקיפות מלאה – אחרי שיעור ההכרות תקבלו הצעה ברורה ומפורטת, 
-                    בלי הפתעות ובלי התחייבות.
-                </p>
-
-                <div class="btn-pair max-w-lg mx-auto">
-                    <a href="tel:0586276476" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-10 py-6 rounded-full text-xl font-extrabold shadow-2xl transition transform hover:scale-105 text-center">
-                        שיחה טלפונית
-                    </a>
-                    <a href="https://wa.me/972586276476?text=היי%2C%20אני%20רוצה%20לקבוע%20שיעור%20הכרות%20+בניית%20תוכנית%20אישית" class="flex-1 bg-green-500 hover:bg-green-600 text-white px-10 py-6 rounded-full text-xl font-extrabold shadow-2xl transition transform hover:scale-105 text-center flex items-center justify-center gap-2">
-                        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                        שליחת הודעה בוואטסאפ
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- טופס יצירת קשר / לידים – החלק החדש -->
+    <!-- טופס יצירת קשר -->
     <section id="contact" class="py-20 bg-gradient-to-b from-purple-50 to-white">
         <div class="max-w-4xl mx-auto px-6">
             <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-800 mb-6 text-center">
@@ -295,70 +262,30 @@
                 class="bg-white p-8 sm:p-12 rounded-3xl shadow-2xl purple-glow border border-purple-100 max-w-3xl mx-auto space-y-8"
             >
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- שם פרטי -->
                     <div class="form-group">
                         <label for="firstName" class="form-label">שם פרטי</label>
-                        <input 
-                            type="text" 
-                            id="firstName" 
-                            name="שם פרטי" 
-                            required 
-                            class="form-input" 
-                            placeholder="למשל: דני"
-                        >
+                        <input type="text" id="firstName" name="שם פרטי" required class="form-input" placeholder="למשל: דני">
                     </div>
 
-                    <!-- שם משפחה -->
                     <div class="form-group">
                         <label for="lastName" class="form-label">שם משפחה</label>
-                        <input 
-                            type="text" 
-                            id="lastName" 
-                            name="שם משפחה" 
-                            required 
-                            class="form-input" 
-                            placeholder="למשל: כהן"
-                        >
+                        <input type="text" id="lastName" name="שם משפחה" required class="form-input" placeholder="למשל: כהן">
                     </div>
                 </div>
 
-                <!-- טלפון -->
                 <div class="form-group">
                     <label for="phone" class="form-label">מספר טלפון</label>
-                    <input 
-                        type="tel" 
-                        id="phone" 
-                        name="טלפון" 
-                        required 
-                        pattern="^05[0-9]{8}$|^0[2-9][0-9]{7}$" 
-                        title="מספר טלפון ישראלי תקין (למשל 0501234567)"
-                        class="form-input" 
-                        placeholder="050-123-4567"
-                    >
+                    <input type="tel" id="phone" name="טלפון" required pattern="^05[0-9]{8}$|^0[2-9][0-9]{7}$" title="מספר טלפון ישראלי תקין" class="form-input" placeholder="050-123-4567">
                 </div>
 
-                <!-- אימייל -->
                 <div class="form-group">
                     <label for="email" class="form-label">כתובת אימייל</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="אימייל" 
-                        required 
-                        class="form-input" 
-                        placeholder="your@email.com"
-                    >
+                    <input type="email" id="email" name="אימייל" required class="form-input" placeholder="your@email.com">
                 </div>
 
-                <!-- כיתה -->
                 <div class="form-group">
                     <label for="grade" class="form-label">באיזה כיתה הלומד/ת?</label>
-                    <select 
-                        id="grade" 
-                        name="כיתה" 
-                        required 
-                        class="form-select"
-                    >
+                    <select id="grade" name="כיתה" required class="form-select">
                         <option value="" disabled selected>בחרו כיתה</option>
                         <option value="ז׳">ז׳</option>
                         <option value="ח׳">ח׳</option>
@@ -370,37 +297,19 @@
                     </select>
                 </div>
 
-                <!-- סיפור קצר על המתמטיקה -->
                 <div class="form-group">
                     <label for="mathHistory" class="form-label">ספרו קצת על העבר עם המתמטיקה</label>
-                    <textarea 
-                        id="mathHistory" 
-                        name="סיפור על המתמטיקה" 
-                        rows="5" 
-                        class="form-textarea" 
-                        placeholder="למשל: ציון אחרון 62, מתקשים בנגזרות / פונקציות, רוצים 90+ בבגרות, או פשוט אוהבים את המקצוע ומחפשים אתגר..."
-                    ></textarea>
+                    <textarea id="mathHistory" name="סיפור על המתמטיקה" rows="5" class="form-textarea" placeholder="למשל: ציון אחרון 62, מתקשים בנגזרות / פונקציות, רוצים 90+ בבגרות..."></textarea>
                 </div>
 
-                <!-- האם רוצים שנחזור אליהם -->
                 <div class="form-group flex items-center gap-3">
-                    <input 
-                        type="checkbox" 
-                        id="callback" 
-                        name="רוצים שנחזור אליכם" 
-                        class="form-checkbox" 
-                        checked
-                    >
+                    <input type="checkbox" id="callback" name="רוצים שנחזור אליכם" class="form-checkbox" checked>
                     <label for="callback" class="text-lg text-gray-700">
                         כן, אני רוצה שיחת טלפון או הודעה חזרה בהקדם
                     </label>
                 </div>
 
-                <!-- כפתור שליחה -->
-                <button 
-                    type="submit" 
-                    class="w-full bg-purple-600 hover:bg-purple-700 text-white px-10 py-5 rounded-full text-xl font-extrabold shadow-2xl transition transform hover:scale-105 mt-6"
-                >
+                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white px-10 py-5 rounded-full text-xl font-extrabold shadow-2xl transition transform hover:scale-105 mt-6">
                     שלחו פרטים → נחזור אליכם ממש בקרוב!
                 </button>
 
@@ -449,21 +358,11 @@
 
                 <details class="group bg-purple-50 rounded-2xl overflow-hidden shadow-sm">
                     <summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl text-purple-900">
-                        כמה עולה שיעור רגיל?
-                        <span class="text-3xl transition group-open:rotate-180">▼</span>
-                    </summary>
-                    <div class="px-8 pb-10 text-lg text-gray-700">
-                        המחירים שלנו נוחים ומתוכננים בצורה הוגנת. ככל שמגדילים את כמות השיעורים בתוכנית, כך המחיר לכל שיעור יורד. אחרי שיעור ההכרות תקבלו הצעה ברורה ומפורטת לפי הצורך של התלמיד.
-                    </div>
-                </details>
-
-                <details class="group bg-purple-50 rounded-2xl overflow-hidden shadow-sm">
-                    <summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl text-purple-900">
                         כמה זמן נמשך כל שיעור?
                         <span class="text-3xl transition group-open:rotate-180">▼</span>
                     </summary>
                     <div class="px-8 pb-10 text-lg text-gray-700">
-                        אורך השיעור גמיש ומותאם אישית. יש תלמידים שמתרכזים טוב יותר ב-45 דקות, ויש כאלה שזקוקים ל-60-70 דקות כדי להעמיק. אנחנו מתאימים את הזמן בדיוק לאופי ולקצב של התלמיד – כך שהוא יפיק את המקסימום ויצליח בצורה הטובה ביותר.
+                        אורך השיעור גמיש ומותאם אישית. יש תלמידים שמתרכזים טוב יותר ב-45 דקות, ויש כאלה שזקוקים ל-60-70 דקות כדי להעמיק. אנחנו מתאימים את הזמן בדיוק לאופי ולקצב של התלמיד.
                     </div>
                 </details>
 
@@ -473,7 +372,7 @@
                         <span class="text-3xl transition group-open:rotate-180">▼</span>
                     </summary>
                     <div class="px-8 pb-10 text-lg text-gray-700">
-                        כן. המורים שלנו זמינים בוואטסאפ גם אחרי השיעור. אם התלמיד נתקל בשאלה, תקיעה או רוצה הבהרה – הוא יכול לשלוח הודעה והמורה יענה בהקדם האפשרי.
+                        כן. המורים שלנו זמינים בוואטסאפ גם אחרי השיעור. אם התלמיד נתקל בשאלה או רוצה הבהרה – הוא יכול לשלוח הודעה והמורה יענה בהקדם.
                     </div>
                 </details>
 
@@ -483,17 +382,7 @@
                         <span class="text-3xl transition group-open:rotate-180">▼</span>
                     </summary>
                     <div class="px-8 pb-10 text-lg text-gray-700">
-                        לא. המורה שעושה את שיעור ההכרות הוא בדרך כלל אותו מורה שמלווה את התלמיד לאורך כל התהליך. אנחנו מאמינים בחשיבות של קשר אישי רציף ובניית אמון.
-                    </div>
-                </details>
-
-                <details class="group bg-purple-50 rounded-2xl overflow-hidden shadow-sm">
-                    <summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl text-purple-900">
-                        מה אם התלמיד לא מתקדם כצפוי?
-                        <span class="text-3xl transition group-open:rotate-180">▼</span>
-                    </summary>
-                    <div class="px-8 pb-10 text-lg text-gray-700">
-                        אנחנו מתאימים את התוכנית בזמן אמת, מוסיפים הסברים נוספים או משנים גישה – עד שרואים התקדמות אמיתית וביטחון.
+                        לא. המורה שעושה את שיעור ההכרות הוא בדרך כלל אותו מורה שמלווה את התלמיד לאורך כל התהליך.
                     </div>
                 </details>
 
