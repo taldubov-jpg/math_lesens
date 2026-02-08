@@ -435,6 +435,40 @@
         </div>
     </footer>
 
-<form name='upayform' action='https://app.upay.co.il/API6/clientsecure/redirectpage.php' method='post'><input type='hidden'        value='taldubov@gmail.com' name='email'><INPUT TYPE='hidden' value='600' NAME='amount'><INPUT TYPE='hidden' value='' NAME='returnurl'><INPUT TYPE='hidden' value='' NAME='ipnurl'><INPUT TYPE='hidden' value='שיעורים פרטיים' NAME='paymentdetails'>        <INPUT TYPE='hidden' value='1' NAME='maxpayments'><INPUT TYPE='hidden' value='1' NAME='livesystem'><INPUT TYPE='hidden' value='' NAME='commissionreduction'><INPUT TYPE='hidden' value='0' NAME='createinvoiceandreceipt'>        <INPUT TYPE='hidden' value='0' NAME='createinvoice'><INPUT TYPE='hidden' value='1' NAME='createreceipt'><INPUT TYPE='hidden' value='UPAY' NAME='refername'><INPUT TYPE='hidden' value='HE' NAME='lang'><INPUT TYPE='hidden' value='NIS' NAME='currency'>        <input type='image' src='https://app.upay.co.il/BANKRESOURCES/UPAY/images/buttons/payment-button3HE.png' name='submit' alt='Make payments with upay'></form>
 </body>
+
+<body>
+
+    <div class="container">
+        <h1>תשלום עבור שיעורים פרטיים</h1>
+        <p>סכום לתשלום: <strong>600 ₪</strong></p>
+        <p>פרטי העסקה: שיעורים פרטיים</p>
+
+        <div class="upay-button">
+            <!-- כאן מדביקים את כל הקוד של uPay -->
+            <form name='upayform' action='https://app.upay.co.il/API6/clientsecure/redirectpage.php' method='post'>
+                <input type='hidden' value='taldubov@gmail.com' name='email'>
+                <input type='hidden' value='600' name='amount'>
+                <input type='hidden' value='' name='returnurl'>
+                <input type='hidden' value='' name='ipnurl'>
+                <input type='hidden' value='שיעורים פרטיים' name='paymentdetails'>
+                <input type='hidden' value='1' name='maxpayments'>
+                <input type='hidden' value='1' name='livesystem'>
+                <input type='hidden' value='' name='commissionreduction'>
+                <input type='hidden' value='0' name='createinvoiceandreceipt'>
+                <input type='hidden' value='0' name='createinvoice'>
+                <input type='hidden' value='1' name='createreceipt'>
+                <input type='hidden' value='UPAY' name='refername'>
+                <input type='hidden' value='HE' name='lang'>
+                <input type='hidden' value='NIS' name='currency'>
+                <input type='image' src='https://app.upay.co.il/BANKRESOURCES/UPAY/images/buttons/payment-button3HE.png' name='submit' alt='שלם באמצעות uPay'>
+            </form>
+        </div>
+
+        <p class="note">תשלום מאובטח ב-SSL באמצעות uPay • כרטיסי אשראי ישראלים ובינלאומיים</p>
+    </div>
+
+</body>
+
+
 </html>
