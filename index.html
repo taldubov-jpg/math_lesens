@@ -163,6 +163,65 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             font-size: 1.5rem;
         }
 
+        /* כרטיסי ביקורות */
+        .review-card {
+            position: relative;
+        }
+        .review-card-inner {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid #ede9fe;
+            box-shadow: 0 4px 20px -6px rgba(109,40,217,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+        }
+        .review-card-inner:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px -10px rgba(109,40,217,0.2);
+        }
+        .review-tag {
+            display: inline-block;
+            background: #ede9fe;
+            color: #6d28d9;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.3rem 0.85rem;
+            border-radius: 9999px;
+            margin-bottom: 0.875rem;
+        }
+        .review-footer {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-top: 0.875rem;
+            border-top: 1px solid #f3f4f6;
+        }
+        .review-avatar {
+            width: 2.25rem;
+            height: 2.25rem;
+            background: linear-gradient(135deg, #7c3aed, #a855f7);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        /* אנימציות גלילה */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* סקשן המטרה */
         .aim-statement {
             background: white;
@@ -302,7 +361,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
             <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 drop-shadow">
                 הילד שלכם מתקשה במתמטיקה?<br>
-                <span class="text-yellow-200">אנחנו יודעים בדיוק למה —<br>ואיך לשנות את זה.</span>
+                <span class="text-yellow-200">אנחנו יודעים בדיוק למה<br>ואיך לשנות את זה.</span>
             </h1>
 
             <p class="text-xl sm:text-2xl mb-4 max-w-3xl mx-auto font-light leading-relaxed">
@@ -346,19 +405,19 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             <p class="text-base text-gray-500 text-center mb-10">רוב ההורים שפונים אלינו עברו לפחות אחד מהדברים האלה</p>
 
             <div class="grid md:grid-cols-2 gap-3">
-                <div class="pain-box">
+                <div class="pain-box fade-up">
                     <span class="pain-dot"></span>
                     <p class="text-base text-gray-700 font-medium leading-snug">הילד אומר "מתמטיקה זה לא בשבילי" — וכבר ויתר לפני שניסה</p>
                 </div>
-                <div class="pain-box">
+                <div class="pain-box fade-up">
                     <span class="pain-dot"></span>
                     <p class="text-base text-gray-700 font-medium leading-snug">הציונים ממשיכים לרדת למרות שעות לימוד ארוכות</p>
                 </div>
-                <div class="pain-box">
+                <div class="pain-box fade-up">
                     <span class="pain-dot"></span>
                     <p class="text-base text-gray-700 font-medium leading-snug">היו מורים פרטיים — אבל הציונים פשוט לא עלו</p>
                 </div>
-                <div class="pain-box">
+                <div class="pain-box fade-up">
                     <span class="pain-dot"></span>
                     <p class="text-base text-gray-700 font-medium leading-snug">הבגרות מתקרבת והחרדה גדלה — בבית ובשיעורים</p>
                 </div>
@@ -381,19 +440,19 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     <section class="py-10 bg-gradient-to-l from-purple-700 to-purple-900 text-white">
         <div class="max-w-5xl mx-auto px-6">
             <div class="flex flex-wrap justify-center divide-x divide-x-reverse divide-white/20">
-                <div class="stat-item px-6 sm:px-10">
+                <div class="stat-item fade-up px-6 sm:px-10">
                     <span class="text-3xl sm:text-4xl font-extrabold">300+</span>
                     <span class="text-xs sm:text-sm font-medium mt-1 opacity-80 text-center">תלמידים שליווינו</span>
                 </div>
-                <div class="stat-item px-6 sm:px-10">
+                <div class="stat-item fade-up px-6 sm:px-10">
                     <span class="text-3xl sm:text-4xl font-extrabold">כיתה א׳ – י״ב</span>
                     <span class="text-xs sm:text-sm font-medium mt-1 opacity-80 text-center">לכל שכבות הגיל</span>
                 </div>
-                <div class="stat-item px-6 sm:px-10">
+                <div class="stat-item fade-up px-6 sm:px-10">
                     <span class="text-3xl sm:text-4xl font-extrabold">100%</span>
                     <span class="text-xs sm:text-sm font-medium mt-1 opacity-80 text-center">אונליין — מכל מקום בארץ</span>
                 </div>
-                <div class="stat-item px-6 sm:px-10">
+                <div class="stat-item fade-up px-6 sm:px-10">
                     <span class="text-3xl sm:text-4xl font-extrabold">מורה קבוע</span>
                     <span class="text-xs sm:text-sm font-medium mt-1 opacity-80 text-center">מהשיעור הראשון עד הסוף</span>
                 </div>
@@ -404,14 +463,101 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
 
     <!-- ============================================================ -->
+    <!-- ביקורות — וידאו (מקורי) + ציטוטי טקסט                       -->
+    <!-- ============================================================ -->
+    <section id="reviews" class="py-20 sm:py-24 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8">
+
+            <!-- ריבוע שיעור ההכרות -->
+            <div class="mb-12 bg-purple-50 border border-purple-100 rounded-2xl px-8 py-6 max-w-3xl mx-auto text-center fade-up">
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    מתחילים עם <strong class="text-purple-800">שיעור היכרות</strong> — המורה מאבחן, מבין את התלמיד, ובונה תוכנית.
+                    לא המשכתם לתוכנית? <strong class="text-purple-800">מקבלים החזר כספי מלא</strong>, ללא שאלות.
+                </p>
+            </div>
+
+            <div class="text-center mb-14 fade-up">
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-900 mb-3">
+                    מה הורים ותלמידים אומרים עלינו
+                </h2>
+
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+
+                <div class="review-card fade-up" style="animation-delay:0.1s">
+                    <div class="review-card-inner">
+                        <iframe
+                            class="w-full rounded-2xl aspect-video mb-5"
+                            src="https://www.youtube.com/embed/ITjR5q0zYNA?rel=0&modestbranding=1&iv_load_policy=3&autoplay=0&playsinline=1"
+                            title="אופק שהגיע אלינו להשלמת בגרויות לאחר שירות קרבי"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen loading="lazy">
+                        </iframe>
+                        <div class="review-footer">
+                            <div class="review-avatar">א</div>
+                            <div>
+                                <p class="font-bold text-gray-800 text-sm">אופק</p>
+                                <p class="text-xs text-gray-500">השלמת בגרויות לאחר שירות קרבי</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card fade-up" style="animation-delay:0.2s">
+                    <div class="review-card-inner">
+                        <iframe
+                            class="w-full rounded-2xl aspect-video mb-5"
+                            src="https://www.youtube.com/embed/md97Qd6cTiE?rel=0&modestbranding=1&iv_load_policy=3&autoplay=0&playsinline=1"
+                            title="ניקה המקסימה ממליצה על הליווי שלנו במתמטיקה"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen loading="lazy">
+                        </iframe>
+                        <div class="review-footer">
+                            <div class="review-avatar">נ</div>
+                            <div>
+                                <p class="font-bold text-gray-800 text-sm">ניקה</p>
+                                <p class="text-xs text-gray-500">ממליצה על הליווי</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review-card fade-up" style="animation-delay:0.3s">
+                    <div class="review-card-inner">
+                        <iframe
+                            class="w-full rounded-2xl aspect-video mb-5"
+                            src="https://www.youtube.com/embed/j4-qj6UzcRU?rel=0&modestbranding=1&iv_load_policy=3&autoplay=0&playsinline=1"
+                            title="המלצה חמה מגלית – אחרי 5 חודשים של ליווי אישי לבן שלה"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen loading="lazy">
+                        </iframe>
+                        <div class="review-footer">
+                            <div class="review-avatar">ג</div>
+                            <div>
+                                <p class="font-bold text-gray-800 text-sm">גלית</p>
+                                <p class="text-xs text-gray-500">ממליצה על הליווי</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
     <!-- מה מייחד אותנו                                               -->
     <!-- ============================================================ -->
     <section id="unique" class="py-20 sm:py-28 bg-white">
         <div class="max-w-6xl mx-auto px-6 text-center">
             <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-800 mb-10">מה הופך את MathBoost לשונה באמת?</h2>
             <p class="text-xl sm:text-2xl text-gray-700 max-w-4xl mx-auto mb-10 leading-relaxed">
-                בשיעור הראשון אנחנו לא "מתחילים ללמד".<br>
-                אנחנו עושים <strong>היכרות מעמיקה עם התלמיד — המורה הולך איתו בכל התהליך</strong>.
+                בשיעור הראשון כבר מתחילים ללמוד — אך עיקר השיעור הוא <strong>הכרה ואבחון התלמיד</strong>.<br>
+                המורה מזהה דרך התרגול את הקשיים ואת דרך החשיבה, ומגיע לסיום השיעור עם תוכנית אישית מדויקת.
             </p>
             <p class="text-xl sm:text-2xl text-gray-700 max-w-4xl mx-auto mb-16 leading-relaxed font-medium">
                 כל תלמיד מקבל מורה קבוע שבונה איתו תוכנית אישית ממוקדת: חיזוק הצדדים החלשים, הבנת שורש הבעיה, והפיכת הלמידה לקלילה ומהנה.<br><br>
@@ -444,13 +590,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 </div>
             </div>
 
-            <!-- שיעור הכרות + החזר — שורה אחת, מתחת לכרטיסים -->
-            <div class="mt-10 bg-purple-50 border border-purple-100 rounded-2xl px-8 py-6 max-w-3xl mx-auto text-center">
-                <p class="text-lg text-gray-700 leading-relaxed">
-                    מתחילים עם <strong class="text-purple-800">שיעור היכרות</strong> — המורה מאבחן, מבין את התלמיד, ובונה תוכנית.
-                    לא המשכתם לתוכנית? <strong class="text-purple-800">מקבלים החזר כספי מלא</strong>, ללא שאלות.
-                </p>
-            </div>
+
 
             <!-- מתאים לכל שכבת גיל -->
             <div class="mt-10 bg-gray-50 rounded-2xl border border-gray-100 p-8 shadow-sm">
@@ -511,84 +651,16 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     </section>
 
     <!-- ============================================================ -->
-    <!-- ביקורות — וידאו (מקורי) + ציטוטי טקסט                       -->
-    <!-- ============================================================ -->
-    <section id="reviews" class="py-20 sm:py-24 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-5 sm:px-8">
-            <div class="text-center mb-14">
-                <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-900 mb-3">
-                    מה הורים ותלמידים אומרים עלינו
-                </h2>
-                <p class="text-base text-gray-500">סרטוני המלצה אמיתיים — בגוף ראשון, ללא עריכה</p>
-            </div>
-
-            <!-- סרטוני וידאו — מקוריים, ללא שינוי -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 mb-14">
-                <div class="bg-white p-6 rounded-2xl shadow-md card-hover flex flex-col border border-purple-50">
-                    <div class="relative mb-5 flex-grow">
-                        <iframe
-                            class="w-full rounded-xl aspect-video shadow-sm"
-                            src="https://www.youtube.com/embed/ITjR5q0zYNA?rel=0&modestbranding=1&iv_load_policy=3&autoplay=0&playsinline=1"
-                            title="אופק שהגיע אלינו להשלמת בגרויות לאחר שירות קרבי"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen
-                            loading="lazy">
-                        </iframe>
-                    </div>
-                    <p class="text-gray-700 text-sm leading-relaxed mb-2 font-medium">
-                        "אופק שהגיע אלינו להשלמת בגרויות לאחר שירות קרבי – ממליץ בחום!"
-                    </p>
-                    <p class="text-purple-600 font-semibold text-sm">אופק – תלמיד וחייל משוחרר</p>
-                </div>
-
-                <div class="bg-white p-6 rounded-2xl shadow-md card-hover flex flex-col border border-purple-50">
-                    <div class="relative mb-5 flex-grow">
-                        <iframe
-                            class="w-full rounded-xl aspect-video shadow-sm"
-                            src="https://www.youtube.com/embed/md97Qd6cTiE?rel=0&modestbranding=1&iv_load_policy=3&autoplay=0&playsinline=1"
-                            title="ניקה המקסימה ממליצה על הליווי שלנו במתמטיקה"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen
-                            loading="lazy">
-                        </iframe>
-                    </div>
-                    <p class="text-gray-700 text-sm leading-relaxed mb-2 font-medium">
-                        "ניקה המקסימה ממליצה על הליווי שלנו במתמטיקה – הצלחה אמיתית!"
-                    </p>
-                    <p class="text-purple-600 font-semibold text-sm">ניקה – אם מרוצה</p>
-                </div>
-
-                <div class="bg-white p-6 rounded-2xl shadow-md card-hover flex flex-col border border-purple-50">
-                    <div class="relative mb-5 flex-grow">
-                        <iframe
-                            class="w-full rounded-xl aspect-video shadow-sm"
-                            src="https://www.youtube.com/embed/j4-qj6UzcRU?rel=0&modestbranding=1&iv_load_policy=3&autoplay=0&playsinline=1"
-                            title="המלצה חמה מגלית – אחרי 5 חודשים של ליווי אישי לבן שלה"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen
-                            loading="lazy">
-                        </iframe>
-                    </div>
-                    <p class="text-gray-700 text-sm leading-relaxed mb-2 font-medium">
-                        "המלצה חמה מגלית – אחרי 5 חודשים של ליווי אישי לבן שלה"
-                    </p>
-                    <p class="text-purple-600 font-semibold text-sm">גלית – אם מרוצה</p>
-                </div>
-            </div>
-
-
-        </div>
-    </section>
-
-    <!-- ============================================================ -->
     <!-- טופס יצירת קשר                                              -->
     <!-- ============================================================ -->
-    <section id="contact" class="py-20 bg-white">
-        <div class="max-w-3xl mx-auto px-6">
-            <div class="text-center mb-10">
+    <section id="contact" class="py-20 bg-white relative overflow-hidden">
+        <!-- רקע דקורטיבי -->
+        <div style="position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(124,58,237,0.08) 0%,transparent 70%);pointer-events:none;"></div>
+        <div style="position:absolute;bottom:-60px;left:-60px;width:240px;height:240px;background:radial-gradient(circle,rgba(124,58,237,0.06) 0%,transparent 70%);pointer-events:none;"></div>
+
+        <div class="max-w-2xl mx-auto px-6 relative">
+            <div class="text-center mb-10 fade-up">
+                <div class="inline-block bg-purple-100 text-purple-700 text-sm font-bold px-4 py-1.5 rounded-full mb-4">שיעור היכרות עם החזר מלא</div>
                 <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-900 mb-4">
                     השאירו פרטים — נחזור אליכם עוד היום
                 </h2>
@@ -600,7 +672,8 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             <form
                 action="https://formspree.io/f/mojnaqgb"
                 method="POST"
-                class="bg-white p-8 sm:p-10 rounded-3xl shadow-xl purple-glow border border-purple-100 space-y-6"
+                class="fade-up"
+                style="background:linear-gradient(135deg,#faf5ff 0%,#f5f3ff 100%);border:1.5px solid #ddd6fe;border-radius:1.75rem;padding:2.5rem;box-shadow:0 20px 60px -15px rgba(109,40,217,0.15);"
             >
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div class="form-group">
@@ -617,8 +690,6 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                     <label for="phone" class="form-label">מספר טלפון</label>
                     <input type="tel" id="phone" name="טלפון" required pattern="^05[0-9]{8}$|^0[2-9][0-9]{7}$" title="מספר טלפון ישראלי תקין" class="form-input" placeholder="050-000-0000">
                 </div>
-
-
 
                 <div class="form-group">
                     <label for="grade" class="form-label">באיזה כיתה הלומד/ת?</label>
@@ -650,7 +721,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
                 <div class="form-group">
                     <label for="mathHistory" class="form-label">ספרו קצת על המצב הנוכחי</label>
-                    <textarea id="mathHistory" name="סיפור על המתמטיקה" rows="4" class="form-textarea" placeholder="למשל: הבן שלי בכיתה ז׳, מתקשה עם שברים ואלגברה בסיסית..."></textarea>
+                    <textarea id="mathHistory" name="סיפור על המתמטיקה" rows="3" class="form-textarea" placeholder="למשל: הבן שלי בכיתה ז׳, מתקשה עם שברים ואלגברה בסיסית..."></textarea>
                 </div>
 
                 <div class="form-group">
@@ -665,18 +736,19 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                     </select>
                 </div>
 
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 mb-2">
                     <input type="checkbox" id="callback" name="רוצים שנחזור אליכם" class="form-checkbox" checked>
                     <label for="callback" class="text-base text-gray-700 cursor-pointer">
                         כן, אני רוצה שיחת טלפון או הודעה חזרה בהקדם
                     </label>
                 </div>
 
-                <button type="submit" class="w-full bg-purple-700 hover:bg-purple-800 text-white px-10 py-4 rounded-full text-lg font-extrabold shadow-lg transition transform hover:scale-105">
+                <button type="submit" class="w-full text-white px-10 py-4 rounded-2xl text-lg font-extrabold shadow-lg transition transform hover:scale-105 mt-2"
+                    style="background:linear-gradient(135deg,#6d28d9 0%,#7c3aed 100%);box-shadow:0 8px 24px -6px rgba(109,40,217,0.4);">
                     שלחו פרטים — נחזור אליכם עוד היום
                 </button>
 
-                <p class="text-center text-xs text-gray-400">
+                <p class="text-center text-xs text-gray-400 mt-4">
                     שליחה מאובטחת &nbsp;·&nbsp; הפרטים ישמשו רק לצורך יצירת קשר
                 </p>
             </form>
@@ -767,5 +839,17 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         </div>
     </footer>
 
+    <script>
+        // אנימציות גלילה
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    </script>
 </body>
 </html>
