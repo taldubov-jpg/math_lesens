@@ -8,22 +8,17 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'AW-17941073605');
-
 </script>
 
-<!-- Event snippet for איש קשר conversion page --> <script> gtag('event', 'conversion', {'send_to': 'AW-17941073605/5HZmCO2v6fUbEMWd_OpC'}); </script>
+<script>
+gtag('event', 'conversion', {'send_to': 'AW-17941073605/5HZmCO2v6fUbEMWd_OpC'});
+</script>
 
-
-<!-- Event snippet for קליק לשיחה conversion page
-In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
 <script>
 function gtag_report_conversion(url) {
   var callback = function () {
-    if (typeof(url) != 'undefined') {
-      window.location = url;
-    }
+    if (typeof(url) != 'undefined') { window.location = url; }
   };
   gtag('event', 'conversion', {
       'send_to': 'AW-17941073605/oopDCMv86fUbEMWd_OpC',
@@ -35,19 +30,13 @@ function gtag_report_conversion(url) {
 }
 </script>
 
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17949331011">
-</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-17949331011"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'AW-17949331011');
 </script>
-
-
 
 <!-- Meta Pixel Code -->
 <script>
@@ -69,306 +58,555 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MathBoost - מתמטיקה זה פשוט ברגע שמסבירים נכון </title>
+    <title>MathBoost – שיעורי מתמטיקה פרטיים מכיתה א׳ ועד בגרות</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Heebo', system-ui, -apple-system, sans-serif; scroll-behavior: smooth; }
-        .hero-bg { background: linear-gradient(135deg, #6b21a8 0%, #a855f7 100%); clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); }
-        .purple-glow { box-shadow: 0 10px 30px -10px rgba(139, 92, 246, 0.4); }
+
+        .hero-bg {
+            background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 60%, #9333ea 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+        }
+
+        .purple-glow { box-shadow: 0 10px 30px -10px rgba(109, 40, 217, 0.35); }
+
         #menu-toggle:checked ~ .mobile-menu { display: flex; }
-        .card-hover:hover { transform: translateY(-10px); transition: all 0.4s ease; box-shadow: 0 20px 40px -10px rgba(139, 92, 246, 0.25); }
+
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 36px -10px rgba(109, 40, 217, 0.2);
+        }
+
         .btn-pair { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
         @media (min-width: 640px) { .btn-pair { flex-wrap: nowrap; } }
 
-        /* סטיילים לטופס */
-        .form-group { margin-bottom: 1.5rem; }
-        .form-label { display: block; font-size: 1.125rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem; }
-        .form-input, .form-select, .form-textarea {
-            width: 100%;
-            padding: 1rem 1.25rem;
-            border: 1px solid #d1d5db;
-            border-radius: 1rem;
-            font-size: 1.125rem;
-            transition: all 0.2s;
-            background-color: rgba(255, 255, 255, 0.8);
+        /* רצועת כיתות */
+        .grade-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            border-radius: 9999px;
+            padding: 0.35rem 1rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            transition: background 0.2s;
         }
-        .form-input:focus, .form-select:focus, .form-textarea:focus {
-            outline: none;
-            border-color: #8b5cf6;
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
-        }
-        .form-checkbox { width: 1.25rem; height: 1.25rem; color: #8b5cf6; border: 1px solid #d1d5db; border-radius: 0.25rem; }
+        .grade-pill:hover { background: rgba(255,255,255,0.25); }
 
-        /* סטיילים חדשים לחלק המטרה */
+        /* כרטיסי כאב */
+        .pain-box {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.875rem;
+            padding: 1.375rem 1.75rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .pain-box:hover {
+            border-color: #c4b5fd;
+            box-shadow: 0 4px 16px -4px rgba(109, 40, 217, 0.1);
+        }
+        .pain-dot {
+            width: 8px;
+            height: 8px;
+            background: #7c3aed;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* סרגל סטטיסטיקות */
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.25rem 1rem;
+        }
+        .stat-divider {
+            width: 1px;
+            background: rgba(255,255,255,0.2);
+            align-self: stretch;
+        }
+
+        /* כרטיסי ייחוד */
+        .feature-card {
+            background: white;
+            border: 1px solid #ede9fe;
+            border-radius: 1.25rem;
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 14px 32px -8px rgba(109, 40, 217, 0.15);
+        }
+        .feature-icon {
+            width: 3rem;
+            height: 3rem;
+            background: #ede9fe;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+            font-size: 1.5rem;
+        }
+
+        /* סקשן המטרה */
         .aim-statement {
             background: white;
             border-radius: 1rem;
             padding: 1.5rem 2rem;
-            margin: 1.5rem auto;
-            max-width: 900px;
-            box-shadow: 0 4px 15px -5px rgba(139, 92, 246, 0.15);
-            border: 1px solid rgba(139, 92, 246, 0.1);
-            transition: all 0.3s ease;
+            box-shadow: 0 2px 12px -4px rgba(109, 40, 217, 0.1);
+            border: 1px solid #ede9fe;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         .aim-statement:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px -8px rgba(139, 92, 246, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px -6px rgba(109, 40, 217, 0.18);
         }
-        .aim-title { color: #6b21a8; font-weight: 800; }
-        .aim-process { color: #7c3aed; }
-        .aim-enjoy { color: #9333ea; }
-        .aim-result { color: #a855f7; font-weight: 700; }
+
+        /* ציטוטים */
+        .quote-card {
+            background: white;
+            border-radius: 1.25rem;
+            padding: 1.75rem;
+            border: 1px solid #ede9fe;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .quote-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px -8px rgba(109, 40, 217, 0.18);
+        }
+
+        /* שדות טופס */
+        .form-group { margin-bottom: 1.25rem; }
+        .form-label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.4rem;
+        }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.875rem 1.125rem;
+            border: 1.5px solid #d1d5db;
+            border-radius: 0.875rem;
+            font-size: 1rem;
+            font-family: 'Heebo', sans-serif;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background-color: #fff;
+            color: #111827;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+        }
+        .form-checkbox {
+            width: 1.125rem;
+            height: 1.125rem;
+            accent-color: #7c3aed;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased">
 
-    <!-- Navbar -->
-    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-lg border-b border-purple-100 shadow-sm">
+    <!-- ============================================================ -->
+    <!-- Navbar                                                       -->
+    <!-- ============================================================ -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16 sm:h-20">
-                <div class="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-purple-700 to-purple-500 bg-clip-text text-transparent">
+
+                <!-- ימין: לוגו -->
+                <div class="text-3xl sm:text-4xl font-extrabold text-purple-700 tracking-tight">
                     MathBoost
                 </div>
 
-                <div class="hidden md:flex items-center gap-10 font-semibold text-gray-700 text-lg">
-                    <a href="#aim" class="hover:text-purple-700 transition">המטרה</a>
-                    <a href="#unique" class="hover:text-purple-700 transition">מה מייחד אותנו</a>
-                    <a href="#contact" class="hover:text-purple-700 transition">צרו קשר</a>
-                    <a href="#faq" class="hover:text-purple-700 transition">שאלות</a>
+                <!-- דסקטופ: תפריט -->
+                <div class="hidden md:flex items-center gap-8 font-semibold text-gray-600 text-base">
+                    <a href="#pain" class="hover:text-purple-700 transition">מכירים את זה?</a>
+                    <a href="#unique" class="hover:text-purple-700 transition">השיטה שלנו</a>
+                    <a href="#reviews" class="hover:text-purple-700 transition">המלצות</a>
+                    <a onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'});return false;" href="#" class="hover:text-purple-700 transition">צרו קשר</a>
+                    <a href="#faq" class="hover:text-purple-700 transition">שאלות נפוצות</a>
                 </div>
 
-                <a href="#contact" class="hidden md:flex bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-full font-bold shadow-lg transition transform hover:scale-105 items-center gap-3 text-lg">
-                    לקביעת שיעור
-                </a>
+                <!-- דסקטופ: כפתורים -->
+                <div class="hidden md:flex items-center gap-3">
+                    <a href="https://wa.me/972586276476?text=%D7%94%D7%99%D7%99%2C%20%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%A9%D7%99%D7%A2%D7%95%D7%A8%20%D7%94%D7%9B%D7%A8%D7%95%D7%AA"
+                       class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-full font-bold text-sm transition">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        וואטסאפ
+                    </a>
+                    <a onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'});return false;" href="#" class="bg-purple-700 hover:bg-purple-800 text-white px-5 py-2.5 rounded-full font-bold text-sm transition">
+                        לקביעת שיעור היכרות
+                    </a>
+                </div>
 
-                <label for="menu-toggle" class="md:hidden cursor-pointer">
-                    <svg class="w-10 h-10 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
-                    </svg>
-                </label>
+                <!-- שמאל במובייל: וואטסאפ קטן + המבורגר -->
+                <div class="flex md:hidden items-center gap-2">
+                    <a href="https://wa.me/972586276476?text=%D7%94%D7%99%D7%99%2C%20%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%A9%D7%99%D7%A2%D7%95%D7%A8%20%D7%94%D7%9B%D7%A8%D7%95%D7%AA"
+                       class="flex items-center gap-1 bg-green-500 hover:bg-green-600 text-white px-3 py-1.5 rounded-full text-xs font-bold transition">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        וואטסאפ
+                    </a>
+                    <label for="menu-toggle" class="cursor-pointer p-1">
+                        <svg class="w-8 h-8 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
+                        </svg>
+                    </label>
+                </div>
             </div>
 
             <input type="checkbox" id="menu-toggle" class="hidden peer" />
-            <div class="mobile-menu hidden md:hidden flex-col bg-white border-t border-purple-100 py-6 px-6 space-y-6 font-semibold text-gray-700 peer-checked:flex">
-                <a href="#aim" class="hover:text-purple-700 transition">המטרה שלנו</a>
-                <a href="#unique" class="hover:text-purple-700 transition">מה מייחד אותנו</a>
-                <a href="#contact" class="hover:text-purple-700 transition">צרו קשר</a>
-                <a href="#faq" class="hover:text-purple-700 transition">שאלות נפוצות</a>
-                <a href="#contact" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-full font-bold text-center">
-                    לקביעת שיעור
+            <div class="mobile-menu hidden md:hidden flex-col bg-white border-t border-purple-100 py-5 px-5 space-y-4 font-semibold text-gray-700 peer-checked:flex">
+                <a href="#pain" class="hover:text-purple-700 transition py-1">מכירים את זה?</a>
+                <a href="#unique" class="hover:text-purple-700 transition py-1">השיטה שלנו</a>
+                <a href="#reviews" class="hover:text-purple-700 transition py-1">המלצות</a>
+                <a onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'});return false;" href="#" class="hover:text-purple-700 transition py-1">צרו קשר</a>
+                <a href="#faq" class="hover:text-purple-700 transition py-1">שאלות נפוצות</a>
+                <a onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'});return false;" href="#" class="bg-purple-700 hover:bg-purple-800 text-white px-6 py-3 rounded-full font-bold text-center">
+                    לקביעת שיעור היכרות
                 </a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero -->
-    <section class="relative pt-32 sm:pt-40 md:pt-52 pb-24 sm:pb-36 text-center text-white hero-bg">
+    <!-- ============================================================ -->
+    <!-- HERO                                                         -->
+    <!-- ============================================================ -->
+    <section class="relative pt-32 sm:pt-40 md:pt-52 pb-28 sm:pb-40 text-center text-white hero-bg">
         <div class="max-w-5xl mx-auto px-5 sm:px-8">
-            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 drop-shadow-lg">
-                רוצים להצטיין במתמטיקה?<br><span class="text-yellow-200"> להגיע לציונים גבוהים וגם להנות מהתהליך?</span><br>התחילו את ההצלחה כאן.
+
+            <!-- תג עדות מספרית -->
+            <div class="inline-block bg-white/15 border border-white/25 text-white text-sm font-semibold px-5 py-2 rounded-full mb-8">
+                ליווינו מעל 300 תלמידים — מכיתה א׳ ועד בגרות
+            </div>
+
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 drop-shadow">
+                הילד שלכם מתקשה במתמטיקה?<br>
+                <span class="text-yellow-200">אנחנו יודעים בדיוק למה —<br>ואיך לשנות את זה.</span>
             </h1>
-            <p class="text-xl sm:text-2xl md:text-3xl mb-6 max-w-4xl mx-auto font-light leading-relaxed">
-             עם שיטות מותאמות אישית ומורים ברמה הגבוהה ביותר , עם גישה מודרנית וחיבור אמיתי לדור הצעיר –<br>הלמידה מתבצעת בהתאמה מלאה לתלמיד, כיפית ופרקטית.
+
+            <p class="text-xl sm:text-2xl mb-4 max-w-3xl mx-auto font-light leading-relaxed">
+                רוב הילדים שמתקשים במתמטיקה <strong>לא חסרי כישרון</strong> — הם פשוט לא קיבלו את ההסבר הנכון עבורם.
             </p>
-            <p class="text-xl sm:text-2xl md:text-3xl mb-10 max-w-4xl mx-auto font-light leading-relaxed">
-                <span class="font-semibold text-white">הצטרפו למאות תלמידים שכבר שיפרו את הציונים שלהם – השיגו ביטחון והתחילו להנות מתהליך הלמידה .</span>
+            <p class="text-lg sm:text-xl mb-10 max-w-3xl mx-auto opacity-90 leading-relaxed">
+                עם מורה קבוע, שיטה מותאמת אישית וחיבור אמיתי לתלמיד — הם מתחילים להבין, להאמין בעצמם, ולעלות בציונים.
             </p>
 
-            <div class="btn-pair max-w-2xl mx-auto">
-                <a href="tel:0586276476" class="flex-1 bg-white text-purple-800 px-8 py-5 rounded-full text-xl font-extrabold shadow-2xl hover:bg-gray-100 transition transform hover:scale-105 purple-glow text-center">
-                    שיחה טלפונית
-                </a>
-                <a href="https://wa.me/972586276476?text=היי%2C%20אני%20רוצה%20שיעור%20הכרות" class="flex-1 bg-green-500 hover:bg-green-600 text-white px-8 py-5 rounded-full text-xl font-extrabold shadow-2xl transition transform hover:scale-105 text-center flex items-center justify-center gap-2">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                    </svg>
-                    שליחת הודעה בוואטסאפ
-                </a>
+            <!-- רצועת כיתות -->
+            <div class="mb-10">
+                <p class="text-white/70 text-sm font-medium mb-3 uppercase tracking-widest">מתאים לכל הגילאים</p>
+                <div class="flex flex-wrap justify-center gap-2">
+                    <span class="grade-pill">כיתה א׳–ו׳</span>
+                    <span class="grade-pill">כיתה ז׳–ט׳</span>
+                    <span class="grade-pill">כיתה י׳–י״ב</span>
+                    <span class="grade-pill">קורסי מבוא במתמטיקה</span>
+                    <span class="grade-pill">השלמת בגרויות</span>
+                </div>
+            </div>
+
+            <div class="flex justify-center mt-2 mb-4">
+                <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"
+                   class="bg-white hover:bg-purple-50 text-purple-800 px-10 py-4 rounded-xl text-lg font-extrabold shadow-xl transition transform hover:scale-105 text-center border-2 border-white/40 cursor-pointer">
+                    לקביעת שיעור היכרות — לחצו כאן
+                </button>
+            </div>
+
+            <p class="mt-5 text-white/65 text-sm">ללא התחייבות &nbsp;·&nbsp; חוזרים אליכם עוד היום &nbsp;·&nbsp; מתאים לכל הגילאים</p>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- PAIN SECTION                                                 -->
+    <!-- ============================================================ -->
+    <section id="pain" class="py-20 sm:py-24 bg-white">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-purple-900 mb-3 text-center">
+                אם הגעתם לכאן — כנראה מכירים את זה:
+            </h2>
+            <p class="text-base text-gray-500 text-center mb-10">רוב ההורים שפונים אלינו עברו לפחות אחד מהדברים האלה</p>
+
+            <div class="grid md:grid-cols-2 gap-3">
+                <div class="pain-box">
+                    <span class="pain-dot"></span>
+                    <p class="text-base text-gray-700 font-medium leading-snug">הילד אומר "מתמטיקה זה לא בשבילי" — וכבר ויתר לפני שניסה</p>
+                </div>
+                <div class="pain-box">
+                    <span class="pain-dot"></span>
+                    <p class="text-base text-gray-700 font-medium leading-snug">הציונים ממשיכים לרדת למרות שעות לימוד ארוכות</p>
+                </div>
+                <div class="pain-box">
+                    <span class="pain-dot"></span>
+                    <p class="text-base text-gray-700 font-medium leading-snug">היו מורים פרטיים — אבל הציונים פשוט לא עלו</p>
+                </div>
+                <div class="pain-box">
+                    <span class="pain-dot"></span>
+                    <p class="text-base text-gray-700 font-medium leading-snug">הבגרות מתקרבת והחרדה גדלה — בבית ובשיעורים</p>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-purple-50 rounded-2xl p-7 border border-purple-100 text-center">
+                <p class="text-xl font-bold text-purple-900 leading-relaxed">
+                    אנחנו מבינים את זה — ועובדים אחרת.
+                </p>
+                <p class="text-base text-gray-600 mt-2 leading-relaxed">
+                    לא "עוד שיעור פרטי". אנחנו מוצאים את שורש הקושי, בונים תוכנית אישית, ומחזירים לתלמיד את הביטחון שאיבד.
+                </p>
             </div>
         </div>
     </section>
 
-    <!-- מה מייחד אותנו -->
+    <!-- ============================================================ -->
+    <!-- STATS BAR                                                    -->
+    <!-- ============================================================ -->
+    <section class="py-10 bg-gradient-to-l from-purple-700 to-purple-900 text-white">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="flex flex-wrap justify-center divide-x divide-x-reverse divide-white/20">
+                <div class="stat-item px-6 sm:px-10">
+                    <span class="text-3xl sm:text-4xl font-extrabold">300+</span>
+                    <span class="text-xs sm:text-sm font-medium mt-1 opacity-80 text-center">תלמידים שליווינו</span>
+                </div>
+                <div class="stat-item px-6 sm:px-10">
+                    <span class="text-3xl sm:text-4xl font-extrabold">כיתה א׳ – י״ב</span>
+                    <span class="text-xs sm:text-sm font-medium mt-1 opacity-80 text-center">לכל שכבות הגיל</span>
+                </div>
+                <div class="stat-item px-6 sm:px-10">
+                    <span class="text-3xl sm:text-4xl font-extrabold">100%</span>
+                    <span class="text-xs sm:text-sm font-medium mt-1 opacity-80 text-center">אונליין — מכל מקום בארץ</span>
+                </div>
+                <div class="stat-item px-6 sm:px-10">
+                    <span class="text-3xl sm:text-4xl font-extrabold">מורה קבוע</span>
+                    <span class="text-xs sm:text-sm font-medium mt-1 opacity-80 text-center">מהשיעור הראשון עד הסוף</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- ============================================================ -->
+    <!-- מה מייחד אותנו                                               -->
+    <!-- ============================================================ -->
     <section id="unique" class="py-20 sm:py-28 bg-white">
         <div class="max-w-6xl mx-auto px-6 text-center">
             <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-800 mb-10">מה הופך את MathBoost לשונה באמת?</h2>
             <p class="text-xl sm:text-2xl text-gray-700 max-w-4xl mx-auto mb-10 leading-relaxed">
                 בשיעור הראשון אנחנו לא "מתחילים ללמד".<br>
-                אנחנו עושים <strong>הכרות מעמיקה עם התלמיד, התלמיד מקבל מורה שהולך איתו בכל התהליך</strong>.
+                אנחנו עושים <strong>היכרות מעמיקה עם התלמיד — המורה הולך איתו בכל התהליך</strong>.
             </p>
-
             <p class="text-xl sm:text-2xl text-gray-700 max-w-4xl mx-auto mb-16 leading-relaxed font-medium">
-              כל תלמיד מקבל מורה קבוע שבונה איתו תוכנית אישית ממוקדת: חיזוק הצדדים החלשים, הבנת שורש הבעיה, והפיכת תהליך הלמידה לקליל יותר, מהנה ולא מכביד ומתסכל   .<br><br>
-                אנחנו עובדים עם תוכנית מסודרת ודו"ח בסוף כל שיעור, כדי שהתלמיד יראה בבירור במה הוא השתפר, במה כדאי לשים דגש בהמשך, וישמר את המוטיבציה הגבוהה לאורך כל הדרך.
+                כל תלמיד מקבל מורה קבוע שבונה איתו תוכנית אישית ממוקדת: חיזוק הצדדים החלשים, הבנת שורש הבעיה, והפיכת הלמידה לקלילה ומהנה.<br><br>
+                אנחנו עובדים עם תוכנית מסודרת ומורה קבוע שמלווה את התלמיד לאורך כל הדרך.<br><br>
+                <strong>זמינות מלאה בוואטסאפ</strong> גם בין שיעורים — התלמיד נתקל בשאלה ומקבל מענה מהיר.
+                גמישות מלאה בשעות, מכל מקום בארץ, בנוחות הבית.
             </p>
 
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="bg-purple-50 p-8 rounded-2xl shadow-lg card-hover">
-                    <img src="https://orot.ac.il/sites/default/files/styles/content_image_-_focal_point/public/%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%A0%D7%A8/%D7%9E%D7%AA%D7%9E%D7%98%D7%99%D7%A7%D7%94.jpg?itok=YVlEKjJ2" 
-                         alt="מורה מסביר מתמטיקה מתקדמת על לוח" 
-                         class="w-24 h-24 mb-6 mx-auto object-contain rounded-full border-4 border-purple-100">
+                    <div class="feature-icon mx-auto">🧠</div>
                     <h3 class="text-2xl font-bold text-purple-900 mb-4">שיטות מתקדמות + מותאמות אישית</h3>
                     <p class="text-lg text-gray-700">
-                        טכניקות פתרון מהירות, כלים מנטליים לביטחון, התאמה לדרך החשיבה של התלמיד – לא "שיטה אחת לכולם".
+                        טכניקות פתרון מהירות, כלים מנטליים לביטחון, התאמה לדרך החשיבה של התלמיד — לא "שיטה אחת לכולם".
                     </p>
                 </div>
-
                 <div class="bg-purple-50 p-8 rounded-2xl shadow-lg card-hover">
-                    <img src="https://cdn.storyboardthat.com/site-images/site-pages/subject-pages/icon-math.png" 
-                         alt="סמל מתמטיקה – חשיבה ותכנון" 
-                         class="w-24 h-24 mb-6 mx-auto object-contain rounded-full border-4 border-purple-100">
+                    <div class="feature-icon mx-auto">🗺️</div>
                     <h3 class="text-2xl font-bold text-purple-900 mb-4">מפת דרכים אישית מדויקת</h3>
                     <p class="text-lg text-gray-700">
-                        זיהוי חוזקות + חולשות, איפה באמת צריך לשים דגש, מה הסדר הנכון לסגור פערים – הכל כתוב ומתועד.
+                        זיהוי חוזקות וחולשות, איפה באמת צריך לשים דגש, מה הסדר הנכון לסגור פערים — הכל כתוב ומתועד.
                     </p>
                 </div>
-
                 <div class="bg-purple-50 p-8 rounded-2xl shadow-lg card-hover">
-                    <img src="https://matnasnet-static-files.s3.il-central-1.amazonaws.com/productImages2/17/2025/10/22/image1761124573.jpg" 
-                         alt="מורה ותלמיד יחד – שיעור פרטי מתמשך" 
-                         class="w-24 h-24 mb-6 mx-auto object-contain rounded-full border-4 border-purple-100">
-                    <h3 class="text-2xl font-bold text-purple-900 mb-4">הכרות אחת – מלווה לכל אורך הדרך</h3>
+                    <div class="feature-icon mx-auto">🤝</div>
+                    <h3 class="text-2xl font-bold text-purple-900 mb-4">היכרות אחת — מלווה לכל אורך הדרך</h3>
                     <p class="text-lg text-gray-700">
-                        המורה שעושה את ההכרות בשיעור הראשון נשאר איתכם עד הסוף. אין "מורה חדש כל פעם".
+                        המורה שעושה את שיעור ההכרות נשאר איתכם עד הסוף. אין "מורה חדש כל פעם".
+                    </p>
+                </div>
+            </div>
+
+            <!-- שיעור הכרות + החזר — שורה אחת, מתחת לכרטיסים -->
+            <div class="mt-10 bg-purple-50 border border-purple-100 rounded-2xl px-8 py-6 max-w-3xl mx-auto text-center">
+                <p class="text-lg text-gray-700 leading-relaxed">
+                    מתחילים עם <strong class="text-purple-800">שיעור היכרות</strong> — המורה מאבחן, מבין את התלמיד, ובונה תוכנית.
+                    לא המשכתם לתוכנית? <strong class="text-purple-800">מקבלים החזר כספי מלא</strong>, ללא שאלות.
+                </p>
+            </div>
+
+            <!-- מתאים לכל שכבת גיל -->
+            <div class="mt-10 bg-gray-50 rounded-2xl border border-gray-100 p-8 shadow-sm">
+                <h3 class="text-2xl font-bold text-purple-900 mb-6 text-center">מתאים לכל שכבת גיל</h3>
+                <div class="grid sm:grid-cols-3 gap-5 text-right">
+                    <div class="p-4">
+                        <div class="text-2xl font-extrabold text-purple-700 mb-1">א׳ – ו׳</div>
+                        <p class="text-sm font-semibold text-gray-800 mb-1">בית ספר יסודי</p>
+                        <p class="text-sm text-gray-500 leading-relaxed">בניית בסיס חזק — חשבון, שברים, גיאומטריה. מניעת פערים לפני שמצטברים.</p>
+                    </div>
+                    <div class="p-4 sm:border-r sm:border-l border-gray-200">
+                        <div class="text-2xl font-extrabold text-purple-700 mb-1">ז׳ – ט׳</div>
+                        <p class="text-sm font-semibold text-gray-800 mb-1">חטיבת ביניים</p>
+                        <p class="text-sm text-gray-500 leading-relaxed">אלגברה, גיאומטריה, פונקציות — סגירת פערים מהיסודי ובניית בסיס לתיכון.</p>
+                    </div>
+                    <div class="p-4">
+                        <div class="text-2xl font-extrabold text-purple-700 mb-1">י׳ – י״ב</div>
+                        <p class="text-sm font-semibold text-gray-800 mb-1">תיכון ובגרות</p>
+                        <p class="text-sm text-gray-500 leading-relaxed">הכנה ממוקדת לבגרות — כל רמות הלימוד, כולל השלמות פערים ומבוגרים.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- המטרה האמיתית שלנו                                           -->
+    <!-- ============================================================ -->
+    <section id="aim" class="py-20 sm:py-24 bg-white text-center">
+        <div class="max-w-4xl mx-auto px-6">
+            <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-900 mb-8">
+                המטרה האמיתית שלנו
+            </h2>
+
+            <p class="text-xl sm:text-2xl text-gray-700 mb-10 leading-relaxed max-w-3xl mx-auto">
+                אנחנו לא רק רוצים לשפר ציונים.<br>
+                <span class="text-purple-700 font-semibold">אנחנו רוצים לבנות תהליך למידה נכון — כזה שמחזיר ביטחון, מפתח יכולות ומאפשר ליהנות אפילו ממתמטיקה.</span>
+            </p>
+
+            <div class="space-y-4 text-right">
+                <div class="aim-statement">
+                    <p class="text-lg sm:text-xl text-gray-700 leading-relaxed">
+                        <span class="font-bold text-purple-800">בגובה העיניים, בקצב שלו.</span> אנחנו בונים לכל תלמיד דרך למידה אישית — בצורה שגורמת לו להבין את החומר, ובעיקר: <span class="font-bold text-purple-800">לחזור להאמין ביכולת שלו.</span>
+                    </p>
+                </div>
+                <div class="aim-statement">
+                    <p class="text-lg sm:text-xl text-gray-700 leading-relaxed">
+                        המטרה היא להפוך את המתמטיקה <span class="font-bold text-purple-800">מחוויה מתסכלת לחוויה שמקדמת</span> — לא רק לקראת בגרות, אלא לכל החיים.
+                    </p>
+                </div>
+                <div class="aim-statement">
+                    <p class="text-lg sm:text-xl text-gray-700 leading-relaxed">
+                        וכשזה קורה — <span class="font-bold text-purple-800">הציונים עולים באופן טבעי.</span> כי ציונים אמיתיים מגיעים מתהליך בריא ונכון, לא מלחץ של הרגע האחרון.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ביקורות -->
-    <section id="reviews" class="py-20 sm:py-28 bg-white">
+    <!-- ============================================================ -->
+    <!-- ביקורות — וידאו (מקורי) + ציטוטי טקסט                       -->
+    <!-- ============================================================ -->
+    <section id="reviews" class="py-20 sm:py-24 bg-gray-50">
         <div class="max-w-7xl mx-auto px-5 sm:px-8">
-            <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-800 mb-16 md:mb-20 text-center">
-                הנה מה שהם אומרים עלינו
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-                <div class="bg-purple-50 p-8 rounded-2xl shadow-xl card-hover flex flex-col transition-all duration-300 border border-purple-100">
-                    <div class="relative mb-6 flex-grow">
-                        <iframe 
-                            class="w-full rounded-xl aspect-video shadow-md"
+            <div class="text-center mb-14">
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-900 mb-3">
+                    מה הורים ותלמידים אומרים עלינו
+                </h2>
+                <p class="text-base text-gray-500">סרטוני המלצה אמיתיים — בגוף ראשון, ללא עריכה</p>
+            </div>
+
+            <!-- סרטוני וידאו — מקוריים, ללא שינוי -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 mb-14">
+                <div class="bg-white p-6 rounded-2xl shadow-md card-hover flex flex-col border border-purple-50">
+                    <div class="relative mb-5 flex-grow">
+                        <iframe
+                            class="w-full rounded-xl aspect-video shadow-sm"
                             src="https://www.youtube.com/embed/ITjR5q0zYNA?rel=0&modestbranding=1&iv_load_policy=3&autoplay=0&playsinline=1"
                             title="אופק שהגיע אלינו להשלמת בגרויות לאחר שירות קרבי"
                             frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen
                             loading="lazy">
                         </iframe>
                     </div>
-                    <p class="text-gray-800 text-base leading-relaxed mb-3 font-medium">
+                    <p class="text-gray-700 text-sm leading-relaxed mb-2 font-medium">
                         "אופק שהגיע אלינו להשלמת בגרויות לאחר שירות קרבי – ממליץ בחום!"
                     </p>
-                    <p class="text-purple-700 font-semibold text-right text-sm">
-                        אופק – תלמיד וחייל משוחרר
-                    </p>
+                    <p class="text-purple-600 font-semibold text-sm">אופק – תלמיד וחייל משוחרר</p>
                 </div>
 
-                <div class="bg-purple-50 p-8 rounded-2xl shadow-xl card-hover flex flex-col transition-all duration-300 border border-purple-100">
-                    <div class="relative mb-6 flex-grow">
-                        <iframe 
-                            class="w-full rounded-xl aspect-video shadow-md"
+                <div class="bg-white p-6 rounded-2xl shadow-md card-hover flex flex-col border border-purple-50">
+                    <div class="relative mb-5 flex-grow">
+                        <iframe
+                            class="w-full rounded-xl aspect-video shadow-sm"
                             src="https://www.youtube.com/embed/md97Qd6cTiE?rel=0&modestbranding=1&iv_load_policy=3&autoplay=0&playsinline=1"
-                            title="ניקה המקסימה ממליצה על MathBoost"
+                            title="ניקה המקסימה ממליצה על הליווי שלנו במתמטיקה"
                             frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen
                             loading="lazy">
                         </iframe>
                     </div>
-                    <p class="text-gray-800 text-base leading-relaxed mb-3 font-medium">
+                    <p class="text-gray-700 text-sm leading-relaxed mb-2 font-medium">
                         "ניקה המקסימה ממליצה על הליווי שלנו במתמטיקה – הצלחה אמיתית!"
                     </p>
-                    <p class="text-purple-700 font-semibold text-right text-sm">
-                        ניקה – אם מרוצה
-                    </p>
+                    <p class="text-purple-600 font-semibold text-sm">ניקה – אם מרוצה</p>
                 </div>
 
-                <div class="bg-purple-50 p-8 rounded-2xl shadow-xl card-hover flex flex-col transition-all duration-300 border border-purple-100">
-                    <div class="relative mb-6 flex-grow">
-                        <iframe 
-                            class="w-full rounded-xl aspect-video shadow-md"
+                <div class="bg-white p-6 rounded-2xl shadow-md card-hover flex flex-col border border-purple-50">
+                    <div class="relative mb-5 flex-grow">
+                        <iframe
+                            class="w-full rounded-xl aspect-video shadow-sm"
                             src="https://www.youtube.com/embed/j4-qj6UzcRU?rel=0&modestbranding=1&iv_load_policy=3&autoplay=0&playsinline=1"
-                            title="המלצה של גלית - לאחר ליווי של 5 חודשים עם בנה"
+                            title="המלצה חמה מגלית – אחרי 5 חודשים של ליווי אישי לבן שלה"
                             frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen
                             loading="lazy">
                         </iframe>
                     </div>
-                    <p class="text-gray-800 text-base leading-relaxed mb-3 font-medium">
+                    <p class="text-gray-700 text-sm leading-relaxed mb-2 font-medium">
                         "המלצה חמה מגלית – אחרי 5 חודשים של ליווי אישי לבן שלה"
                     </p>
-                    <p class="text-purple-700 font-semibold text-right text-sm">
-                        גלית – אם מרוצה
-                    </p>
+                    <p class="text-purple-600 font-semibold text-sm">גלית – אם מרוצה</p>
                 </div>
             </div>
+
+
         </div>
     </section>
 
-    <!-- המטרה שלנו – החלק המעודכן -->
-    <section id="aim" class="py-24 bg-gradient-to-b from-purple-50 to-white text-center">
-        <div class="max-w-5xl mx-auto px-6">
-            <h2 class="text-5xl sm:text-6xl md:text-7xl font-extrabold text-purple-800 mb-10 md:mb-16 leading-tight">
-                המטרה האמיתית שלנו
-            </h2>
-            
-            <p class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-10 leading-relaxed">
-                אנחנו לא רק רוצים לשפר ציונים.<br>
-                <span class="text-purple-700">
-                    אנחנו רוצים לבנות תהליך למידה  נכון –<br>
-                    כזה שמחזיר ביטחון, מפתח יכולות ומאפשר ליהנות אפילו ממתמטיקה.
-                </span>
-            </p>
-
-            <div class="mt-12 max-w-4xl mx-auto space-y-6">
-                <div class="aim-statement">
-                    <p class="text-2xl sm:text-3xl font-medium aim-process">
-                        אנחנו בונים לכל תלמיד דרך למידה אישית –<br>
-                        <span class="aim-title">בגובה העיניים, בקצב שלו, בצורה שגורמת לו להבין את החומר והכי חשוב: הילד מתחיל להאמין בעצמו  .</span>
-                    </p>
-                </div>
-
-                <div class="aim-statement">
-                    <p class="text-2xl sm:text-3xl font-medium aim-enjoy">
-                        המטרה היא להפוך את המתמטיקה מחוויה מתסכלת<br>
-                        <span class="aim-title">לחוויה מהנה, שדוחפת ומקדמת את התלמיד .</span>
-                    </p>
-                </div>
-
-                <div class="aim-statement">
-                    <p class="text-2xl sm:text-3xl font-medium aim-result">
-                        וכשזה קורה – הציונים עולים באופן טבעי,<br>
-                        <span class="aim-title">כי אנו מאמינים שציונים והישגים אמיתיים מגיעים<br>
-                        דווקא מתהליך בריא, נכון ומהנה לתלמיד.</span>
-                    </p>
-                </div>
+    <!-- ============================================================ -->
+    <!-- טופס יצירת קשר                                              -->
+    <!-- ============================================================ -->
+    <section id="contact" class="py-20 bg-white">
+        <div class="max-w-3xl mx-auto px-6">
+            <div class="text-center mb-10">
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-900 mb-4">
+                    השאירו פרטים — נחזור אליכם עוד היום
+                </h2>
+                <p class="text-base text-gray-600 max-w-xl mx-auto leading-relaxed">
+                    מתחילים בשיעור היכרות — המורה מאבחן את התלמיד, מזהה את הקשיים, ובונה תוכנית אישית. החלטתם שלא להמשיך? מקבלים את מלוא התשלום בחזרה.
+                </p>
             </div>
-        </div>
-    </section>
 
-    <!-- טופס יצירת קשר -->
-    <section id="contact" class="py-20 bg-gradient-to-b from-purple-50 to-white">
-        <div class="max-w-4xl mx-auto px-6">
-            <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-800 mb-6 text-center">
-                רוצים להתחיל? מלאו פרטים ונחזור אליכם 
-            </h2>
-            
-
-            <form 
+            <form
                 action="https://formspree.io/f/mojnaqgb"
                 method="POST"
-                class="bg-white p-8 sm:p-12 rounded-3xl shadow-2xl purple-glow border border-purple-100 max-w-3xl mx-auto space-y-8"
+                class="bg-white p-8 sm:p-10 rounded-3xl shadow-xl purple-glow border border-purple-100 space-y-6"
             >
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div class="form-group">
                         <label for="firstName" class="form-label">שם פרטי</label>
                         <input type="text" id="firstName" name="שם פרטי" required class="form-input" placeholder="שם פרטי">
                     </div>
-
                     <div class="form-group">
                         <label for="lastName" class="form-label">שם משפחה</label>
                         <input type="text" id="lastName" name="שם משפחה" required class="form-input" placeholder="שם משפחה">
@@ -380,103 +618,136 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                     <input type="tel" id="phone" name="טלפון" required pattern="^05[0-9]{8}$|^0[2-9][0-9]{7}$" title="מספר טלפון ישראלי תקין" class="form-input" placeholder="050-000-0000">
                 </div>
 
-                <div class="form-group">
-                    <label for="email" class="form-label">כתובת אימייל</label>
-                    <input type="email" id="email" name="אימייל" required class="form-input" placeholder="your@email.com">
-                </div>
+
 
                 <div class="form-group">
                     <label for="grade" class="form-label">באיזה כיתה הלומד/ת?</label>
                     <select id="grade" name="כיתה" required class="form-select">
                         <option value="" disabled selected>בחרו כיתה</option>
-                        <option value="ז׳">ז׳</option>
-                        <option value="ח׳">ח׳</option>
-                        <option value="ט׳">ט׳</option>
-                        <option value="י׳">י׳</option>
-                        <option value="י״א">י״א</option>
-                        <option value="י״ב">י״ב</option>
-                        <option value="אחר">אחר (השלמות, מבוגרים וכו')</option>
+                        <optgroup label="בית ספר יסודי">
+                            <option value="א׳">א׳</option>
+                            <option value="ב׳">ב׳</option>
+                            <option value="ג׳">ג׳</option>
+                            <option value="ד׳">ד׳</option>
+                            <option value="ה׳">ה׳</option>
+                            <option value="ו׳">ו׳</option>
+                        </optgroup>
+                        <optgroup label="חטיבת ביניים">
+                            <option value="ז׳">ז׳</option>
+                            <option value="ח׳">ח׳</option>
+                            <option value="ט׳">ט׳</option>
+                        </optgroup>
+                        <optgroup label="תיכון">
+                            <option value="י׳">י׳</option>
+                            <option value="י״א">י״א</option>
+                            <option value="י״ב">י״ב</option>
+                        </optgroup>
+                        <optgroup label="אחר">
+                            <option value="אחר">השלמות, מבוגרים וכו׳</option>
+                        </optgroup>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="mathHistory" class="form-label">ספרו קצת על העבר עם המתמטיקה</label>
-                    <textarea id="mathHistory" name="סיפור על המתמטיקה" rows="5" class="form-textarea" placeholder="רשמו כאן בקצרה את המצב הנוכחי ואת המטרה..."></textarea>
+                    <label for="mathHistory" class="form-label">ספרו קצת על המצב הנוכחי</label>
+                    <textarea id="mathHistory" name="סיפור על המתמטיקה" rows="4" class="form-textarea" placeholder="למשל: הבן שלי בכיתה ז׳, מתקשה עם שברים ואלגברה בסיסית..."></textarea>
                 </div>
 
-                <div class="form-group flex items-center gap-3">
+                <div class="form-group">
+                    <label for="callTime" class="form-label">באיזו שעה תרצו שנחזור אליכם?</label>
+                    <select id="callTime" name="שעה מועדפת לחזרה" class="form-select">
+                        <option value="" disabled selected>בחרו שעה</option>
+                        <option value="בוקר 08:00–10:00">בוקר — 08:00–10:00</option>
+                        <option value="בוקר 10:00–12:00">בוקר — 10:00–12:00</option>
+                        <option value="צהריים 12:00–14:00">צהריים — 12:00–14:00</option>
+                        <option value="אחר הצהריים 14:00–17:00">אחר הצהריים — 14:00–17:00</option>
+                        <option value="ערב 17:00–20:00">ערב — 17:00–20:00</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center gap-3">
                     <input type="checkbox" id="callback" name="רוצים שנחזור אליכם" class="form-checkbox" checked>
-                    <label for="callback" class="text-lg text-gray-700">
+                    <label for="callback" class="text-base text-gray-700 cursor-pointer">
                         כן, אני רוצה שיחת טלפון או הודעה חזרה בהקדם
                     </label>
                 </div>
 
-                <button type="submit" class="w-full bg-purple-600 hover:bg-purple-700 text-white px-10 py-5 rounded-full text-xl font-extrabold shadow-2xl transition transform hover:scale-105 mt-6">
-                    שלחו פרטים → נחזור אליכם ממש בקרוב!
+                <button type="submit" class="w-full bg-purple-700 hover:bg-purple-800 text-white px-10 py-4 rounded-full text-lg font-extrabold shadow-lg transition transform hover:scale-105">
+                    שלחו פרטים — נחזור אליכם עוד היום
                 </button>
 
-                <p class="text-center text-sm text-gray-600 mt-4">
-                    שליחה מאובטחת • הפרטים ישמשו רק לצורך יצירת קשר
+                <p class="text-center text-xs text-gray-400">
+                    שליחה מאובטחת &nbsp;·&nbsp; הפרטים ישמשו רק לצורך יצירת קשר
                 </p>
             </form>
         </div>
     </section>
 
-    <!-- FAQ -->
-    <section id="faq" class="py-24 bg-white">
-        <div class="max-w-4xl mx-auto px-6">
-            <h2 class="text-5xl font-extrabold text-purple-800 mb-16 text-center">שאלות שכולם שואלים</h2>
-            <div class="space-y-6">
+    <!-- ============================================================ -->
+    <!-- FAQ                                                          -->
+    <!-- ============================================================ -->
+    <section id="faq" class="py-20 bg-gray-50">
+        <div class="max-w-3xl mx-auto px-6">
+            <h2 class="text-4xl font-extrabold text-purple-900 mb-12 text-center">שאלות נפוצות</h2>
+            <div class="space-y-4">
 
-                <details class="group bg-purple-50 rounded-2xl overflow-hidden shadow-sm">
-                    <summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl text-purple-900">
+                <details class="group bg-white rounded-2xl overflow-hidden border border-purple-100 shadow-sm">
+                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-lg text-purple-900">
+                        לאיזה גיל מתאים השירות?
+                        <span class="text-xl transition-transform group-open:rotate-180 flex-shrink-0 mr-2">▼</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-base text-gray-600 leading-relaxed">
+                        לכל שכבת גיל — מכיתה א׳ ועד בגרות. בבית הספר היסודי אנחנו בונים בסיס חזק ומונעים צבירת פערים. בחטיבה אנחנו סוגרים פערים ומכינים לתיכון. בתיכון — הכנה ממוקדת לבגרות ולכל רמות הלימוד, כולל השלמות ומבוגרים.
+                    </div>
+                </details>
+
+                <details class="group bg-white rounded-2xl overflow-hidden border border-purple-100 shadow-sm">
+                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-lg text-purple-900">
                         מה בדיוק קורה בשיעור ההכרות?
-                        <span class="text-3xl transition group-open:rotate-180">▼</span>
+                        <span class="text-xl transition-transform group-open:rotate-180 flex-shrink-0 mr-2">▼</span>
                     </summary>
-                    <div class="px-8 pb-10 text-lg text-gray-700">
-                        המורה עובר איתכם על מבחנים אחרונים, שיחה על קשיים, כמה תרגילים מייצגים + ניתוח עמוק. בסוף מחליטים יחד על התוכנית המתאימה ביותר לכם.
+                    <div class="px-6 pb-6 text-base text-gray-600 leading-relaxed">
+                        המורה מתייחד עם התלמיד לשיחה מעמיקה — עוברים על מבחנים אחרונים, מזהים קשיים ספציפיים, עושים כמה תרגילים לאבחון, ובסוף בונים יחד תוכנית אישית. אם בסיום השיעור תחליטו שלא להמשיך לתוכנית הליווי — מקבלים את מלוא התשלום בחזרה.
                     </div>
                 </details>
 
-                <details class="group bg-purple-50 rounded-2xl overflow-hidden shadow-sm">
-                    <summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl text-purple-900">
-                        מתאים ל-3, 4 או 5 יחידות?
-                        <span class="text-3xl transition group-open:rotate-180">▼</span>
-                    </summary>
-                    <div class="px-8 pb-10 text-lg text-gray-700">
-                        כן – מכל הרמות, כולל השלמות פערים גדולים והכנה ל-5 יחידות ברמה גבוהה.
-                    </div>
-                </details>
-
-                <details class="group bg-purple-50 rounded-2xl overflow-hidden shadow-sm">
-                    <summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl text-purple-900">
+                <details class="group bg-white rounded-2xl overflow-hidden border border-purple-100 shadow-sm">
+                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-lg text-purple-900">
                         האם השיעורים פרונטליים או אונליין?
-                        <span class="text-3xl transition group-open:rotate-180">▼</span>
+                        <span class="text-xl transition-transform group-open:rotate-180 flex-shrink-0 mr-2">▼</span>
                     </summary>
-                    <div class="px-8 pb-10 text-lg text-gray-700">
+                    <div class="px-6 pb-6 text-base text-gray-600 leading-relaxed">
                         כל השיעורים מתקיימים אונליין בלבד. זה מאפשר גמישות מלאה בשעות, נוחות מהבית וגישה למורים מנוסים מכל רחבי הארץ.
                     </div>
                 </details>
 
-               
-
-                <details class="group bg-purple-50 rounded-2xl overflow-hidden shadow-sm">
-                    <summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl text-purple-900">
-                        האם יש מענה של המורים אחרי השיעור?
-                        <span class="text-3xl transition group-open:rotate-180">▼</span>
+                <details class="group bg-white rounded-2xl overflow-hidden border border-purple-100 shadow-sm">
+                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-lg text-purple-900">
+                        האם יש זמינות של המורה מחוץ לשיעורים?
+                        <span class="text-xl transition-transform group-open:rotate-180 flex-shrink-0 mr-2">▼</span>
                     </summary>
-                    <div class="px-8 pb-10 text-lg text-gray-700">
-                        כן. המורים שלנו זמינים בוואטסאפ גם אחרי השיעור. אם התלמיד נתקל בשאלה או רוצה הבהרה – הוא יכול לשלוח הודעה והמורה יענה בהקדם.
+                    <div class="px-6 pb-6 text-base text-gray-600 leading-relaxed">
+                        כן. המורים זמינים בוואטסאפ גם אחרי השיעור. אם התלמיד נתקל בשאלה בין שיעור לשיעור — שולח הודעה והמורה עונה בהקדם.
                     </div>
                 </details>
 
-                <details class="group bg-purple-50 rounded-2xl overflow-hidden shadow-sm">
-                    <summary class="flex justify-between items-center p-8 cursor-pointer font-bold text-xl text-purple-900">
+                <details class="group bg-white rounded-2xl overflow-hidden border border-purple-100 shadow-sm">
+                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-lg text-purple-900">
                         האם המורה משתנה במהלך הליווי?
-                        <span class="text-3xl transition group-open:rotate-180">▼</span>
+                        <span class="text-xl transition-transform group-open:rotate-180 flex-shrink-0 mr-2">▼</span>
                     </summary>
-                    <div class="px-8 pb-10 text-lg text-gray-700">
-                        לא. המורה שעושה את שיעור ההכרות הוא בדרך כלל אותו מורה שמלווה את התלמיד לאורך כל התהליך.
+                    <div class="px-6 pb-6 text-base text-gray-600 leading-relaxed">
+                        לא. המורה שמבצע את שיעור ההכרות הוא אותו מורה שמלווה את התלמיד לאורך כל התהליך. אנחנו מאמינים שיציבות ואמון הם חלק מהתוצאה.
+                    </div>
+                </details>
+
+                <details class="group bg-white rounded-2xl overflow-hidden border border-purple-100 shadow-sm">
+                    <summary class="flex justify-between items-center p-6 cursor-pointer font-bold text-lg text-purple-900">
+                        ניסינו כבר מורה פרטי — למה זה יעבוד הפעם?
+                        <span class="text-xl transition-transform group-open:rotate-180 flex-shrink-0 mr-2">▼</span>
+                    </summary>
+                    <div class="px-6 pb-6 text-base text-gray-600 leading-relaxed">
+                        רוב המורים הפרטיים "מסבירים את החומר של השבוע". אנחנו קודם כל מוצאים <strong class="text-purple-800">מאיפה מגיע הקושי</strong>. לעיתים קרובות, מקור הבעיה אינו בחומר הנוכחי אלא בפערים שנצברו שנים קודם. ברגע שמזהים ומטפלים בשורש — הכל משתנה.
                     </div>
                 </details>
 
@@ -484,18 +755,17 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gradient-to-t from-purple-900 to-purple-800 text-white py-20">
-        <div class="max-w-6xl mx-auto px-6 text-center">
-            <div class="text-5xl font-extrabold mb-8">MathBoost</div>
-            <p class="text-xl mb-6 text-purple-200" >מתמטיקה עם תוצאות, לצד תהליך נכון מותאם אישית</p>
-            <p class="text-sm opacity-70">© 2026 MathBoost – כל הזכויות שמורות</p>
+    <!-- ============================================================ -->
+    <!-- Footer                                                       -->
+    <!-- ============================================================ -->
+    <footer class="bg-purple-900 text-white py-16">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <div class="text-4xl font-extrabold mb-3 tracking-tight">MathBoost</div>
+            <p class="text-purple-300 text-base mb-2">שיעורי מתמטיקה אישיים — מכיתה א׳ ועד בגרות</p>
+            <p class="text-purple-300 text-sm mb-8">אונליין · מורה קבוע · שיטה מותאמת אישית</p>
+            <p class="text-xs text-purple-400">© 2026 MathBoost – כל הזכויות שמורות</p>
         </div>
     </footer>
 
 </body>
-
-
-
-
 </html>
