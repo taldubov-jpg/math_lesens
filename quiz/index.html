@@ -392,13 +392,8 @@
   <div class="step active" id="step-0">
     <div class="intro">
       <div class="intro-emoji">🎯</div>
-      <h1>בואו נבין מה <span class="accent">באמת קורה</span> עם הילד/ה שלכם</h1>
-      <p>שאלון קצר של 7 שאלות שיעזור לנו להבין את המצב ולהתאים תוכנית מדויקת.<br>לוקח כ-90 שניות. בלי התחייבות — אין צורך בפרטים אישיים.</p>
-      <div class="intro-stats">
-        <div class="intro-stat-item">⏱️ <strong>90</strong> שניות</div>
-        <div class="intro-stat-item">📋 <strong>7</strong> שאלות</div>
-        <div class="intro-stat-item">💎 <strong>סיכום</strong> אישי</div>
-      </div>
+      <h1>בואו נבין מה <span class="accent">באמת קורה</span> עם התלמיד/ה שלכם</h1>
+      <p>שאלון קצר שיעזור לנו להבין את המצב לפני שיעור היכרות.<br>אין צורך בפרטים אישיים.</p>
       <button class="btn btn-primary btn-big" onclick="nextStep()">בואו נתחיל ←</button>
     </div>
   </div>
@@ -406,8 +401,8 @@
   <!-- ═══════ STEP 1 — Grade ═══════ -->
   <div class="step" id="step-1">
     <div class="q-counter">שאלה 1 מתוך 7</div>
-    <h2 class="q-title">באיזו כיתה הלומד/ת?</h2>
-    <p class="q-subtitle">בחר/י את הכיתה הקרובה</p>
+    <h2 class="q-title">באיזו כיתה התלמיד/ה?</h2>
+    <p class="q-subtitle">בחרו את הכיתה המתאימה</p>
     <div class="options" data-key="grade">
       <button class="option" data-value="elementary"><span class="option-emoji">🎒</span><span class="option-text">כיתה א׳ — ו׳ (יסודי)</span><span class="option-check">✓</span></button>
       <button class="option" data-value="middle"><span class="option-emoji">📐</span><span class="option-text">כיתה ז׳ — ט׳ (חטיבה)</span><span class="option-check">✓</span></button>
@@ -419,16 +414,16 @@
       <button class="btn btn-secondary" onclick="prevStep()">→ חזרה</button>
       <button class="btn btn-primary" onclick="nextStep()" disabled>המשך</button>
     </div>
-    <div class="btn-disabled-hint">בחר/י תשובה כדי להמשיך</div>
+    <div class="btn-disabled-hint">בחרו תשובה כדי להמשיך</div>
   </div>
 
   <!-- ═══════ STEP 2 — Main challenge ═══════ -->
   <div class="step" id="step-2">
     <div class="q-counter">שאלה 2 מתוך 7</div>
     <h2 class="q-title">מה האתגר העיקרי כרגע?</h2>
-    <p class="q-subtitle">בחר/י את הדבר שהכי מטריד אותך</p>
+    <p class="q-subtitle">בחרו את הדבר שהכי מטריד אתכם</p>
     <div class="options" data-key="challenge">
-      <button class="option" data-value="not-understand"><span class="option-emoji">🤯</span><span class="option-text">פשוט לא מבין/ה את החומר בכיתה</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="not-understand"><span class="option-emoji">🤯</span><span class="option-text">פשוט לא מבינים את החומר בכיתה</span><span class="option-check">✓</span></button>
       <button class="option" data-value="grades-drop"><span class="option-emoji">📉</span><span class="option-text">הציונים יורדים מבחינה למבחינה</span><span class="option-check">✓</span></button>
       <button class="option" data-value="gaps"><span class="option-emoji">🕳️</span><span class="option-text">יש פערים גדולים משנים קודמות</span><span class="option-check">✓</span></button>
       <button class="option" data-value="anxiety"><span class="option-emoji">😰</span><span class="option-text">חרדה / לחץ לפני מבחנים</span><span class="option-check">✓</span></button>
@@ -439,27 +434,27 @@
       <button class="btn btn-secondary" onclick="prevStep()">→ חזרה</button>
       <button class="btn btn-primary" onclick="nextStep()" disabled>המשך</button>
     </div>
-    <div class="btn-disabled-hint">בחר/י תשובה כדי להמשיך</div>
+    <div class="btn-disabled-hint">בחרו תשובה כדי להמשיך</div>
   </div>
 
   <!-- ═══════ STEP 3 — Current grade ═══════ -->
   <div class="step" id="step-3">
     <div class="q-counter">שאלה 3 מתוך 7</div>
     <h2 class="q-title">איפה הציון עומד היום?</h2>
-    <p class="q-subtitle">בערך — לא נדרש לדייק</p>
+    <p class="q-subtitle">בערך — לא חייבים לדייק</p>
     <div class="options" data-key="current-grade">
-      <button class="option" data-value="under-60"><span class="option-emoji">🔴</span><span class="option-text">פחות מ-60 (נכשל/ת)</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="under-60"><span class="option-emoji">🔴</span><span class="option-text">פחות מ-60</span><span class="option-check">✓</span></button>
       <button class="option" data-value="60-70"><span class="option-emoji">🟠</span><span class="option-text">60—70 (מתחת לממוצע)</span><span class="option-check">✓</span></button>
       <button class="option" data-value="70-80"><span class="option-emoji">🟡</span><span class="option-text">70—80 (סביר אבל יכול להשתפר)</span><span class="option-check">✓</span></button>
       <button class="option" data-value="80-90"><span class="option-emoji">🟢</span><span class="option-text">80—90 (טוב, רוצה להגיע למצוין)</span><span class="option-check">✓</span></button>
-      <button class="option" data-value="90+"><span class="option-emoji">⭐</span><span class="option-text">90+ (מצטיין/ת — שמירה על הרמה)</span><span class="option-check">✓</span></button>
-      <button class="option" data-value="unknown"><span class="option-emoji">🤷</span><span class="option-text">לא בטוח/ה — עוד אין מספיק ציונים</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="90+"><span class="option-emoji">⭐</span><span class="option-text">90+ (מצוין — שמירה על הרמה)</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="unknown"><span class="option-emoji">🤷</span><span class="option-text">לא יודעים — עוד אין מספיק ציונים</span><span class="option-check">✓</span></button>
     </div>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="prevStep()">→ חזרה</button>
       <button class="btn btn-primary" onclick="nextStep()" disabled>המשך</button>
     </div>
-    <div class="btn-disabled-hint">בחר/י תשובה כדי להמשיך</div>
+    <div class="btn-disabled-hint">בחרו תשובה כדי להמשיך</div>
   </div>
 
   <!-- ═══════ STEP 4 — History ═══════ -->
@@ -477,50 +472,50 @@
       <button class="btn btn-secondary" onclick="prevStep()">→ חזרה</button>
       <button class="btn btn-primary" onclick="nextStep()" disabled>המשך</button>
     </div>
-    <div class="btn-disabled-hint">בחר/י תשובה כדי להמשיך</div>
+    <div class="btn-disabled-hint">בחרו תשובה כדי להמשיך</div>
   </div>
 
   <!-- ═══════ STEP 5 — Frequency ═══════ -->
   <div class="step" id="step-5">
     <div class="q-counter">שאלה 5 מתוך 7</div>
     <h2 class="q-title">כמה שיעורים בשבוע הייתם רוצים?</h2>
-    <p class="q-subtitle">תוכלו לשנות אחר כך — זה רק כיוון</p>
+    <p class="q-subtitle">אפשר לשנות אחר כך — זה רק כיוון</p>
     <div class="options" data-key="frequency">
       <button class="option" data-value="1"><span class="option-emoji">1️⃣</span><span class="option-text">שיעור אחד בשבוע (קצב רגוע)</span><span class="option-check">✓</span></button>
       <button class="option" data-value="2"><span class="option-emoji">2️⃣</span><span class="option-text">שניים בשבוע (קצב טוב לרוב המקרים)</span><span class="option-check">✓</span></button>
       <button class="option" data-value="3+"><span class="option-emoji">🔥</span><span class="option-text">3+ בשבוע (אינטנסיבי — לבגרות קרובה)</span><span class="option-check">✓</span></button>
-      <button class="option" data-value="not-sure"><span class="option-emoji">💭</span><span class="option-text">לא בטוח/ה — נשמח שתייעצו לנו</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="not-sure"><span class="option-emoji">💭</span><span class="option-text">לא יודעים — נשמח שתייעצו לנו</span><span class="option-check">✓</span></button>
     </div>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="prevStep()">→ חזרה</button>
       <button class="btn btn-primary" onclick="nextStep()" disabled>המשך</button>
     </div>
-    <div class="btn-disabled-hint">בחר/י תשובה כדי להמשיך</div>
+    <div class="btn-disabled-hint">בחרו תשובה כדי להמשיך</div>
   </div>
 
   <!-- ═══════ STEP 6 — Timeline ═══════ -->
   <div class="step" id="step-6">
     <div class="q-counter">שאלה 6 מתוך 7</div>
     <h2 class="q-title">מתי תרצו להתחיל?</h2>
-    <p class="q-subtitle">דחיפות עוזרת לנו לסדר את השיעור הראשון</p>
+    <p class="q-subtitle">נסדר את שיעור ההיכרות בהתאם</p>
     <div class="options" data-key="timeline">
       <button class="option" data-value="immediately"><span class="option-emoji">🚨</span><span class="option-text">השבוע — דחוף!</span><span class="option-check">✓</span></button>
       <button class="option" data-value="2-weeks"><span class="option-emoji">⏰</span><span class="option-text">בשבועיים הקרובים</span><span class="option-check">✓</span></button>
       <button class="option" data-value="month"><span class="option-emoji">📅</span><span class="option-text">בחודש הקרוב</span><span class="option-check">✓</span></button>
-      <button class="option" data-value="exploring"><span class="option-emoji">🤔</span><span class="option-text">בודק/ת אפשרויות — לא דחוף</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="exploring"><span class="option-emoji">🤔</span><span class="option-text">בודקים אפשרויות — לא דחוף</span><span class="option-check">✓</span></button>
     </div>
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="prevStep()">→ חזרה</button>
       <button class="btn btn-primary" onclick="nextStep()" disabled>המשך</button>
     </div>
-    <div class="btn-disabled-hint">בחר/י תשובה כדי להמשיך</div>
+    <div class="btn-disabled-hint">בחרו תשובה כדי להמשיך</div>
   </div>
 
   <!-- ═══════ STEP 7 — Open text ═══════ -->
   <div class="step" id="step-7">
-    <div class="q-counter">שאלה 7 מתוך 7 — האחרונה!</div>
+    <div class="q-counter">שאלה אחרונה</div>
     <h2 class="q-title">משהו נוסף שכדאי לנו לדעת?</h2>
-    <p class="q-subtitle">אופציונלי — זה עוזר לנו להתאים מורה מדויק יותר</p>
+    <p class="q-subtitle">לא חובה — אבל עוזר לנו להתאים את המורה המתאים</p>
     <textarea class="input-field" id="freeText"
       placeholder="לדוגמה: הבן שלי בכיתה ז׳, מתקשה במיוחד עם שברים ופונקציות. הוא ביישן ומעדיף מורה רגוע."
       rows="5"></textarea>
