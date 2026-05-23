@@ -301,6 +301,118 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             accent-color: #7c3aed;
             flex-shrink: 0;
         }
+
+        .diagnostic-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        .diagnostic-shell {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(196, 181, 253, 0.75);
+            background:
+                radial-gradient(circle at 8% 8%, rgba(250, 204, 21, 0.18), transparent 25rem),
+                radial-gradient(circle at 92% 4%, rgba(168, 85, 247, 0.18), transparent 24rem),
+                linear-gradient(145deg, #171044 0%, #3b1a86 48%, #6d28d9 100%);
+            border-radius: 2rem;
+            box-shadow: 0 28px 90px -42px rgba(76, 29, 149, 0.75);
+        }
+        .diagnostic-stage {
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.13);
+            border-radius: 1.75rem;
+            backdrop-filter: blur(16px);
+        }
+        .diagnostic-map {
+            display: grid;
+            gap: 0.85rem;
+        }
+        .diagnostic-map-item {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            border: 1px solid rgba(255,255,255,0.16);
+            background: rgba(255,255,255,0.1);
+            border-radius: 1rem;
+            padding: 0.9rem 1rem;
+        }
+        .diagnostic-map-badge {
+            width: 2.2rem;
+            height: 2.2rem;
+            border-radius: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #4c1d95;
+            background: linear-gradient(135deg, #fde68a, #fff7ed);
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+        .diagnostic-track-button {
+            width: 100%;
+            border: 1px solid #ddd6fe;
+            border-radius: 1.15rem;
+            background: linear-gradient(145deg, #fff 0%, #f5f3ff 100%);
+            color: #312e81;
+            padding: 1rem;
+            text-align: right;
+            transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+        }
+        .diagnostic-track-button:hover,
+        .diagnostic-track-button:focus-visible {
+            transform: translateY(-3px);
+            border-color: #a78bfa;
+            box-shadow: 0 18px 34px -24px rgba(76, 29, 149, 0.72);
+            outline: none;
+        }
+        .diagnostic-answer {
+            width: 100%;
+            border: 1px solid #e9d5ff;
+            border-radius: 1rem;
+            background: white;
+            color: #312e81;
+            padding: 0.95rem 1rem;
+            font-weight: 700;
+            text-align: right;
+            transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+        }
+        .diagnostic-answer:hover,
+        .diagnostic-answer:focus-visible {
+            transform: translateY(-2px);
+            border-color: #8b5cf6;
+            background: #faf5ff;
+            outline: none;
+        }
+        .diagnostic-progress {
+            height: 0.6rem;
+            overflow: hidden;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.14);
+        }
+        .diagnostic-progress-bar {
+            height: 100%;
+            width: 0;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #fde047, #f0abfc);
+            transition: width 0.28s ease;
+        }
+        .diagnostic-focus-chip {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid #ddd6fe;
+            border-radius: 999px;
+            background: #f5f3ff;
+            color: #5b21b6;
+            padding: 0.42rem 0.8rem;
+            font-size: 0.86rem;
+            font-weight: 800;
+        }
+        @media (min-width: 1024px) {
+            .diagnostic-grid {
+                grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+                align-items: stretch;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased">
@@ -320,6 +432,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 <!-- דסקטופ: תפריט -->
                 <div class="hidden md:flex items-center gap-8 font-semibold text-gray-600 text-base">
                     <a href="#pain" class="hover:text-purple-700 transition">מכירים את זה?</a>
+                    <a href="#diagnostic" class="hover:text-purple-700 transition">אבחון משחקי</a>
                     <a href="#unique" class="hover:text-purple-700 transition">השיטה שלנו</a>
                     <a href="#reviews" class="hover:text-purple-700 transition">המלצות</a>
                     <a onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'});return false;" href="#" class="hover:text-purple-700 transition">צרו קשר</a>
@@ -356,6 +469,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             <input type="checkbox" id="menu-toggle" class="hidden peer" />
             <div class="mobile-menu hidden md:hidden flex-col bg-white border-t border-purple-100 py-5 px-5 space-y-4 font-semibold text-gray-700 peer-checked:flex">
                 <a href="#pain" class="hover:text-purple-700 transition py-1">מכירים את זה?</a>
+                <a href="#diagnostic" class="hover:text-purple-700 transition py-1">אבחון משחקי</a>
                 <a href="#unique" class="hover:text-purple-700 transition py-1">השיטה שלנו</a>
                 <a href="#reviews" class="hover:text-purple-700 transition py-1">המלצות</a>
                 <a onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'});return false;" href="#" class="hover:text-purple-700 transition py-1">צרו קשר</a>
@@ -409,7 +523,124 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 </button>
             </div>
 
+            <button onclick="document.getElementById('diagnostic').scrollIntoView({behavior:'smooth'})"
+                class="inline-flex items-center justify-center text-white/95 hover:text-white font-bold border border-white/30 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full transition cursor-pointer">
+                נסו אבחון משחקי קצר לפני השיחה
+            </button>
+
             <p class="mt-5 text-white/65 text-sm">ללא התחייבות &nbsp;·&nbsp; חוזרים אליכם עוד היום &nbsp;·&nbsp; מתאים לכל הגילאים</p>
+        </div>
+    </section>
+
+    <section id="diagnostic" class="py-20 sm:py-24 bg-gradient-to-b from-purple-50 via-white to-white">
+        <div class="max-w-7xl mx-auto px-5 sm:px-8">
+            <div class="text-center max-w-4xl mx-auto mb-10 fade-up">
+                <span class="inline-flex items-center gap-2 bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-extrabold mb-5">
+                    אבחון משחקי קצר • 2 דקות
+                </span>
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-950 mb-4">
+                    לפני שמחפשים עוד דף תרגול — בודקים איך התלמיד חושב
+                </h2>
+                <p class="text-lg sm:text-xl text-gray-600 leading-relaxed">
+                    משימה קצרה להורה ולתלמיד שמדמה את מה שאנחנו מחפשים בשיעור היכרות: בסיס, דרך חשיבה וביטחון מול שאלה חדשה.
+                    זו טעימה חכמה — האבחון האמיתי נעשה עם מורה.
+                </p>
+            </div>
+
+            <div class="diagnostic-shell p-4 sm:p-7 lg:p-9 fade-up">
+                <div class="diagnostic-grid">
+                    <div class="text-white p-4 sm:p-6 flex flex-col justify-between">
+                        <div>
+                            <p class="text-yellow-200 font-black tracking-wide mb-3">MathBoost Challenge</p>
+                            <h3 class="text-3xl sm:text-4xl font-black leading-tight mb-4">
+                                מסלול קטן שמגלה איפה צריך להתחיל
+                            </h3>
+                            <p class="text-purple-100 text-lg leading-relaxed mb-7">
+                                לא רק “צדק או טעה”. אנחנו מסתכלים אם צריך לחזק דיוק חישובי, שפה אלגברית או תרגום בעיה לדרך פתרון.
+                            </p>
+                        </div>
+                        <div class="diagnostic-map">
+                            <div class="diagnostic-map-item">
+                                <span class="diagnostic-map-badge">1</span>
+                                <div>
+                                    <p class="font-extrabold">בוחרים מסלול גיל</p>
+                                    <p class="text-sm text-purple-100">יסודי, חטיבה או תיכון.</p>
+                                </div>
+                            </div>
+                            <div class="diagnostic-map-item">
+                                <span class="diagnostic-map-badge">2</span>
+                                <div>
+                                    <p class="font-extrabold">פותרים 3 משימות קצרות</p>
+                                    <p class="text-sm text-purple-100">בלי לחץ ובלי מבחן ארוך.</p>
+                                </div>
+                            </div>
+                            <div class="diagnostic-map-item">
+                                <span class="diagnostic-map-badge">3</span>
+                                <div>
+                                    <p class="font-extrabold">מקבלים כיוון ראשוני</p>
+                                    <p class="text-sm text-purple-100">וממשיכים לשיעור היכרות מדויק.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="diagnostic-stage p-4 sm:p-6">
+                        <div id="diagnostic-start" class="bg-white rounded-3xl p-5 sm:p-7 shadow-2xl shadow-purple-950/20">
+                            <div class="flex items-start justify-between gap-4 mb-6">
+                                <div>
+                                    <p class="text-sm font-extrabold text-purple-600 mb-2">שלב ראשון</p>
+                                    <h3 class="text-2xl sm:text-3xl font-black text-purple-950">איזה מסלול מתאים לתלמיד/ה?</h3>
+                                </div>
+                                <span class="hidden sm:inline-flex bg-yellow-100 text-yellow-800 font-black rounded-2xl px-3 py-2 text-sm">מתחילים</span>
+                            </div>
+                            <div class="grid gap-3">
+                                <button type="button" class="diagnostic-track-button" data-diagnostic-track="elementary">
+                                    <span class="block text-xl font-black">יסודי</span>
+                                    <span class="block text-sm text-gray-600 mt-1">חשבון, שברים והבנת נתונים.</span>
+                                </button>
+                                <button type="button" class="diagnostic-track-button" data-diagnostic-track="middle">
+                                    <span class="block text-xl font-black">חטיבת ביניים</span>
+                                    <span class="block text-sm text-gray-600 mt-1">מעבר לאלגברה, משוואות וחשיבה מסודרת.</span>
+                                </button>
+                                <button type="button" class="diagnostic-track-button" data-diagnostic-track="high">
+                                    <span class="block text-xl font-black">תיכון ובגרות</span>
+                                    <span class="block text-sm text-gray-600 mt-1">פונקציות, ייצוגים וניהול פתרון.</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="diagnostic-play" class="hidden bg-white rounded-3xl p-5 sm:p-7 shadow-2xl shadow-purple-950/20" aria-live="polite">
+                            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                                <div>
+                                    <p id="diagnostic-track-label" class="text-sm font-extrabold text-purple-600"></p>
+                                    <h3 id="diagnostic-question-title" class="text-2xl sm:text-3xl font-black text-purple-950"></h3>
+                                </div>
+                                <span id="diagnostic-question-count" class="bg-purple-100 text-purple-800 font-black rounded-full px-4 py-2 text-sm"></span>
+                            </div>
+                            <div class="diagnostic-progress mb-6">
+                                <div id="diagnostic-progress-bar" class="diagnostic-progress-bar"></div>
+                            </div>
+                            <p id="diagnostic-question-prompt" class="text-xl sm:text-2xl text-gray-800 font-extrabold leading-relaxed mb-5"></p>
+                            <div id="diagnostic-answers" class="grid gap-3"></div>
+                        </div>
+
+                        <div id="diagnostic-result" class="hidden bg-white rounded-3xl p-5 sm:p-7 shadow-2xl shadow-purple-950/20" aria-live="polite">
+                            <p class="text-sm font-extrabold text-purple-600 mb-2">כיוון ראשוני</p>
+                            <h3 id="diagnostic-result-title" class="text-3xl font-black text-purple-950 mb-3"></h3>
+                            <p id="diagnostic-result-copy" class="text-lg text-gray-600 leading-relaxed mb-5"></p>
+                            <div id="diagnostic-focus-list" class="flex flex-wrap gap-2 mb-6"></div>
+                            <div class="grid sm:grid-cols-2 gap-3">
+                                <button type="button" id="diagnostic-lead-button" class="text-white bg-purple-700 hover:bg-purple-800 rounded-2xl px-5 py-4 font-black transition">
+                                    קבעו שיעור היכרות עם הכיוון הזה
+                                </button>
+                                <button type="button" id="diagnostic-restart-button" class="text-purple-800 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-2xl px-5 py-4 font-black transition">
+                                    נסו מסלול אחר
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -451,6 +682,69 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 </p>
             </div>
         </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- ✨ אבחון מצב — 90 שניות (שאלון להורה)                       -->
+    <!-- ============================================================ -->
+    <section id="quiz-intro" class="py-16 sm:py-20 bg-white">
+      <div class="max-w-5xl mx-auto px-5 sm:px-8 fade-up">
+        <div class="relative rounded-3xl overflow-hidden p-8 sm:p-12 text-white"
+             style="background: linear-gradient(135deg, #6B21A8 0%, #7E22CE 60%, #EC4899 100%);
+                    box-shadow: 0 24px 60px -20px rgba(126,34,206,0.5);">
+          <!-- Decorative orbs -->
+          <div style="position:absolute;top:-80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.18),transparent 65%);"></div>
+          <div style="position:absolute;bottom:-100px;right:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(254,240,138,0.25),transparent 65%);"></div>
+          <!-- Floating math symbols -->
+          <div style="position:absolute;top:10%;left:8%;font-size:80px;opacity:0.07;font-family:'Times New Roman',serif;">π</div>
+          <div style="position:absolute;bottom:15%;right:8%;font-size:90px;opacity:0.07;font-family:'Times New Roman',serif;">∫</div>
+          <div style="position:absolute;top:50%;right:20%;font-size:60px;opacity:0.08;font-family:'Times New Roman',serif;">√</div>
+
+          <div class="relative grid sm:grid-cols-5 gap-8 items-center">
+            <!-- Copy (right in RTL) -->
+            <div class="sm:col-span-3 text-right">
+              <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold mb-5"
+                    style="background: rgba(255,255,255,0.18); backdrop-filter: blur(10px);">
+                ✨ אבחון מצב · 90 שניות · חינם
+              </span>
+              <h2 class="text-3xl sm:text-5xl font-extrabold leading-tight mb-4">
+                לא בטוחים מה הילד/ה צריך?
+                <br>
+                <span style="color: #FEF08A;">בואו ננתח את המצב יחד.</span>
+              </h2>
+              <p class="text-lg text-purple-100 leading-relaxed mb-7 max-w-xl">
+                7 שאלות קצרות, סיכום אישי עם תוכנית התחלתית, ואז שיחה איתנו
+                עם מורה שמתאים בדיוק. בלי התחייבות.
+              </p>
+              <div class="flex flex-wrap gap-3 items-center">
+                <a href="quiz/"
+                   class="inline-block bg-white text-purple-800 px-8 py-4 rounded-full font-extrabold text-base hover:bg-yellow-100 hover:scale-105 transition-all shadow-2xl">
+                  התחילו אבחון ←
+                </a>
+                <span class="text-sm text-purple-200">
+                  או דלגו ישר ל<a href="#contact" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'});return false;" class="underline font-bold">השארת פרטים</a>
+                </span>
+              </div>
+            </div>
+            <!-- Visual mockup (left in RTL) -->
+            <div class="sm:col-span-2">
+              <div class="rounded-2xl p-5 text-purple-950 text-right"
+                   style="background:#fff;box-shadow:0 20px 50px -10px rgba(0,0,0,0.3);transform:rotate(-2deg);">
+                <div class="text-xs font-extrabold text-purple-600 mb-2">שאלה 1 מתוך 7</div>
+                <div class="text-lg font-extrabold mb-4">באיזו כיתה הלומד/ת?</div>
+                <div class="space-y-2">
+                  <div class="p-3 rounded-xl border-2 border-purple-400 bg-purple-50 text-sm font-bold">🎓 כיתה י״ב (בגרות השנה!)</div>
+                  <div class="p-3 rounded-xl border border-gray-200 text-sm text-gray-600">📊 כיתה י׳ — י״א</div>
+                  <div class="p-3 rounded-xl border border-gray-200 text-sm text-gray-600">📐 כיתה ז׳ — ט׳</div>
+                </div>
+                <div class="mt-4 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                  <div style="height:100%;width:15%;background:linear-gradient(90deg,#7E22CE,#EC4899);"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ============================================================ -->
@@ -861,6 +1155,244 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     </footer>
 
     <script>
+        const diagnosticTracks = {
+            elementary: {
+                label: 'מסלול יסודי',
+                contactGrade: 'ד׳',
+                questions: [
+                    {
+                        title: 'תחנת דיוק',
+                        prompt: 'יש 24 מדבקות שמחלקים שווה בשווה ל־6 ילדים. כמה מדבקות מקבל כל ילד?',
+                        answers: ['4', '6', '18'],
+                        correctAnswer: 0,
+                        focus: 'דיוק חישובי'
+                    },
+                    {
+                        title: 'תחנת שברים',
+                        prompt: 'איזה שבר גדול יותר?',
+                        answers: ['3/4', '2/3', 'הם שווים'],
+                        correctAnswer: 0,
+                        focus: 'הבנת שברים'
+                    },
+                    {
+                        title: 'תחנת צורה',
+                        prompt: 'למלבן אורך 8 ס״מ ורוחב 3 ס״מ. מה ההיקף שלו?',
+                        answers: ['11 ס״מ', '22 ס״מ', '24 ס״מ'],
+                        correctAnswer: 1,
+                        focus: 'תרגום נתונים לפתרון'
+                    }
+                ]
+            },
+            middle: {
+                label: 'מסלול חטיבה',
+                contactGrade: 'ח׳',
+                questions: [
+                    {
+                        title: 'תחנת משוואה',
+                        prompt: 'מה הערך של x במשוואה 3x + 7 = 22?',
+                        answers: ['5', '7', '15'],
+                        correctAnswer: 0,
+                        focus: 'שפה אלגברית'
+                    },
+                    {
+                        title: 'תחנת אחוזים',
+                        prompt: 'מחיר של 80 ש״ח עלה ב־25%. מה המחיר החדש?',
+                        answers: ['85 ש״ח', '100 ש״ח', '105 ש״ח'],
+                        correctAnswer: 1,
+                        focus: 'אחוזים והיגיון מספרי'
+                    },
+                    {
+                        title: 'תחנת תרגום',
+                        prompt: 'איזו משוואה מתארת “מספר ועוד 9 שווה 17”?',
+                        answers: ['9x = 17', 'x + 9 = 17', 'x - 9 = 17'],
+                        correctAnswer: 1,
+                        focus: 'תרגום בעיה למודל'
+                    }
+                ]
+            },
+            high: {
+                label: 'מסלול תיכון ובגרות',
+                contactGrade: 'י״א',
+                questions: [
+                    {
+                        title: 'תחנת פונקציה',
+                        prompt: 'בפונקציה y = 2x - 3, מהו השיפוע?',
+                        answers: ['-3', '2', 'x'],
+                        correctAnswer: 1,
+                        focus: 'קריאת ייצוגים'
+                    },
+                    {
+                        title: 'תחנת שורשים',
+                        prompt: 'אם f(x) = x² - 9, אילו ערכי x פותרים f(x) = 0?',
+                        answers: ['3 בלבד', '3 ו־‎-3', '9 ו־‎-9'],
+                        correctAnswer: 1,
+                        focus: 'בסיס אלגברי'
+                    },
+                    {
+                        title: 'תחנת דרך',
+                        prompt: 'במשוואה 2(x - 4) = 10, איזה צעד מקדם נכון את הבידוד של x?',
+                        answers: ['לחלק ב־2 ולקבל x - 4 = 5', 'להוסיף 4 ולקבל 2x = 14', 'להכפיל ב־10'],
+                        correctAnswer: 0,
+                        focus: 'ניהול דרך פתרון'
+                    }
+                ]
+            }
+        };
+        const diagnosticState = {
+            trackKey: '',
+            questionIndex: 0,
+            attempts: []
+        };
+        const diagnosticElements = {
+            start: document.getElementById('diagnostic-start'),
+            play: document.getElementById('diagnostic-play'),
+            result: document.getElementById('diagnostic-result'),
+            trackLabel: document.getElementById('diagnostic-track-label'),
+            questionTitle: document.getElementById('diagnostic-question-title'),
+            questionCount: document.getElementById('diagnostic-question-count'),
+            progressBar: document.getElementById('diagnostic-progress-bar'),
+            prompt: document.getElementById('diagnostic-question-prompt'),
+            answers: document.getElementById('diagnostic-answers'),
+            resultTitle: document.getElementById('diagnostic-result-title'),
+            resultCopy: document.getElementById('diagnostic-result-copy'),
+            focusList: document.getElementById('diagnostic-focus-list'),
+            leadButton: document.getElementById('diagnostic-lead-button'),
+            restartButton: document.getElementById('diagnostic-restart-button')
+        };
+
+        function trackDiagnosticEvent(eventName, parameters = {}) {
+            if (typeof gtag === 'function') {
+                gtag('event', eventName, parameters);
+            }
+            if (typeof fbq === 'function') {
+                fbq('trackCustom', eventName, parameters);
+            }
+        }
+
+        function startDiagnostic(trackKey) {
+            diagnosticState.trackKey = trackKey;
+            diagnosticState.questionIndex = 0;
+            diagnosticState.attempts = [];
+            diagnosticElements.start.classList.add('hidden');
+            diagnosticElements.result.classList.add('hidden');
+            diagnosticElements.play.classList.remove('hidden');
+            renderDiagnosticQuestion();
+            trackDiagnosticEvent('diagnostic_start', { track: trackKey });
+        }
+
+        function renderDiagnosticQuestion() {
+            const activeTrack = diagnosticTracks[diagnosticState.trackKey];
+            const activeQuestion = activeTrack.questions[diagnosticState.questionIndex];
+            diagnosticElements.trackLabel.textContent = activeTrack.label;
+            diagnosticElements.questionTitle.textContent = activeQuestion.title;
+            diagnosticElements.questionCount.textContent = `שאלה ${diagnosticState.questionIndex + 1} מתוך ${activeTrack.questions.length}`;
+            diagnosticElements.progressBar.style.width = `${(diagnosticState.questionIndex / activeTrack.questions.length) * 100}%`;
+            diagnosticElements.prompt.textContent = activeQuestion.prompt;
+            diagnosticElements.answers.replaceChildren();
+
+            activeQuestion.answers.forEach((answerText, answerIndex) => {
+                const answerButton = document.createElement('button');
+                answerButton.type = 'button';
+                answerButton.className = 'diagnostic-answer';
+                answerButton.textContent = answerText;
+                answerButton.addEventListener('click', () => chooseDiagnosticAnswer(answerIndex));
+                diagnosticElements.answers.appendChild(answerButton);
+            });
+        }
+
+        function chooseDiagnosticAnswer(answerIndex) {
+            const activeTrack = diagnosticTracks[diagnosticState.trackKey];
+            const activeQuestion = activeTrack.questions[diagnosticState.questionIndex];
+            diagnosticState.attempts.push({
+                focus: activeQuestion.focus,
+                correct: answerIndex === activeQuestion.correctAnswer
+            });
+
+            if (diagnosticState.questionIndex === activeTrack.questions.length - 1) {
+                finishDiagnostic();
+                return;
+            }
+
+            diagnosticState.questionIndex += 1;
+            renderDiagnosticQuestion();
+        }
+
+        function finishDiagnostic() {
+            const activeTrack = diagnosticTracks[diagnosticState.trackKey];
+            const correctAnswers = diagnosticState.attempts.filter((attempt) => attempt.correct).length;
+            const missedFocusAreas = [...new Set(
+                diagnosticState.attempts
+                    .filter((attempt) => !attempt.correct)
+                    .map((attempt) => attempt.focus)
+            )];
+            const focusAreas = missedFocusAreas.length
+                ? missedFocusAreas
+                : ['העמקה מעבר לתשובה הנכונה', 'ביטחון מול שאלות חדשות'];
+            const resultTitles = {
+                3: 'יש בסיס טוב — עכשיו בודקים עומק וקצב',
+                2: 'כיוון טוב — יש נקודה שכדאי לדייק',
+                1: 'כדאי להתחיל ממיפוי פערים מסודר',
+                0: 'לא מנחשים — בונים בסיס צעד־צעד'
+            };
+            const resultCopy = correctAnswers >= 2
+                ? 'המשימה הקצרה מראה שיש על מה לבנות. בשיעור היכרות נבדוק מה נשאר יציב כשעוברים לשאלות חדשות, ניהול זמן ורמת הכיתה.'
+                : 'זה בדיוק המקום שבו ליווי מותאם עוזר: לא להעמיס עוד תרגילים, אלא להבין מה חסר בבסיס ואיך מחזירים לתלמיד תחושת שליטה.';
+
+            diagnosticElements.play.classList.add('hidden');
+            diagnosticElements.result.classList.remove('hidden');
+            diagnosticElements.progressBar.style.width = '100%';
+            diagnosticElements.resultTitle.textContent = resultTitles[correctAnswers];
+            diagnosticElements.resultCopy.textContent = resultCopy;
+            diagnosticElements.focusList.replaceChildren();
+            focusAreas.forEach((focusArea) => {
+                const focusChip = document.createElement('span');
+                focusChip.className = 'diagnostic-focus-chip';
+                focusChip.textContent = focusArea;
+                diagnosticElements.focusList.appendChild(focusChip);
+            });
+            diagnosticElements.leadButton.dataset.diagnosticNote =
+                `הושלם אבחון משחקי באתר: ${activeTrack.label}. תשובות נכונות: ${correctAnswers}/${activeTrack.questions.length}. כיווני בדיקה: ${focusAreas.join(', ')}.`;
+            trackDiagnosticEvent('diagnostic_complete', {
+                track: diagnosticState.trackKey,
+                score: correctAnswers
+            });
+        }
+
+        function moveDiagnosticToLeadForm() {
+            const activeTrack = diagnosticTracks[diagnosticState.trackKey];
+            const gradeField = document.getElementById('grade');
+            const historyField = document.getElementById('mathHistory');
+            const firstNameField = document.getElementById('firstName');
+            const contactSection = document.getElementById('contact');
+            const diagnosticNote = diagnosticElements.leadButton.dataset.diagnosticNote;
+
+            if (gradeField && activeTrack) {
+                gradeField.value = activeTrack.contactGrade;
+            }
+            if (historyField && diagnosticNote) {
+                historyField.value = historyField.value
+                    ? `${historyField.value}\n${diagnosticNote}`
+                    : diagnosticNote;
+            }
+            contactSection.scrollIntoView({ behavior: 'smooth' });
+            window.setTimeout(() => firstNameField?.focus(), 500);
+            trackDiagnosticEvent('diagnostic_lead_click', { track: diagnosticState.trackKey });
+        }
+
+        function restartDiagnostic() {
+            diagnosticState.trackKey = '';
+            diagnosticState.questionIndex = 0;
+            diagnosticState.attempts = [];
+            diagnosticElements.play.classList.add('hidden');
+            diagnosticElements.result.classList.add('hidden');
+            diagnosticElements.start.classList.remove('hidden');
+        }
+
+        document.querySelectorAll('[data-diagnostic-track]').forEach((trackButton) => {
+            trackButton.addEventListener('click', () => startDiagnostic(trackButton.dataset.diagnosticTrack));
+        });
+        diagnosticElements.leadButton.addEventListener('click', moveDiagnosticToLeadForm);
+        diagnosticElements.restartButton.addEventListener('click', restartDiagnostic);
         // אנימציות גלילה
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {

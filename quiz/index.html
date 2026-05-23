@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>שאלון אבחון — MathBoost</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ═══════════════ Design system ═══════════════ */
+  :root {
+    --purple: #7E22CE;
+    --purple-dark: #6B21A8;
+    --purple-light: #FAF5FF;
+    --purple-soft: #EDE9FE;
+    --pink: #EC4899;
+    --gold: #F59E0B;
+    --green: #10B981;
+    --red: #EF4444;
+    --text: #111827;
+    --text-soft: #4B5563;
+    --text-mute: #9CA3AF;
+    --border: rgba(0,0,0,0.08);
+    --shadow: 0 10px 40px -10px rgba(126, 34, 206, 0.2);
+    --shadow-hover: 0 20px 50px -10px rgba(126, 34, 206, 0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Heebo', system-ui, sans-serif;
+    background:
+      radial-gradient(at 20% 10%, #FAF5FF 0%, transparent 40%),
+      radial-gradient(at 80% 80%, #FCE7F3 0%, transparent 40%),
+      #FFFFFF;
+    background-attachment: fixed;
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+  /* Floating math equations background */
+  .floating-math {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.06;
+  }
+  .floating-math span {
+    position: absolute; font-size: 50px; font-weight: 200; color: var(--purple);
+    font-family: 'Times New Roman', serif; animation: float 20s infinite ease-in-out;
+  }
+  .floating-math span:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+  .floating-math span:nth-child(2) { top: 20%; right: 8%; animation-delay: 2s; font-size: 70px; }
+  .floating-math span:nth-child(3) { top: 50%; left: 12%; animation-delay: 5s; font-size: 60px; }
+  .floating-math span:nth-child(4) { top: 70%; right: 5%; animation-delay: 7s; font-size: 80px; }
+  .floating-math span:nth-child(5) { top: 85%; left: 20%; animation-delay: 9s; font-size: 45px; }
+  .floating-math span:nth-child(6) { top: 35%; right: 25%; animation-delay: 12s; font-size: 55px; }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(20px, -30px) rotate(5deg); }
+    50% { transform: translate(-15px, 20px) rotate(-3deg); }
+    75% { transform: translate(10px, 30px) rotate(2deg); }
+  }
+
+  /* ═══════════════ Header ═══════════════ */
+  .topnav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.75); backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 28px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .brand {
+    font-size: 22px; font-weight: 800; letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .close-btn {
+    background: rgba(0,0,0,0.04); border: none; width: 36px; height: 36px;
+    border-radius: 18px; cursor: pointer; font-size: 18px; color: var(--text-soft);
+    transition: all .2s;
+  }
+  .close-btn:hover { background: rgba(0,0,0,0.08); transform: scale(1.05); }
+
+  /* ═══════════════ Progress bar ═══════════════ */
+  .progress-bar-wrap {
+    position: sticky; top: 73px; z-index: 49;
+    height: 3px; background: var(--border); overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%; width: 0%; transition: width .5s cubic-bezier(.2,.8,.2,1);
+    background: linear-gradient(90deg, var(--purple), var(--pink));
+  }
+
+  /* ═══════════════ Main ═══════════════ */
+  main {
+    max-width: 720px; margin: 0 auto; padding: 60px 24px 80px;
+    position: relative; z-index: 1;
+  }
+
+  /* ═══════════════ Step container ═══════════════ */
+  .step {
+    display: none;
+    animation: stepIn .5s cubic-bezier(.2,.8,.2,1);
+  }
+  .step.active { display: block; }
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ═══════════════ Intro screen ═══════════════ */
+  .intro {
+    text-align: center; padding-top: 20px;
+  }
+  .intro-emoji {
+    font-size: 72px; margin-bottom: 16px;
+    display: inline-block;
+    animation: bounce 2s infinite ease-in-out;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .intro h1 {
+    font-size: clamp(28px, 5vw, 42px); font-weight: 800; letter-spacing: -0.03em;
+    line-height: 1.15; margin-bottom: 16px;
+  }
+  .intro h1 .accent {
+    background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .intro p { font-size: 17px; color: var(--text-soft); margin-bottom: 28px; }
+  .intro-stats {
+    display: flex; justify-content: center; gap: 32px;
+    margin-bottom: 36px; flex-wrap: wrap;
+  }
+  .intro-stat-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 14px; color: var(--text-soft);
+  }
+  .intro-stat-item strong { color: var(--purple); font-weight: 700; font-size: 16px; }
+
+  /* ═══════════════ Question card ═══════════════ */
+  .q-counter {
+    font-size: 13px; color: var(--text-mute); font-weight: 600;
+    letter-spacing: 0.05em; margin-bottom: 10px;
+  }
+  .q-title {
+    font-size: clamp(22px, 4vw, 28px); font-weight: 700; line-height: 1.3;
+    margin-bottom: 8px; letter-spacing: -0.02em;
+  }
+  .q-subtitle {
+    font-size: 14px; color: var(--text-soft); margin-bottom: 28px;
+  }
+
+  /* ═══════════════ Options ═══════════════ */
+  .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .option {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(20px);
+    border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 18px 20px;
+    cursor: pointer; transition: all .25s cubic-bezier(.2,.8,.2,1);
+    display: flex; align-items: center; gap: 14px;
+    text-align: right; font-family: inherit; font-size: 15px; color: var(--text);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    width: 100%;
+  }
+  .option:hover {
+    border-color: var(--purple);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .option.selected {
+    background: linear-gradient(135deg, var(--purple-light) 0%, #FFF 100%);
+    border-color: var(--purple);
+    box-shadow: var(--shadow);
+  }
+  .option-emoji { font-size: 24px; flex-shrink: 0; }
+  .option-text { flex: 1; font-weight: 500; }
+  /* Fix #2: hide checkmark on unselected, only show when picked */
+  .option-check {
+    width: 22px; height: 22px; border-radius: 11px;
+    border: 2px solid var(--border); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
+    color: transparent;            /* hide the ✓ text by default */
+  }
+  .option.selected .option-check {
+    background: var(--purple); border-color: var(--purple);
+    color: #fff;                    /* reveal it only when selected */
+    transform: scale(1.1);
+  }
+
+  /* ═══════════════ Input fields ═══════════════ */
+  .input-field {
+    width: 100%; padding: 16px 20px; font-family: inherit; font-size: 16px;
+    background: #fff; border: 1.5px solid var(--border); border-radius: 14px;
+    color: var(--text); text-align: right; transition: all .2s;
+    margin-bottom: 16px;
+  }
+  .input-field:focus {
+    outline: none; border-color: var(--purple);
+    box-shadow: 0 0 0 4px rgba(126, 34, 206, 0.1);
+  }
+  textarea.input-field { resize: vertical; min-height: 80px; }
+
+  /* ═══════════════ Buttons ═══════════════ */
+  .btn-row { display: flex; gap: 10px; margin-top: 8px; }
+  .btn {
+    padding: 16px 28px; font-family: inherit; font-size: 15px; font-weight: 600;
+    border: none; border-radius: 100px; cursor: pointer;
+    transition: all .25s cubic-bezier(.2,.8,.2,1);
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 100%);
+    color: #fff; flex: 1;
+    box-shadow: 0 8px 24px -8px rgba(126, 34, 206, 0.5);
+  }
+  .btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px -8px rgba(126, 34, 206, 0.7);
+  }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+  /* Fix #3: helper text on disabled primary — auto-hides when btn is enabled */
+  .btn-disabled-hint {
+    text-align: center; font-size: 12px; color: var(--text-mute);
+    margin-top: 10px; height: 16px;
+    transition: opacity .25s; opacity: 1;
+  }
+  .btn-row:has(.btn-primary:not(:disabled)) + .btn-disabled-hint {
+    opacity: 0; pointer-events: none;
+  }
+  /* Fix #5: stronger secondary back button */
+  .btn-secondary {
+    background: #fff; color: var(--text-soft);
+    border: 1.5px solid var(--border);
+    padding: 16px 22px;
+    font-weight: 600;
+  }
+  .btn-secondary:hover {
+    background: var(--purple-light);
+    border-color: var(--purple);
+    color: var(--purple-dark);
+  }
+  .btn-big {
+    width: 100%; padding: 18px 32px; font-size: 16px;
+  }
+
+  /* ═══════════════ Result screen ═══════════════ */
+  .result-hero {
+    text-align: center; padding: 20px 0 32px;
+  }
+  .result-icon {
+    width: 88px; height: 88px; border-radius: 24px;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 100%);
+    color: #fff; font-size: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 18px;
+    box-shadow: 0 16px 40px -10px rgba(126, 34, 206, 0.4);
+    animation: bounce 2s infinite ease-in-out;
+  }
+  .result-hero h2 {
+    font-size: clamp(26px, 5vw, 34px); font-weight: 800;
+    letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 10px;
+  }
+  .result-hero p { font-size: 16px; color: var(--text-soft); }
+
+  .result-card {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 20px; padding: 28px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .result-card-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    color: var(--purple); margin-bottom: 10px;
+  }
+  .result-card h3 {
+    font-size: 22px; font-weight: 700; margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  .result-card p { color: var(--text-soft); font-size: 15px; line-height: 1.65; }
+  .result-card ul { margin: 14px 0; padding-right: 20px; color: var(--text-soft); }
+  .result-card li { margin-bottom: 8px; font-size: 14px; }
+
+  .recommendation-tag {
+    display: inline-block;
+    padding: 6px 14px; border-radius: 100px;
+    background: linear-gradient(135deg, var(--purple-soft) 0%, #FCE7F3 100%);
+    color: var(--purple-dark); font-size: 12px; font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  /* ═══════════════ CTA card on result — redirects to the site form ═══════ */
+  .cta-card {
+    background: linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%);
+    color: #fff;
+    border-radius: 20px; padding: 32px 28px;
+    margin-top: 24px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-card::before {
+    content: ''; position: absolute; top: -60px; left: -60px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
+  }
+  .cta-card::after {
+    content: ''; position: absolute; bottom: -80px; right: -40px;
+    width: 240px; height: 240px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.4), transparent 70%);
+  }
+  .cta-card > * { position: relative; z-index: 1; }
+  .cta-card h3 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .cta-card > p { font-size: 14px; opacity: 0.92; margin-bottom: 22px; line-height: 1.6; }
+  .cta-card .btn-primary {
+    background: #fff; color: var(--purple); font-weight: 700;
+    box-shadow: 0 8px 24px -8px rgba(0,0,0,0.3);
+    text-decoration: none;
+    max-width: 320px; margin: 0 auto;
+  }
+  .cta-card .btn-primary:hover {
+    background: var(--purple-light); transform: translateY(-2px);
+    box-shadow: 0 12px 32px -8px rgba(0,0,0,0.4);
+  }
+  .cta-card .cta-sub {
+    margin-top: 16px; font-size: 12px; opacity: 0.85;
+  }
+  .cta-card .cta-sub a {
+    color: #fff; text-decoration: underline; font-weight: 600;
+  }
+  /* Soft note inside result card — explains "why" of the recommendation */
+  .result-note {
+    margin-top: 16px; padding: 12px 14px;
+    background: var(--purple-light);
+    border-right: 3px solid var(--purple);
+    border-radius: 10px;
+    font-size: 13px; color: var(--text-soft); line-height: 1.6;
+  }
+  .result-note:empty { display: none; }
+
+  /* ═══════════════ Submitted screen ═══════════════ */
+  .submitted-hero {
+    text-align: center; padding: 40px 0;
+  }
+  .submitted-icon {
+    width: 96px; height: 96px; border-radius: 50%;
+    background: var(--green); color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 50px; margin-bottom: 20px;
+    animation: pulse 2s infinite;
+    box-shadow: 0 16px 40px -10px rgba(16, 185, 129, 0.4);
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  /* ═══════════════ Mobile ═══════════════ */
+  @media (max-width: 600px) {
+    .topnav { padding: 14px 18px; }
+    main { padding: 30px 18px 60px; }
+    .intro-stats { gap: 18px; }
+    .floating-math span { font-size: 32px !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating math equations background -->
+<div class="floating-math" aria-hidden="true">
+  <span>x² + y²</span>
+  <span>π</span>
+  <span>√2</span>
+  <span>∫</span>
+  <span>Σ</span>
+  <span>θ</span>
+</div>
+
+<!-- Top nav -->
+<div class="topnav">
+  <div class="brand">MathBoost</div>
+  <button class="close-btn" onclick="location.href='../'" title="חזרה לאתר">✕</button>
+</div>
+
+<!-- Progress bar -->
+<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<main>
+
+  <!-- ═══════ STEP 0 — Intro ═══════ -->
+  <div class="step active" id="step-0">
+    <div class="intro">
+      <div class="intro-emoji">🎯</div>
+      <h1>בואו נבין מה <span class="accent">באמת קורה</span> עם הילד/ה שלכם</h1>
+      <p>שאלון קצר של 7 שאלות שיעזור לנו להבין את המצב ולהתאים תוכנית מדויקת.<br>לוקח כ-90 שניות. בלי התחייבות — אין צורך בפרטים אישיים.</p>
+      <div class="intro-stats">
+        <div class="intro-stat-item">⏱️ <strong>90</strong> שניות</div>
+        <div class="intro-stat-item">📋 <strong>7</strong> שאלות</div>
+        <div class="intro-stat-item">💎 <strong>סיכום</strong> אישי</div>
+      </div>
+      <button class="btn btn-primary btn-big" onclick="nextStep()">בואו נתחיל ←</button>
+    </div>
+  </div>
+
+  <!-- ═══════ STEP 1 — Grade ═══════ -->
+  <div class="step" id="step-1">
+    <div class="q-counter">שאלה 1 מתוך 7</div>
+    <h2 class="q-title">באיזו כיתה הלומד/ת?</h2>
+    <p class="q-subtitle">בחר/י את הכיתה הקרובה</p>
+    <div class="options" data-key="grade">
+      <button class="option" data-value="elementary"><span class="option-emoji">🎒</span><span class="option-text">כיתה א׳ — ו׳ (יסודי)</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="middle"><span class="option-emoji">📐</span><span class="option-text">כיתה ז׳ — ט׳ (חטיבה)</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="high-10-11"><span class="option-emoji">📊</span><span class="option-text">כיתה י׳ — י״א (תיכון, לפני בגרות)</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="high-12"><span class="option-emoji">🎓</span><span class="option-text">כיתה י״ב (בגרות השנה!)</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="adult"><span class="option-emoji">👨‍🎓</span><span class="option-text">השלמת בגרויות / קורסי מבוא</span><span class="option-check">✓</span></button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="prevStep()">→ חזרה</button>
+      <button class="btn btn-primary" onclick="nextStep()" disabled>המשך</button>
+    </div>
+    <div class="btn-disabled-hint">בחר/י תשובה כדי להמשיך</div>
+  </div>
+
+  <!-- ═══════ STEP 2 — Main challenge ═══════ -->
+  <div class="step" id="step-2">
+    <div class="q-counter">שאלה 2 מתוך 7</div>
+    <h2 class="q-title">מה האתגר העיקרי כרגע?</h2>
+    <p class="q-subtitle">בחר/י את הדבר שהכי מטריד אותך</p>
+    <div class="options" data-key="challenge">
+      <button class="option" data-value="not-understand"><span class="option-emoji">🤯</span><span class="option-text">פשוט לא מבין/ה את החומר בכיתה</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="grades-drop"><span class="option-emoji">📉</span><span class="option-text">הציונים יורדים מבחינה למבחינה</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="gaps"><span class="option-emoji">🕳️</span><span class="option-text">יש פערים גדולים משנים קודמות</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="anxiety"><span class="option-emoji">😰</span><span class="option-text">חרדה / לחץ לפני מבחנים</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="motivation"><span class="option-emoji">😩</span><span class="option-text">אין מוטיבציה — "מתמטיקה לא בשבילי"</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="bagrut"><span class="option-emoji">🎯</span><span class="option-text">להעלות יחידות / לשפר ציון בגרות</span><span class="option-check">✓</span></button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="prevStep()">→ חזרה</button>
+      <button class="btn btn-primary" onclick="nextStep()" disabled>המשך</button>
+    </div>
+    <div class="btn-disabled-hint">בחר/י תשובה כדי להמשיך</div>
+  </div>
+
+  <!-- ═══════ STEP 3 — Current grade ═══════ -->
+  <div class="step" id="step-3">
+    <div class="q-counter">שאלה 3 מתוך 7</div>
+    <h2 class="q-title">איפה הציון עומד היום?</h2>
+    <p class="q-subtitle">בערך — לא נדרש לדייק</p>
+    <div class="options" data-key="current-grade">
+      <button class="option" data-value="under-60"><span class="option-emoji">🔴</span><span class="option-text">פחות מ-60 (נכשל/ת)</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="60-70"><span class="option-emoji">🟠</span><span class="option-text">60—70 (מתחת לממוצע)</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="70-80"><span class="option-emoji">🟡</span><span class="option-text">70—80 (סביר אבל יכול להשתפר)</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="80-90"><span class="option-emoji">🟢</span><span class="option-text">80—90 (טוב, רוצה להגיע למצוין)</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="90+"><span class="option-emoji">⭐</span><span class="option-text">90+ (מצטיין/ת — שמירה על הרמה)</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="unknown"><span class="option-emoji">🤷</span><span class="option-text">לא בטוח/ה — עוד אין מספיק ציונים</span><span class="option-check">✓</span></button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="prevStep()">→ חזרה</button>
+      <button class="btn btn-primary" onclick="nextStep()" disabled>המשך</button>
+    </div>
+    <div class="btn-disabled-hint">בחר/י תשובה כדי להמשיך</div>
+  </div>
+
+  <!-- ═══════ STEP 4 — History ═══════ -->
+  <div class="step" id="step-4">
+    <div class="q-counter">שאלה 4 מתוך 7</div>
+    <h2 class="q-title">היה ניסיון קודם עם מורה פרטי?</h2>
+    <p class="q-subtitle">חשוב לנו להבין מה כבר ניסיתם</p>
+    <div class="options" data-key="history">
+      <button class="option" data-value="never"><span class="option-emoji">🆕</span><span class="option-text">לא — זו ההתחלה שלנו עם מורה פרטי</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="tried-no-success"><span class="option-emoji">😕</span><span class="option-text">היו 1-2 מורים — לא ראינו שיפור משמעותי</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="tried-many"><span class="option-emoji">😓</span><span class="option-text">היו כמה — הילד לא התחבר לאף אחד</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="had-good"><span class="option-emoji">😊</span><span class="option-text">היה מורה טוב, אבל סיים — מחפשים חדש</span><span class="option-check">✓</span></button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="prevStep()">→ חזרה</button>
+      <button class="btn btn-primary" onclick="nextStep()" disabled>המשך</button>
+    </div>
+    <div class="btn-disabled-hint">בחר/י תשובה כדי להמשיך</div>
+  </div>
+
+  <!-- ═══════ STEP 5 — Frequency ═══════ -->
+  <div class="step" id="step-5">
+    <div class="q-counter">שאלה 5 מתוך 7</div>
+    <h2 class="q-title">כמה שיעורים בשבוע הייתם רוצים?</h2>
+    <p class="q-subtitle">תוכלו לשנות אחר כך — זה רק כיוון</p>
+    <div class="options" data-key="frequency">
+      <button class="option" data-value="1"><span class="option-emoji">1️⃣</span><span class="option-text">שיעור אחד בשבוע (קצב רגוע)</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="2"><span class="option-emoji">2️⃣</span><span class="option-text">שניים בשבוע (קצב טוב לרוב המקרים)</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="3+"><span class="option-emoji">🔥</span><span class="option-text">3+ בשבוע (אינטנסיבי — לבגרות קרובה)</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="not-sure"><span class="option-emoji">💭</span><span class="option-text">לא בטוח/ה — נשמח שתייעצו לנו</span><span class="option-check">✓</span></button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="prevStep()">→ חזרה</button>
+      <button class="btn btn-primary" onclick="nextStep()" disabled>המשך</button>
+    </div>
+    <div class="btn-disabled-hint">בחר/י תשובה כדי להמשיך</div>
+  </div>
+
+  <!-- ═══════ STEP 6 — Timeline ═══════ -->
+  <div class="step" id="step-6">
+    <div class="q-counter">שאלה 6 מתוך 7</div>
+    <h2 class="q-title">מתי תרצו להתחיל?</h2>
+    <p class="q-subtitle">דחיפות עוזרת לנו לסדר את השיעור הראשון</p>
+    <div class="options" data-key="timeline">
+      <button class="option" data-value="immediately"><span class="option-emoji">🚨</span><span class="option-text">השבוע — דחוף!</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="2-weeks"><span class="option-emoji">⏰</span><span class="option-text">בשבועיים הקרובים</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="month"><span class="option-emoji">📅</span><span class="option-text">בחודש הקרוב</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="exploring"><span class="option-emoji">🤔</span><span class="option-text">בודק/ת אפשרויות — לא דחוף</span><span class="option-check">✓</span></button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="prevStep()">→ חזרה</button>
+      <button class="btn btn-primary" onclick="nextStep()" disabled>המשך</button>
+    </div>
+    <div class="btn-disabled-hint">בחר/י תשובה כדי להמשיך</div>
+  </div>
+
+  <!-- ═══════ STEP 7 — Open text ═══════ -->
+  <div class="step" id="step-7">
+    <div class="q-counter">שאלה 7 מתוך 7 — האחרונה!</div>
+    <h2 class="q-title">משהו נוסף שכדאי לנו לדעת?</h2>
+    <p class="q-subtitle">אופציונלי — זה עוזר לנו להתאים מורה מדויק יותר</p>
+    <textarea class="input-field" id="freeText"
+      placeholder="לדוגמה: הבן שלי בכיתה ז׳, מתקשה במיוחד עם שברים ופונקציות. הוא ביישן ומעדיף מורה רגוע."
+      rows="5"></textarea>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="prevStep()">→ חזרה</button>
+      <button class="btn btn-primary" onclick="showResult()">סיימתי — הציגו לי סיכום</button>
+    </div>
+  </div>
+
+  <!-- ═══════ STEP 8 — Result ═══════ -->
+  <div class="step" id="step-8">
+    <div class="result-hero">
+      <div class="result-icon">✨</div>
+      <h2>הנה הסיכום שלנו בשבילכם</h2>
+      <p>בהתבסס על מה שסיפרתם — בנינו עבורכם נקודת התחלה</p>
+    </div>
+
+    <div class="result-card">
+      <div class="recommendation-tag" id="resultTag">תוכנית מומלצת</div>
+      <h3 id="resultTitle">תוכנית התאוששות מהירה</h3>
+      <p id="resultDescription">בהתבסס על מה שסיפרתם...</p>
+      <div class="result-card-label" style="margin-top:20px">השלבים המומלצים:</div>
+      <ul id="resultSteps"></ul>
+      <div id="resultNote" class="result-note"></div>
+    </div>
+
+    <!-- CTA: redirect to the live form on mathboost.co.il -->
+    <div class="cta-card">
+      <h3>הצעד הבא — שיעור היכרות</h3>
+      <p>השאירו פרטים בטופס באתר, וניצור איתכם קשר עוד היום עם המורה המתאים לתוכנית הזו.</p>
+      <a id="ctaToForm" class="btn btn-primary btn-big" href="#" rel="noopener">
+        השאירו פרטים באתר ←
+      </a>
+      <p class="cta-sub">
+        ללא התחייבות · חזרה תוך 4 שעות · או דברו איתנו ב<a href="https://wa.me/972586276476" target="_blank" rel="noopener">וואטסאפ</a>
+      </p>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  // ════════════════ Config ════════════════
+  // URL of the live website's contact form. The "השאירו פרטים" CTA on the
+  // result screen redirects here. We append query params so the form can
+  // pre-fill (if the site supports them).
+  const SITE_FORM_URL = '../#contact';
+
+  // ════════════════ State ════════════════
+  const TOTAL_STEPS = 8;
+  let currentStep = 0;
+  let isAdvancing = false;   // Fix #1: prevent double-advance from rapid clicks
+  const answers = {};
+
+  function updateProgress() {
+    const pct = (currentStep / TOTAL_STEPS) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+  }
+
+  function nextStep() {
+    if (isAdvancing) return;
+    if (currentStep >= TOTAL_STEPS) return;
+    isAdvancing = true;
+    document.getElementById('step-' + currentStep).classList.remove('active');
+    currentStep++;
+    document.getElementById('step-' + currentStep).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateProgress();
+    setTimeout(() => { isAdvancing = false; }, 300);
+  }
+
+  function prevStep() {
+    if (isAdvancing) return;
+    if (currentStep <= 0) return;
+    isAdvancing = true;
+    document.getElementById('step-' + currentStep).classList.remove('active');
+    currentStep--;
+    document.getElementById('step-' + currentStep).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateProgress();
+    setTimeout(() => { isAdvancing = false; }, 300);
+  }
+
+  // ════════════════ Option selection ════════════════
+  document.querySelectorAll('.options').forEach(group => {
+    group.addEventListener('click', (e) => {
+      const opt = e.target.closest('.option');
+      if (!opt) return;
+      const key = group.dataset.key;
+      const value = opt.dataset.value;
+      // Mark visually
+      group.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      // Store
+      answers[key] = value;
+      // Enable the next button
+      const step = opt.closest('.step');
+      const btn = step.querySelector('.btn-primary');
+      if (btn) btn.disabled = false;
+      // Auto-advance after small delay for satisfaction
+      setTimeout(() => {
+        if (btn && !btn.disabled) btn.click();
+      }, 400);
+    });
+  });
+
+  // ════════════════ Result logic ════════════════
+  function showResult() {
+    answers.freeText = document.getElementById('freeText').value.trim();
+    const rec = buildRecommendation(answers);
+
+    // Render fields
+    document.getElementById('resultTag').textContent = rec.tag;
+    document.getElementById('resultTitle').textContent = rec.title;
+    document.getElementById('resultDescription').textContent = rec.description;
+    const stepsList = document.getElementById('resultSteps');
+    stepsList.innerHTML = '';
+    rec.steps.forEach(s => {
+      const li = document.createElement('li');
+      li.textContent = s;
+      stepsList.appendChild(li);
+    });
+    // Optional gentle "why more sessions" note — only shown when relevant
+    const noteEl = document.getElementById('resultNote');
+    noteEl.textContent = rec.note || '';
+
+    // Build the redirect URL with quiz answers as query params, so the site
+    // form can pre-fill the relevant fields (grade, free-text, source).
+    // Site doesn't need to read them — they're harmless if ignored.
+    const params = new URLSearchParams({
+      source: 'quiz',
+      grade: answers.grade || '',
+      challenge: answers.challenge || '',
+      current_grade: answers['current-grade'] || '',
+      history: answers.history || '',
+      frequency: answers.frequency || '',
+      timeline: answers.timeline || '',
+      note: answers.freeText || '',
+      plan: rec.planKey || '',
+    });
+    const url = SITE_FORM_URL + (SITE_FORM_URL.includes('?') ? '&' : '?') + params.toString();
+    document.getElementById('ctaToForm').href = url;
+
+    // Save answers to localStorage in case the site wants to consume them
+    try { localStorage.setItem('mathboost_quiz_answers', JSON.stringify(answers)); } catch {}
+
+    nextStep();
+    fireConfetti();
+  }
+
+  // ════════════════ Smart recommendation builder ════════════════
+  // Philosophy:
+  //   - RESPECT the user's stated frequency preference (`a.frequency`).
+  //     Never push more sessions than they asked for — that feels like
+  //     a sales tactic and erodes trust.
+  //   - The ONE exception: a clear, well-explained note when the user's
+  //     situation OBJECTIVELY requires more (e.g. bagrut in 4 months with
+  //     a failing grade and they picked 1 lesson/week). We don't change
+  //     the plan — we add a short, honest "note" explaining the trade-off
+  //     and leaving the decision to them.
+  //   - Tone: warm, professional, no "🚨 דחוף!" sales-y emoji-spam.
+  //   - Hebrew copy is reviewed manually for natural phrasing.
+  function buildRecommendation(a) {
+    const grade        = a.grade;
+    const challenge    = a.challenge;
+    const currentGrade = a['current-grade'];
+    const history      = a.history;
+    const frequency    = a.frequency;           // '1' | '2' | '3+' | 'not-sure'
+    const timeline     = a.timeline;            // 'immediately' | '2-weeks' | 'month' | 'exploring'
+
+    const isBagrut     = grade === 'high-12';
+    const isPreBagrut  = grade === 'high-10-11';
+    const isElementary = grade === 'elementary';
+    const isMiddle     = grade === 'middle';
+    const urgent       = timeline === 'immediately';
+    const lowGrade     = currentGrade === 'under-60' || currentGrade === '60-70';
+
+    // Translate frequency to the line that shows in the plan steps.
+    // Default for "not-sure" is one a week — a deliberate non-pushy default.
+    const freqLine = ({
+      '1':   'שיעור קבוע פעם בשבוע',
+      '2':   'שני שיעורים בשבוע',
+      '3+':  'שלושה שיעורים בשבוע (קצב אינטנסיבי)',
+      'not-sure': 'מתחילים בשיעור אחד בשבוע — נתאים אחרי שנכיר',
+    })[frequency] || 'שיעור פעם בשבוע';
+
+    // The honest "consider more" note — surfaces ONLY in cases where the
+    // gap between what the user picked and what we'd professionally
+    // recommend is wide enough that staying silent would be dishonest.
+    // It's a soft heads-up, not a hard sell.
+    let note = '';
+    if (isBagrut && urgent && (frequency === '1' || frequency === 'not-sure')) {
+      note = 'הערה כנה: בגרות בעוד מספר חודשים בדרך כלל מחייבת שני שיעורים בשבוע לפחות, כדי להספיק לכסות חומר וגם לתרגל. נשארים עם שיעור אחד? לגמרי אפשר — נדבר על זה בשיעור ההיכרות ונחליט יחד מה הקצב הנכון.';
+    } else if (isBagrut && lowGrade && frequency === '1') {
+      note = 'הערה: ציון של מתחת ל-70 בכיתה י"ב הוא סימן שצריך לסגור פערים די מהר. שיעור אחד בשבוע אפשרי, אבל בדרך כלל ההתקדמות תהיה איטית יותר. שווה לדבר על זה עם המורה בשיעור ההיכרות.';
+    } else if (challenge === 'gaps' && lowGrade && frequency === '1') {
+      note = 'הערה: כשיש פערים גדולים, שיעור אחד בשבוע סוגר אותם — אבל לוקח יותר זמן. אם רוצים לזרז — אפשר להתחיל באינטנסיבי לחודש-חודשיים ואז לרדת לשיעור שבועי. נדבר על זה בשיחה.';
+    }
+
+    // ─── 1. Bagrut (12th grade) ───────────────────────────────────────────
+    if (isBagrut) {
+      return {
+        planKey: 'bagrut',
+        tag: 'תוכנית בגרות',
+        title: 'תוכנית הכנה לבגרות',
+        description: urgent
+          ? 'הבגרות כאן ויש עוד חומר לכסות. הגישה שלנו: מיפוי מדויק של הפערים, התמקדות במה שבאמת חוזר בבחינה, וסימולציות תחת תנאי בגרות.'
+          : 'יש זמן לבנות תוכנית בגרות בצורה רגועה ויסודית. הגישה שלנו: ביסוס יסודות, בניית ביטחון בכל פרק, ורק לקראת הסוף — סימולציות תחת תנאי בחינה.',
+        steps: [
+          'שיעור היכרות (60 דק׳) — אבחון אישי + בניית מפת בגרות',
+          freqLine,
+          'תרגול ביתי ממוקד בין השיעורים',
+          'סימולציות בגרות לקראת הבחינה',
+          'זמינות מורה בוואטסאפ לשאלות בין שיעורים',
+        ],
+        note,
+      };
+    }
+
+    // ─── 2. Pre-bagrut (10-11) ────────────────────────────────────────────
+    if (isPreBagrut) {
+      return {
+        planKey: 'pre-bagrut',
+        tag: 'תוכנית תיכון',
+        title: 'בניית בסיס לבגרות',
+        description: 'השנים האלה הן הזמן הכי טוב לבנות בסיס יציב לבגרות — בלי לחץ של זמן. מתחילים מאבחון של הרמה הנוכחית, סוגרים פערים אם יש, ובונים שגרת לימוד יציבה.',
+        steps: [
+          'שיעור היכרות (60 דק׳) — אבחון רמה והבנת התלמיד',
+          freqLine,
+          'סגירת פערים משנים קודמות אם מתגלים',
+          'התקדמות לפי קצב התלמיד, מקבילה לחומר הכיתה',
+          'מורה קבוע שמלווה עד הבגרות',
+        ],
+        note,
+      };
+    }
+
+    // ─── 3. Challenge-specific plans (work for all ages) ──────────────────
+    if (challenge === 'anxiety') {
+      return {
+        planKey: 'anxiety',
+        tag: 'תוכנית בניית ביטחון',
+        title: 'מהלחץ — להבנה',
+        description: 'חרדה מבחנים היא אחת הסיבות הכי שכיחות לציונים נמוכים אצל תלמידים חכמים. אנחנו מטפלים בשורש — בונים את הביטחון לפני שניגשים לחומר המאתגר.',
+        steps: [
+          'שיעור היכרות שמתחיל מנקודת חוזק של התלמיד',
+          freqLine,
+          'תרגול הדרגתי שצובר חוויות הצלחה קטנות',
+          'טכניקות פשוטות להתמודדות עם מבחן',
+          'מורה רגוע/ה ותומך/ת — בלי שיפוטיות',
+        ],
+        note,
+      };
+    }
+
+    if (challenge === 'motivation') {
+      return {
+        planKey: 'motivation',
+        tag: 'תוכנית בניית מוטיבציה',
+        title: 'מ"זה לא בשבילי" — להבנה ראשונה',
+        description: 'תלמיד שאומר "מתמטיקה לא בשבילי" בדרך כלל פשוט עוד לא חווה רגע של הצלחה במתמטיקה. המטרה של השיעורים הראשונים: לתת לו את הניצחון הראשון.',
+        steps: [
+          'שיעור היכרות מבוסס שיחה — בלי לחץ, בלי מבחנים',
+          freqLine,
+          'התחלה מנקודה שהתלמיד כן מבין — ובניה משם',
+          'מורה צעיר/ה שיודע/ת לדבר בשפת התלמיד',
+          'יעדים שבועיים קטנים וברורים',
+        ],
+        note,
+      };
+    }
+
+    if (challenge === 'gaps') {
+      return {
+        planKey: 'gaps',
+        tag: 'תוכנית סגירת פערים',
+        title: 'סוגרים פערים בסדר הנכון',
+        description: 'פערים משנים קודמות הם הסיבה הכי שכיחה לכישלון במתמטיקה. הגישה שלנו: לא לרדוף אחרי הכיתה — קודם לחזור אחורה, לסגור את היסודות, ואז להדביק קצב.',
+        steps: [
+          'שיעור היכרות — מיפוי מדויק של הפערים',
+          'דוח כתוב להורים: אילו נושאים פתוחים ובאיזה סדר נסגור אותם',
+          freqLine,
+          'תרגול ממוקד בכל פער עד לשליטה מלאה',
+          'מעבר חזרה לחומר הכיתה רק אחרי שהבסיס חזק',
+        ],
+        note,
+      };
+    }
+
+    if (challenge === 'bagrut') {
+      // User explicitly said the goal is improving bagrut — even if not in 12th
+      return {
+        planKey: 'bagrut-prep',
+        tag: 'תוכנית שיפור ציון בגרות',
+        title: 'העלאת ציון או יחידות',
+        description: 'לפעמים שינוי קטן בגישה משפר ציון בגרות בעשרות נקודות. נתחיל מאבחון מה בדיוק עוצר אותך עכשיו ונבנה תוכנית ממוקדת.',
+        steps: [
+          'שיעור היכרות — אבחון של החוזקות והחולשות בחומר',
+          freqLine,
+          'דגש על סוגי שאלות שחוזרות בבחינות',
+          'סימולציות תחת תנאי בחינה',
+          'משוב כתוב אחרי כל סימולציה',
+        ],
+        note,
+      };
+    }
+
+    if (challenge === 'not-understand' || challenge === 'grades-drop') {
+      // Generic "needs better explanation" — pair with grade-level styling
+      return {
+        planKey: 'understanding',
+        tag: 'תוכנית בניית הבנה',
+        title: 'הסבר בקצב של התלמיד',
+        description: history === 'tried-no-success' || history === 'tried-many'
+          ? 'אם היו מורים פרטיים בעבר ולא היה שיפור — בדרך כלל זו לא בעיה של חומר. זו התאמה לא נכונה של מורה ושיטה. אנחנו מתחילים מהבנה של איך התלמיד חושב, ואז בוחרים מורה ושיטה שמתאימים.'
+          : 'הסיבה הכי שכיחה ש"לא מבינים" היא שההסבר בכיתה לא תפס. בשיעור פרטי, המורה יכול לעצור על כל נקודה, לחזור עליה בכמה דרכים, ולוודא שאין פערים לפני שמתקדמים.',
+        steps: [
+          'שיעור היכרות (60 דק׳) — איך התלמיד חושב, איפה הוא נתקע',
+          freqLine,
+          'הסברים בכמה דרכים — לא רק שיטה אחת',
+          'תרגול קצר על כל נושא לפני שעוברים הלאה',
+          'מורה קבוע שמכיר את התלמיד',
+        ],
+        note,
+      };
+    }
+
+    // ─── 4. Elementary fallback ───────────────────────────────────────────
+    if (isElementary) {
+      return {
+        planKey: 'elementary',
+        tag: 'תוכנית יסודי',
+        title: 'בונים אהבה למתמטיקה',
+        description: 'בגיל יסודי הגישה היא הכל. אנחנו לא רק מלמדים — אנחנו בונים יחס חיובי למתמטיקה דרך משחקים, סיפורים והצלחות קטנות.',
+        steps: [
+          'שיעור היכרות בקצב של הילד/ה — בלי לחץ',
+          freqLine,
+          'תרגול דרך משחקי לוגיקה ופאזלים',
+          'סיכום שבועי קצר להורים',
+          'מורה קבוע שבונה קשר ארוך טווח',
+        ],
+        note,
+      };
+    }
+
+    // ─── 5. Default — middle school or unspecified ────────────────────────
+    return {
+      planKey: 'default',
+      tag: 'תוכנית התקדמות אישית',
+      title: 'מתחילים מאבחון',
+      description: 'בנינו תוכנית התחלתית בהתבסס על מה שסיפרתם. הצעד הראשון הוא שיעור היכרות — שם המורה ייפגש עם התלמיד, יאבחן את הקשיים המדויקים, ויחד נחליט על המשך.',
+      steps: [
+        'שיעור היכרות (60 דק׳) — אבחון + הכרות',
+        freqLine,
+        'תוכנית כתובה שנשלחת להורים אחרי השיעור הראשון',
+        'מורה קבוע לאורך כל הדרך',
+        'זמינות בוואטסאפ לשאלות בין שיעורים',
+      ],
+      note,
+    };
+  }
+
+  // ════════════════ Confetti ════════════════
+  function fireConfetti() {
+    const canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999';
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext('2d');
+    canvas.width = innerWidth; canvas.height = innerHeight;
+    const colors = ['#7E22CE','#EC4899','#F59E0B','#10B981','#3B82F6'];
+    const pieces = [];
+    for (let i = 0; i < 80; i++) {
+      pieces.push({
+        x: innerWidth/2, y: innerHeight*0.4,
+        vx: (Math.random()-0.5)*15, vy: -Math.random()*15 - 5,
+        size: Math.random()*8 + 4, rot: Math.random()*360, vrot: (Math.random()-0.5)*15,
+        color: colors[Math.floor(Math.random()*colors.length)],
+        life: 1,
+      });
+    }
+    let frame = 0;
+    function tick() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      pieces.forEach(p => {
+        p.x += p.vx; p.y += p.vy; p.vy += 0.4; p.rot += p.vrot; p.life -= 0.012;
+        ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot * Math.PI/180);
+        ctx.globalAlpha = Math.max(0, p.life); ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size*0.5);
+        ctx.restore();
+      });
+      frame++;
+      if (frame < 120) requestAnimationFrame(tick);
+      else canvas.remove();
+    }
+    tick();
+  }
+
+  updateProgress();
+</script>
+
+</body>
+</html>
