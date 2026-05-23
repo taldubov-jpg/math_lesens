@@ -818,18 +818,11 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                   <p class="text-purple-100 text-base leading-relaxed mb-4">
                     אחרי האבחון — בונים תוכנית כתובה במיוחד לתלמיד הזה: אילו נושאים מסדרים קודם, באיזה קצב מתקדמים, אילו טכניקות מתאימות לדרך החשיבה שלו.
                   </p>
-                  <!-- Mini progress mockup -->
-                  <div class="bg-white/15 backdrop-blur rounded-xl p-4 mt-4 text-right">
-                    <div class="text-[11px] font-extrabold text-yellow-200 mb-2 tracking-wider">דוגמה לתוכנית אישית</div>
-                    <div class="space-y-1.5 text-xs">
-                      <div class="flex justify-between items-center"><span>שברים — סגור</span><span class="text-yellow-200 font-bold">✓ 100%</span></div>
-                      <div class="h-1.5 bg-white/20 rounded-full overflow-hidden"><div class="h-full bg-yellow-200 rounded-full" style="width:100%"></div></div>
-                      <div class="flex justify-between items-center mt-3"><span>אלגברה — בעבודה</span><span class="text-white font-bold">65%</span></div>
-                      <div class="h-1.5 bg-white/20 rounded-full overflow-hidden"><div class="h-full bg-white rounded-full" style="width:65%"></div></div>
-                      <div class="flex justify-between items-center mt-3"><span>פונקציות — הבא</span><span class="text-white/60">—</span></div>
-                      <div class="h-1.5 bg-white/20 rounded-full overflow-hidden"><div class="h-full bg-white/30 rounded-full" style="width:5%"></div></div>
-                    </div>
-                  </div>
+                  <ul class="space-y-2 text-sm">
+                    <li class="flex items-start gap-2"><span class="text-yellow-200 font-bold flex-shrink-0">✓</span><span class="text-purple-100">מפת פערים מסודרת מהראשון לאחרון</span></li>
+                    <li class="flex items-start gap-2"><span class="text-yellow-200 font-bold flex-shrink-0">✓</span><span class="text-purple-100">קצב למידה אישי — לא לפי הכיתה</span></li>
+                    <li class="flex items-start gap-2"><span class="text-yellow-200 font-bold flex-shrink-0">✓</span><span class="text-purple-100">עדכון להורים אחרי כל שיעור</span></li>
+                  </ul>
                 </div>
               </div>
 
@@ -1403,6 +1396,29 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         }, { threshold: 0.1 });
 
         document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // ─── Auto-scroll to contact form when coming back from the quiz ───
+        // Quiz redirects to "/?source=quiz&...#contact". The native hash scroll
+        // doesn't always land cleanly because of the sticky header and lazy
+        // fade-up content above. We force a clean, delayed smooth scroll.
+        (function scrollToContactIfFromQuiz() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('source') !== 'quiz') return;
+            const contact = document.getElementById('contact');
+            if (!contact) return;
+            // Wait for fonts + layout to settle before scrolling.
+            setTimeout(() => {
+                contact.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Flash the form section briefly so user notices.
+                contact.style.transition = 'background 0.6s ease';
+                const origBg = contact.style.backgroundColor;
+                contact.style.backgroundColor = '#FAF5FF';
+                setTimeout(() => { contact.style.backgroundColor = origBg; }, 1200);
+                // Focus the first input
+                const firstInput = contact.querySelector('input, select, textarea');
+                if (firstInput) setTimeout(() => firstInput.focus({ preventScroll: true }), 800);
+            }, 400);
+        })();
     </script>
 </body>
 </html>
