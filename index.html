@@ -523,124 +523,12 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 </button>
             </div>
 
-            <button onclick="document.getElementById('diagnostic').scrollIntoView({behavior:'smooth'})"
-                class="inline-flex items-center justify-center text-white/95 hover:text-white font-bold border border-white/30 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full transition cursor-pointer">
-                נסו אבחון משחקי קצר לפני השיחה
-            </button>
+            <a href="quiz/"
+                class="inline-flex items-center justify-center text-white/95 hover:text-white font-bold border border-white/30 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full transition cursor-pointer no-underline">
+                ✨ נסו אבחון מצב קצר — 90 שניות
+            </a>
 
             <p class="mt-5 text-white/65 text-sm">ללא התחייבות &nbsp;·&nbsp; חוזרים אליכם עוד היום &nbsp;·&nbsp; מתאים לכל הגילאים</p>
-        </div>
-    </section>
-
-    <section id="diagnostic" class="py-20 sm:py-24 bg-gradient-to-b from-purple-50 via-white to-white">
-        <div class="max-w-7xl mx-auto px-5 sm:px-8">
-            <div class="text-center max-w-4xl mx-auto mb-10 fade-up">
-                <span class="inline-flex items-center gap-2 bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-extrabold mb-5">
-                    אבחון משחקי קצר • 2 דקות
-                </span>
-                <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-950 mb-4">
-                    לפני שמחפשים עוד דף תרגול — בודקים איך התלמיד חושב
-                </h2>
-                <p class="text-lg sm:text-xl text-gray-600 leading-relaxed">
-                    משימה קצרה להורה ולתלמיד שמדמה את מה שאנחנו מחפשים בשיעור היכרות: בסיס, דרך חשיבה וביטחון מול שאלה חדשה.
-                    זו טעימה חכמה — האבחון האמיתי נעשה עם מורה.
-                </p>
-            </div>
-
-            <div class="diagnostic-shell p-4 sm:p-7 lg:p-9 fade-up">
-                <div class="diagnostic-grid">
-                    <div class="text-white p-4 sm:p-6 flex flex-col justify-between">
-                        <div>
-                            <p class="text-yellow-200 font-black tracking-wide mb-3">MathBoost Challenge</p>
-                            <h3 class="text-3xl sm:text-4xl font-black leading-tight mb-4">
-                                מסלול קטן שמגלה איפה צריך להתחיל
-                            </h3>
-                            <p class="text-purple-100 text-lg leading-relaxed mb-7">
-                                לא רק “צדק או טעה”. אנחנו מסתכלים אם צריך לחזק דיוק חישובי, שפה אלגברית או תרגום בעיה לדרך פתרון.
-                            </p>
-                        </div>
-                        <div class="diagnostic-map">
-                            <div class="diagnostic-map-item">
-                                <span class="diagnostic-map-badge">1</span>
-                                <div>
-                                    <p class="font-extrabold">בוחרים מסלול גיל</p>
-                                    <p class="text-sm text-purple-100">יסודי, חטיבה או תיכון.</p>
-                                </div>
-                            </div>
-                            <div class="diagnostic-map-item">
-                                <span class="diagnostic-map-badge">2</span>
-                                <div>
-                                    <p class="font-extrabold">פותרים 3 משימות קצרות</p>
-                                    <p class="text-sm text-purple-100">בלי לחץ ובלי מבחן ארוך.</p>
-                                </div>
-                            </div>
-                            <div class="diagnostic-map-item">
-                                <span class="diagnostic-map-badge">3</span>
-                                <div>
-                                    <p class="font-extrabold">מקבלים כיוון ראשוני</p>
-                                    <p class="text-sm text-purple-100">וממשיכים לשיעור היכרות מדויק.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="diagnostic-stage p-4 sm:p-6">
-                        <div id="diagnostic-start" class="bg-white rounded-3xl p-5 sm:p-7 shadow-2xl shadow-purple-950/20">
-                            <div class="flex items-start justify-between gap-4 mb-6">
-                                <div>
-                                    <p class="text-sm font-extrabold text-purple-600 mb-2">שלב ראשון</p>
-                                    <h3 class="text-2xl sm:text-3xl font-black text-purple-950">איזה מסלול מתאים לתלמיד/ה?</h3>
-                                </div>
-                                <span class="hidden sm:inline-flex bg-yellow-100 text-yellow-800 font-black rounded-2xl px-3 py-2 text-sm">מתחילים</span>
-                            </div>
-                            <div class="grid gap-3">
-                                <button type="button" class="diagnostic-track-button" data-diagnostic-track="elementary">
-                                    <span class="block text-xl font-black">יסודי</span>
-                                    <span class="block text-sm text-gray-600 mt-1">חשבון, שברים והבנת נתונים.</span>
-                                </button>
-                                <button type="button" class="diagnostic-track-button" data-diagnostic-track="middle">
-                                    <span class="block text-xl font-black">חטיבת ביניים</span>
-                                    <span class="block text-sm text-gray-600 mt-1">מעבר לאלגברה, משוואות וחשיבה מסודרת.</span>
-                                </button>
-                                <button type="button" class="diagnostic-track-button" data-diagnostic-track="high">
-                                    <span class="block text-xl font-black">תיכון ובגרות</span>
-                                    <span class="block text-sm text-gray-600 mt-1">פונקציות, ייצוגים וניהול פתרון.</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div id="diagnostic-play" class="hidden bg-white rounded-3xl p-5 sm:p-7 shadow-2xl shadow-purple-950/20" aria-live="polite">
-                            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-                                <div>
-                                    <p id="diagnostic-track-label" class="text-sm font-extrabold text-purple-600"></p>
-                                    <h3 id="diagnostic-question-title" class="text-2xl sm:text-3xl font-black text-purple-950"></h3>
-                                </div>
-                                <span id="diagnostic-question-count" class="bg-purple-100 text-purple-800 font-black rounded-full px-4 py-2 text-sm"></span>
-                            </div>
-                            <div class="diagnostic-progress mb-6">
-                                <div id="diagnostic-progress-bar" class="diagnostic-progress-bar"></div>
-                            </div>
-                            <p id="diagnostic-question-prompt" class="text-xl sm:text-2xl text-gray-800 font-extrabold leading-relaxed mb-5"></p>
-                            <div id="diagnostic-answers" class="grid gap-3"></div>
-                        </div>
-
-                        <div id="diagnostic-result" class="hidden bg-white rounded-3xl p-5 sm:p-7 shadow-2xl shadow-purple-950/20" aria-live="polite">
-                            <p class="text-sm font-extrabold text-purple-600 mb-2">כיוון ראשוני</p>
-                            <h3 id="diagnostic-result-title" class="text-3xl font-black text-purple-950 mb-3"></h3>
-                            <p id="diagnostic-result-copy" class="text-lg text-gray-600 leading-relaxed mb-5"></p>
-                            <div id="diagnostic-focus-list" class="flex flex-wrap gap-2 mb-6"></div>
-                            <div class="grid sm:grid-cols-2 gap-3">
-                                <button type="button" id="diagnostic-lead-button" class="text-white bg-purple-700 hover:bg-purple-800 rounded-2xl px-5 py-4 font-black transition">
-                                    קבעו שיעור היכרות עם הכיוון הזה
-                                </button>
-                                <button type="button" id="diagnostic-restart-button" class="text-purple-800 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-2xl px-5 py-4 font-black transition">
-                                    נסו מסלול אחר
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -1497,11 +1385,14 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             diagnosticElements.start.classList.remove('hidden');
         }
 
-        document.querySelectorAll('[data-diagnostic-track]').forEach((trackButton) => {
-            trackButton.addEventListener('click', () => startDiagnostic(trackButton.dataset.diagnosticTrack));
-        });
-        diagnosticElements.leadButton.addEventListener('click', moveDiagnosticToLeadForm);
-        diagnosticElements.restartButton.addEventListener('click', restartDiagnostic);
+        // Guard: the diagnostic section was removed — skip wiring listeners if elements aren't on the page.
+        if (diagnosticElements.start && diagnosticElements.leadButton && diagnosticElements.restartButton) {
+            document.querySelectorAll('[data-diagnostic-track]').forEach((trackButton) => {
+                trackButton.addEventListener('click', () => startDiagnostic(trackButton.dataset.diagnosticTrack));
+            });
+            diagnosticElements.leadButton.addEventListener('click', moveDiagnosticToLeadForm);
+            diagnosticElements.restartButton.addEventListener('click', restartDiagnostic);
+        }
         // אנימציות גלילה
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
