@@ -291,7 +291,163 @@
     margin-bottom: 14px;
   }
 
-  /* ═══════════════ CTA card on result — redirects to the site form ═══════ */
+  /* ═══════════════ Inline lead form on result screen ═══════════════════ */
+  .lead-form-card {
+    background: linear-gradient(135deg, #faf5ff 0%, #fdf2f8 100%);
+    border: 1.5px solid #ede9fe;
+    border-radius: 20px;
+    padding: 28px 24px;
+    margin-top: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .lead-form-card::before {
+    content: ''; position: absolute; top: -80px; left: -60px;
+    width: 240px; height: 240px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(126,34,206,0.07), transparent 70%);
+    pointer-events: none;
+  }
+  .lead-form-card::after {
+    content: ''; position: absolute; bottom: -100px; right: -40px;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(236,72,153,0.08), transparent 70%);
+    pointer-events: none;
+  }
+  .lead-form-card > * { position: relative; z-index: 1; }
+  .lead-form-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .lead-form-eyebrow {
+    display: inline-block;
+    background: var(--purple);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+  }
+  .lead-form-card h3 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--purple-dark);
+    margin-bottom: 6px;
+  }
+  .lead-form-card .lead-form-sub {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .lead-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .lead-form-card .input-field {
+    margin-bottom: 10px;
+    padding: 12px 14px;
+    font-size: 15px;
+  }
+  .lead-form-card .btn-submit {
+    width: 100%;
+    background: linear-gradient(135deg, var(--purple) 0%, #c026d3 100%);
+    color: #fff;
+    font-weight: 800;
+    font-size: 16px;
+    padding: 14px 20px;
+    border: 0;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 10px 24px -8px rgba(126,34,206,0.5);
+    transition: transform .18s, box-shadow .18s, filter .18s;
+    margin-top: 6px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .lead-form-card .btn-submit:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 30px -8px rgba(126,34,206,0.55);
+    filter: brightness(1.05);
+  }
+  .lead-form-card .btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  .lead-form-card .btn-submit .spinner {
+    width: 16px; height: 16px;
+    border: 2.5px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .lead-form-card .form-trust {
+    margin-top: 14px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .lead-form-card .form-trust .wa-link {
+    color: var(--purple);
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 1px dotted var(--purple);
+  }
+  .lead-form-card .form-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+  .lead-form-success {
+    text-align: center;
+    padding: 24px 8px;
+  }
+  .lead-form-success-icon {
+    width: 70px; height: 70px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    box-shadow: 0 12px 28px -10px rgba(16,185,129,0.5);
+  }
+  .lead-form-success h3 {
+    color: var(--purple-dark);
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .lead-form-success p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .lead-form-success .wa-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #25D366;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 14px;
+    box-shadow: 0 6px 16px -4px rgba(37,211,102,0.4);
+    transition: transform .18s;
+  }
+  .lead-form-success .wa-pill:hover { transform: translateY(-1px); }
+
+  /* ═══════════════ Legacy CTA card (kept as fallback styles) ═══════════ */
   .cta-card {
     background: linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%);
     color: #fff;
@@ -542,16 +698,57 @@
       <div id="resultNote" class="result-note"></div>
     </div>
 
-    <!-- CTA: redirect to the live form on mathboost.co.il -->
-    <div class="cta-card">
-      <h3>הצעד הבא — שיעור היכרות</h3>
-      <p>השאירו פרטים בטופס באתר, וניצור איתכם קשר עוד היום עם המורה המתאים לתוכנית הזו.</p>
-      <a id="ctaToForm" class="btn btn-primary btn-big" href="#" rel="noopener">
-        השאירו פרטים באתר ←
-      </a>
-      <p class="cta-sub">
-        ללא התחייבות · חזרה תוך 4 שעות · או דברו איתנו ב<a href="https://wa.me/972586276476" target="_blank" rel="noopener">וואטסאפ</a>
+    <!-- Inline lead form — submits directly to the CRM webhook, no redirect -->
+    <div class="lead-form-card" id="leadFormCard">
+      <div class="lead-form-header">
+        <span class="lead-form-eyebrow">הצעד הבא</span>
+        <h3>שיעור היכרות — חזרה תוך 4 שעות</h3>
+        <p class="lead-form-sub">השאירו שם וטלפון, ואנחנו ניצור איתכם קשר עם המורה המתאים לתוכנית שקיבלתם.</p>
+      </div>
+
+      <form id="leadInlineForm" novalidate>
+        <div class="lead-form-row">
+          <input type="text" class="input-field" name="שם פרטי" id="lf_firstName" placeholder="שם פרטי" autocomplete="given-name" required />
+          <input type="text" class="input-field" name="שם משפחה" id="lf_lastName" placeholder="שם משפחה" autocomplete="family-name" required />
+        </div>
+        <input type="tel" class="input-field" name="טלפון" id="lf_phone" placeholder="050-000-0000" autocomplete="tel" inputmode="tel" pattern="^05[0-9]{8}$|^0[2-9][0-9]{7}$" required />
+
+        <select class="input-field" name="שעה מועדפת לחזרה" id="lf_callTime">
+          <option value="" disabled selected>שעה מועדפת לחזרה (אופציונלי)</option>
+          <option value="בוקר 08:00–10:00">בוקר · 08:00 – 10:00</option>
+          <option value="בוקר 10:00–12:00">בוקר · 10:00 – 12:00</option>
+          <option value="צהריים 12:00–14:00">צהריים · 12:00 – 14:00</option>
+          <option value="אחר הצהריים 14:00–17:00">אחר הצהריים · 14:00 – 17:00</option>
+          <option value="ערב 17:00–20:00">ערב · 17:00 – 20:00</option>
+        </select>
+
+        <!-- Hidden context from the quiz -->
+        <input type="hidden" name="כיתה" id="lf_grade" />
+        <input type="hidden" name="סיפור על המתמטיקה" id="lf_story" />
+        <input type="hidden" name="רוצים שנחזור אליכם" value="כן" />
+        <input type="hidden" name="מקור" value="quiz" />
+
+        <button type="submit" class="btn-submit" id="lf_submit">
+          <span class="btn-text">שלחו פרטים</span>
+        </button>
+
+        <div id="lf_error" class="form-error" style="display:none"></div>
+      </form>
+
+      <p class="form-trust">
+        ללא התחייבות · השליחה מאובטחת · או דברו איתנו <a class="wa-link" href="https://wa.me/972586276476" target="_blank" rel="noopener">בוואטסאפ</a>
       </p>
+    </div>
+
+    <!-- Success state — replaces the form after submit -->
+    <div class="lead-form-card lead-form-success" id="leadFormSuccess" style="display:none">
+      <div class="lead-form-success-icon">✓</div>
+      <h3>קיבלנו את הפרטים!</h3>
+      <p>אנחנו יוצרים איתכם קשר עוד היום — בדרך כלל תוך 4 שעות. אם יותר נוח לכם לדבר בוואטסאפ:</p>
+      <a class="wa-pill" href="https://wa.me/972586276476" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163a11.867 11.867 0 0 1-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 0 1 8.413 3.488 11.824 11.824 0 0 1 3.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 0 1-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 0 0 1.51 5.26L4.293 19.62l3.36-.881"/></svg>
+        פתחו וואטסאפ עכשיו
+      </a>
     </div>
   </div>
 
@@ -642,22 +839,12 @@
     const noteEl = document.getElementById('resultNote');
     noteEl.textContent = rec.note || '';
 
-    // Build the redirect URL with quiz answers as query params, so the site
-    // form can pre-fill the relevant fields (grade, free-text, source).
-    // Site doesn't need to read them — they're harmless if ignored.
-    const params = new URLSearchParams({
-      source: 'quiz',
-      grade: answers.grade || '',
-      challenge: answers.challenge || '',
-      current_grade: answers['current-grade'] || '',
-      history: answers.history || '',
-      frequency: answers.frequency || '',
-      timeline: answers.timeline || '',
-      note: answers.freeText || '',
-      plan: rec.planKey || '',
-    });
-    const url = SITE_FORM_URL + (SITE_FORM_URL.includes('?') ? '&' : '?') + params.toString();
-    document.getElementById('ctaToForm').href = url;
+    // Populate the inline lead form's hidden fields with quiz context, so
+    // the CRM gets the full picture even though the visible form is just
+    // name + phone + time-preference.
+    const gradeLabel = mapGradeToHebrew(answers.grade);
+    document.getElementById('lf_grade').value = gradeLabel;
+    document.getElementById('lf_story').value = buildStoryFromQuiz(answers, rec);
 
     // Save answers to localStorage in case the site wants to consume them
     try { localStorage.setItem('mathboost_quiz_answers', JSON.stringify(answers)); } catch {}
@@ -665,6 +852,117 @@
     nextStep();
     fireConfetti();
   }
+
+  function mapGradeToHebrew(code) {
+    const map = {
+      'elementary': 'יסודי',
+      'middle':     'חטיבה',
+      'high-10-11': 'תיכון (י׳–י״א)',
+      'high-12':    'י״ב',
+      'adult':      'השלמות / מבוגרים',
+    };
+    return map[code] || code || '';
+  }
+
+  function buildStoryFromQuiz(answers, rec) {
+    const challengeMap = {
+      'not-understand': 'לא מבינים את החומר בכיתה',
+      'grades-drop':    'הציונים יורדים ממבחן למבחן',
+      'gaps':           'יש פערים גדולים משנים קודמות',
+      'anxiety':        'חרדה / לחץ לפני מבחנים',
+      'motivation':     'אין מוטיבציה — "מתמטיקה לא בשבילי"',
+      'bagrut':         'להעלות יחידות / לשפר ציון בגרות',
+    };
+    const gradeMap = {
+      'under-60': 'פחות מ-60',
+      '60-70':    '60–70',
+      '70-80':    '70–80',
+      '80-90':    '80–90',
+      '90+':      '90+',
+      'unknown':  'עוד אין מספיק ציונים',
+    };
+    const historyMap = {
+      'never':            'לא היו מורים פרטיים — זו ההתחלה',
+      'tried-no-success': 'היו 1-2 מורים — לא ראו שיפור משמעותי',
+      'tried-many':       'היו כמה — הילד לא התחבר לאף אחד',
+      'had-good':         'היה מורה טוב שסיים — מחפשים חדש',
+    };
+    const frequencyMap = {
+      '1':  'שיעור אחד בשבוע (קצב רגוע)',
+      '2':  'שניים בשבוע (קצב טוב)',
+      '3+': '3+ בשבוע (אינטנסיבי)',
+    };
+
+    const parts = [];
+    if (rec?.title) parts.push(`המלצה אוטומטית: ${rec.title}`);
+    if (answers.challenge && challengeMap[answers.challenge]) parts.push(`קושי עיקרי: ${challengeMap[answers.challenge]}`);
+    if (answers['current-grade'] && gradeMap[answers['current-grade']]) parts.push(`ציון נוכחי: ${gradeMap[answers['current-grade']]}`);
+    if (answers.history && historyMap[answers.history]) parts.push(`היסטוריה: ${historyMap[answers.history]}`);
+    if (answers.frequency && frequencyMap[answers.frequency]) parts.push(`תדירות מועדפת: ${frequencyMap[answers.frequency]}`);
+    if (answers.timeline) parts.push(`לוח זמנים: ${answers.timeline}`);
+    if (answers.freeText) parts.push(`הערה מההורה: ${answers.freeText}`);
+    return parts.join(' | ');
+  }
+
+  // ════════════════ Inline lead form submission ════════════════
+  document.getElementById('leadInlineForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const submitBtn = document.getElementById('lf_submit');
+    const errorBox = document.getElementById('lf_error');
+    errorBox.style.display = 'none';
+
+    // Basic client-side validation
+    const phone = document.getElementById('lf_phone').value.trim();
+    const firstName = document.getElementById('lf_firstName').value.trim();
+    const lastName = document.getElementById('lf_lastName').value.trim();
+    if (!firstName || !lastName) {
+      errorBox.textContent = 'יש למלא שם פרטי ושם משפחה';
+      errorBox.style.display = 'block';
+      return;
+    }
+    if (!/^05\d{8}$|^0[2-9]\d{7}$/.test(phone)) {
+      errorBox.textContent = 'מספר טלפון לא תקין. צריך 10 ספרות שמתחילות ב-05 או ב-02-09.';
+      errorBox.style.display = 'block';
+      return;
+    }
+
+    // Disable + show spinner
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner"></span><span class="btn-text">שולח...</span>';
+
+    try {
+      const formData = new FormData(form);
+      // POST as url-encoded form (same as the main site form on mathboost.co.il)
+      const body = new URLSearchParams();
+      for (const [k, v] of formData.entries()) body.append(k, v);
+
+      const res = await fetch('https://math-crm.onrender.com/api/leads/webhook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString(),
+      });
+
+      if (!res.ok) throw new Error('שגיאה בשרת');
+
+      // Hide form, show success
+      document.getElementById('leadFormCard').style.display = 'none';
+      const success = document.getElementById('leadFormSuccess');
+      success.style.display = 'block';
+      success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      // Fire pixel events if available (consistent with main site form)
+      try {
+        if (typeof window.fbq === 'function') window.fbq('track', 'Lead');
+        if (typeof window.gtag === 'function') window.gtag('event', 'generate_lead', { event_category: 'quiz' });
+      } catch {}
+    } catch (err) {
+      errorBox.textContent = 'לא הצלחנו לשלוח. אפשר לנסות שוב או לכתוב לנו בוואטסאפ.';
+      errorBox.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span class="btn-text">שלחו פרטים</span>';
+    }
+  });
 
   // ════════════════ Smart recommendation builder ════════════════
   // Philosophy:
