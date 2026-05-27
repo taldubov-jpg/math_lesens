@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#7E22CE"/>
+      <stop offset="55%" stop-color="#9333EA"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+    <linearGradient id="hi" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="rgba(255,255,255,0.35)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </linearGradient>
+  </defs>
+  <!-- rounded square background -->
+  <rect x="0" y="0" width="64" height="64" rx="14" ry="14" fill="url(#g)"/>
+  <!-- subtle glossy highlight -->
+  <rect x="0" y="0" width="64" height="32" rx="14" ry="14" fill="url(#hi)"/>
+  <!-- bold M -->
+  <text x="32" y="42"
+        text-anchor="middle"
+        font-family="'Heebo','Inter','Segoe UI',Arial,sans-serif"
+        font-weight="900"
+        font-size="38"
+        fill="#FFFFFF"
+        letter-spacing="-2">M</text>
+  <!-- small "+" mark, signaling boost/growth -->
+  <g transform="translate(46 16)">
+    <circle r="7" fill="#FEF08A"/>
+    <path d="M-3 0 H3 M0 -3 V3" stroke="#7E22CE" stroke-width="2.2" stroke-linecap="round"/>
+  </g>
+</svg>
