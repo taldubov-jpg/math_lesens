@@ -96,10 +96,62 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     <style>
         body { font-family: 'Heebo', system-ui, -apple-system, sans-serif; scroll-behavior: smooth; }
 
+        /* ═══════════════════════════════════════════════════
+           Hero — gradient mesh + depth (instead of flat purple)
+           ═══════════════════════════════════════════════════ */
         .hero-bg {
-            background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 60%, #9333ea 100%);
+            position: relative;
+            background:
+                radial-gradient(60% 50% at 80% 0%, rgba(236, 72, 153, 0.45) 0%, transparent 60%),
+                radial-gradient(50% 40% at 0% 100%, rgba(99, 102, 241, 0.50) 0%, transparent 65%),
+                radial-gradient(40% 35% at 50% 50%, rgba(192, 38, 211, 0.25) 0%, transparent 70%),
+                linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #7c3aed 100%);
             clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            overflow: hidden;
         }
+        /* Floating math symbols — subtle, not screaming */
+        .hero-bg .math-symbol {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.055);
+            font-family: 'Times New Roman', serif;
+            font-weight: 700;
+            pointer-events: none;
+            user-select: none;
+            line-height: 1;
+        }
+        @media (max-width: 640px) {
+            .hero-bg .math-symbol { opacity: 0.7; } /* smaller display, slightly less */
+        }
+        /* CTA glow — soft warm halo behind the button */
+        .hero-cta-wrap {
+            position: relative;
+            display: inline-block;
+        }
+        .hero-cta-wrap::before {
+            content: '';
+            position: absolute;
+            inset: -20px -40px;
+            background: radial-gradient(closest-side, rgba(254, 240, 138, 0.35), transparent 70%);
+            filter: blur(20px);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .hero-cta-wrap > * { position: relative; z-index: 1; }
+        /* Trust badge pills */
+        .trust-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: rgba(255, 255, 255, 0.88);
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 0.4rem 0.85rem;
+            border-radius: 9999px;
+            backdrop-filter: blur(8px);
+        }
+        .trust-badge svg { width: 13px; height: 13px; opacity: 0.85; }
 
         .purple-glow { box-shadow: 0 10px 30px -10px rgba(109, 40, 217, 0.35); }
 
@@ -702,11 +754,19 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     <!-- HERO                                                         -->
     <!-- ============================================================ -->
     <section class="relative pt-32 sm:pt-40 md:pt-52 pb-28 sm:pb-40 text-center text-white hero-bg">
-        <div class="max-w-5xl mx-auto px-5 sm:px-8">
+        <!-- Floating math symbols (decorative, aria-hidden) -->
+        <span class="math-symbol" aria-hidden="true" style="top:10%;right:7%;font-size:130px;">π</span>
+        <span class="math-symbol" aria-hidden="true" style="top:38%;left:8%;font-size:110px;">∫</span>
+        <span class="math-symbol" aria-hidden="true" style="bottom:25%;right:14%;font-size:140px;">√</span>
+        <span class="math-symbol" aria-hidden="true" style="top:22%;left:32%;font-size:75px;">∑</span>
+        <span class="math-symbol" aria-hidden="true" style="bottom:32%;left:28%;font-size:90px;">∞</span>
+        <span class="math-symbol" aria-hidden="true" style="top:55%;right:34%;font-size:65px;">x²</span>
 
-            <!-- תג עדות מספרית -->
+        <div class="relative max-w-5xl mx-auto px-5 sm:px-8">
+
+            <!-- תג עדות מספרית עם counter מונפש -->
             <div class="inline-block bg-white/15 border border-white/25 text-white text-sm font-semibold px-5 py-2 rounded-full mb-8">
-                ליווינו מעל 300 תלמידים — מכיתה א׳ ועד בגרות
+                ליווינו מעל <span id="studentsCounter" data-target="300">300</span> תלמידים — מכיתה א׳ ועד בגרות
             </div>
 
             <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 drop-shadow">
@@ -733,14 +793,31 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 </div>
             </div>
 
-            <div class="flex justify-center mt-2 mb-4">
-                <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"
-                   class="btn-cta-light btn-lg">
-                    קביעת שיעור היכרות
-                </button>
+            <!-- CTA עם glow רך מאחור -->
+            <div class="flex justify-center mt-2 mb-6">
+                <div class="hero-cta-wrap">
+                    <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"
+                       class="btn-cta-light btn-lg">
+                        קביעת שיעור היכרות
+                    </button>
+                </div>
             </div>
 
-            <p class="mt-5 text-white/65 text-sm">ללא התחייבות &nbsp;·&nbsp; חוזרים אליכם עוד היום &nbsp;·&nbsp; מתאים לכל הגילאים</p>
+            <!-- Trust badges במקום שורת טקסט -->
+            <div class="flex flex-wrap justify-center gap-2 mt-5">
+                <span class="trust-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    ללא התחייבות
+                </span>
+                <span class="trust-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    חוזרים אליכם עוד היום
+                </span>
+                <span class="trust-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    מתאים לכל הגילאים
+                </span>
+            </div>
         </div>
     </section>
 
@@ -1859,6 +1936,26 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         });
 
         document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // ─── Animated counter for the "300 תלמידים" badge ───
+        // נטענה רק פעם אחת כשהדף עולה — הזחיחה הזו תופסת את העין מיד.
+        // אם המשתמש מבקש reduced motion — מציגים את הערך הסופי מיד.
+        const counterEl = document.getElementById('studentsCounter');
+        if (counterEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            const target = parseInt(counterEl.dataset.target || counterEl.textContent, 10) || 0;
+            const duration = 1500; // ms
+            const startTime = performance.now();
+            counterEl.textContent = '0';
+            function tick(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(1, elapsed / duration);
+                // ease-out-quart לאותו easing כמו ה-fade-up
+                const eased = 1 - Math.pow(1 - progress, 4);
+                counterEl.textContent = Math.round(target * eased).toLocaleString('he-IL');
+                if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        }
 
         // ─── Auto-scroll to contact form when coming back from the quiz ───
         // Quiz redirects to "/?source=quiz&...#contact". The native hash scroll
