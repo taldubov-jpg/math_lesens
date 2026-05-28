@@ -241,15 +241,32 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             flex-shrink: 0;
         }
 
-        /* אנימציות גלילה */
+        /* ═══════════════════════════════════════════════════
+           אנימציות גלילה — fade-up + stagger
+           עיכוב מדורג (data-stagger) נקבע ב-JS לפי סדר ה-siblings,
+           ככה שאלמנטים באותו סקשן מופיעים זה אחר זה עם 70ms ביניהם.
+           ה-easing הוא cubic-bezier טבעי שמרגיש premium יותר מ-ease.
+           ═══════════════════════════════════════════════════ */
         .fade-up {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transform: translateY(28px);
+            transition:
+                opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+            transition-delay: var(--stagger-delay, 0ms);
+            will-change: opacity, transform;
         }
         .fade-up.visible {
             opacity: 1;
             transform: translateY(0);
+        }
+        /* ביטול אנימציה למשתמשים שמבקשים פחות תנועה (Accessibility) */
+        @media (prefers-reduced-motion: reduce) {
+            .fade-up {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
         }
 
         /* סקשן המטרה */
@@ -1803,14 +1820,43 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             diagnosticElements.leadButton.addEventListener('click', moveDiagnosticToLeadForm);
             diagnosticElements.restartButton.addEventListener('click', restartDiagnostic);
         }
-        // אנימציות גלילה
+        // ═══════════════════════════════════════════════════
+        // אנימציות גלילה — fade-up + stagger
+        // ─────────────────────────────────────────────────
+        // עבור כל .fade-up אנחנו:
+        //   1. מחשבים מיקום בתוך הקבוצה (sibling index ביחס לאלמנטים
+        //      .fade-up אחים) → קובע את ה-stagger-delay (CSS variable).
+        //   2. כשהוא נכנס לתצוגה (IntersectionObserver) — מוסיפים .visible.
+        //   3. ברגע שהוא הופיע — מנתקים אותו מה-observer (חוסך זיכרון).
+        //
+        // אם המשתמש שינה את ההעדפה ל-reduced motion, ה-CSS כבר טיפל.
+        // ═══════════════════════════════════════════════════
+        const STAGGER_MS = 70;  // עיכוב בין שכנים — מעודן, לא מרגיש איטי
+        const MAX_STAGGER = 360; // תקרה: גם אם יש 10 כרטיסים, אחרון יחכה מקסימום 360ms
+
+        // עוטף קביעת המיקום בתוך הקבוצה — ה-fade-up האחרים שחולקים אותו הורה
+        function assignStaggerDelay(el) {
+            if (el.dataset.staggerAssigned) return;
+            const siblings = Array.from(el.parentElement?.children || [])
+                .filter(c => c.classList.contains('fade-up'));
+            const idx = siblings.indexOf(el);
+            const delay = Math.min(idx * STAGGER_MS, MAX_STAGGER);
+            el.style.setProperty('--stagger-delay', `${delay}ms`);
+            el.dataset.staggerAssigned = '1';
+        }
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+                if (!entry.isIntersecting) return;
+                assignStaggerDelay(entry.target);
+                entry.target.classList.add('visible');
+                // אחרי שהאלמנט הופיע, לא צריך לעקוב אחריו יותר
+                observer.unobserve(entry.target);
             });
-        }, { threshold: 0.1 });
+        }, {
+            threshold: 0.12,             // טיפה יותר מאשר 0.1 — נראה יותר טבעי
+            rootMargin: '0px 0px -60px 0px', // מתחיל אנימציה כשעוד 60px מתחת לקצה
+        });
 
         document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
