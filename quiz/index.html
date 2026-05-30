@@ -900,6 +900,12 @@
       '2':  'שניים בשבוע (קצב טוב)',
       '3+': '3+ בשבוע (אינטנסיבי)',
     };
+    const timelineMap = {
+      'immediately': 'רוצים להתחיל מיד',
+      '2-weeks':     'בשבועיים הקרובים',
+      'month':       'בחודש הקרוב',
+      'exploring':   'בודקים אפשרויות בינתיים',
+    };
 
     const parts = [];
     if (rec?.title) parts.push(`המלצה אוטומטית: ${rec.title}`);
@@ -907,8 +913,11 @@
     if (answers['current-grade'] && gradeMap[answers['current-grade']]) parts.push(`ציון נוכחי: ${gradeMap[answers['current-grade']]}`);
     if (answers.history && historyMap[answers.history]) parts.push(`היסטוריה: ${historyMap[answers.history]}`);
     if (answers.frequency && frequencyMap[answers.frequency]) parts.push(`תדירות מועדפת: ${frequencyMap[answers.frequency]}`);
-    if (answers.timeline) parts.push(`לוח זמנים: ${answers.timeline}`);
+    if (answers.timeline) parts.push(`לוח זמנים: ${timelineMap[answers.timeline] || answers.timeline}`);
     if (answers.freeText) parts.push(`הערה מההורה: ${answers.freeText}`);
+    // The honest "consider more" heads-up the client saw — most actionable
+    // signal for the owner's first call, so include it when present.
+    if (rec?.note) parts.push(`הערה שהוצגה ללקוח: ${rec.note}`);
     return parts.join(' | ');
   }
 
@@ -1102,7 +1111,7 @@
         description: 'פערים משנים קודמות הם הסיבה הכי שכיחה לכישלון במתמטיקה. הגישה שלנו: לא לרדוף אחרי הכיתה — קודם לחזור אחורה, לסגור את היסודות, ואז להדביק קצב.',
         steps: [
           'שיעור היכרות — מיפוי מדויק של הפערים',
-          'דוח כתוב להורים: אילו נושאים פתוחים ובאיזה סדר נסגור אותם',
+          'תמונה ברורה להורים: אילו נושאים פתוחים ובאיזה סדר נסגור אותם',
           freqLine,
           'תרגול ממוקד בכל פער עד לשליטה מלאה',
           'מעבר חזרה לחומר הכיתה רק אחרי שהבסיס חזק',
@@ -1123,7 +1132,7 @@
           freqLine,
           'דגש על סוגי שאלות שחוזרות בבחינות',
           'סימולציות תחת תנאי בחינה',
-          'משוב כתוב אחרי כל סימולציה',
+          'משוב אישי אחרי כל סימולציה',
         ],
         note,
       };
@@ -1176,7 +1185,7 @@
       steps: [
         'שיעור היכרות (60 דק׳) — אבחון + הכרות',
         freqLine,
-        'תוכנית כתובה שנשלחת להורים אחרי השיעור הראשון',
+        'תוכנית התקדמות שמסכמים עם ההורים אחרי השיעור הראשון',
         'מורה קבוע לאורך כל הדרך',
         'זמינות בוואטסאפ לשאלות בין שיעורים',
       ],
