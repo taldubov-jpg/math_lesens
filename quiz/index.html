@@ -281,7 +281,14 @@
   }
   .result-card p { color: var(--text-soft); font-size: 15px; line-height: 1.65; }
   .result-card ul { margin: 14px 0; padding-right: 20px; color: var(--text-soft); }
-  .result-card li { margin-bottom: 8px; font-size: 14px; }
+  .result-card li {
+    margin-bottom: 8px; font-size: 14px;
+    opacity: 0; transform: translateY(6px);
+    animation: stepReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes stepReveal {
+    to { opacity: 1; transform: translateY(0); }
+  }
 
   .recommendation-tag {
     display: inline-block;
@@ -655,7 +662,7 @@
     <h2 class="q-title">מתי תרצו להתחיל?</h2>
     <p class="q-subtitle">נסדר את שיעור ההיכרות בהתאם</p>
     <div class="options" data-key="timeline">
-      <button class="option" data-value="immediately"><span class="option-emoji">🚨</span><span class="option-text">השבוע — דחוף!</span><span class="option-check">✓</span></button>
+      <button class="option" data-value="immediately"><span class="option-emoji">⚡</span><span class="option-text">השבוע — כמה שיותר מהר</span><span class="option-check">✓</span></button>
       <button class="option" data-value="2-weeks"><span class="option-emoji">⏰</span><span class="option-text">בשבועיים הקרובים</span><span class="option-check">✓</span></button>
       <button class="option" data-value="month"><span class="option-emoji">📅</span><span class="option-text">בחודש הקרוב</span><span class="option-check">✓</span></button>
       <button class="option" data-value="exploring"><span class="option-emoji">🤔</span><span class="option-text">בודקים אפשרויות — לא דחוף</span><span class="option-check">✓</span></button>
@@ -830,9 +837,10 @@
     document.getElementById('resultDescription').textContent = rec.description;
     const stepsList = document.getElementById('resultSteps');
     stepsList.innerHTML = '';
-    rec.steps.forEach(s => {
+    rec.steps.forEach((s, i) => {
       const li = document.createElement('li');
       li.textContent = s;
+      li.style.animationDelay = (0.12 + i * 0.09) + 's';
       stepsList.appendChild(li);
     });
     // Optional gentle "why more sessions" note — only shown when relevant

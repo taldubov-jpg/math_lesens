@@ -1391,6 +1391,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             (function initGradePills(){
                 const pills = document.querySelectorAll('#gradeGroups .grade-pill');
                 const hidden = document.getElementById('grade');
+                const form = hidden ? hidden.closest('form') : null;
                 pills.forEach(pill => {
                     pill.addEventListener('click', () => {
                         pills.forEach(p => p.classList.remove('selected'));
@@ -1398,6 +1399,33 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                         if (hidden) hidden.value = pill.dataset.grade;
                     });
                 });
+
+                // Submit UX: validate grade is chosen + show a loading state.
+                // We do NOT call preventDefault on success — the native POST →
+                // webhook → thank-you redirect keeps working as before.
+                if (form) {
+                    form.addEventListener('submit', (e) => {
+                        if (hidden && !hidden.value) {
+                            e.preventDefault();
+                            const groups = document.getElementById('gradeGroups');
+                            if (groups) {
+                                groups.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                groups.style.transition = 'box-shadow .2s ease';
+                                groups.style.boxShadow = '0 0 0 2px #EC4899';
+                                setTimeout(() => { groups.style.boxShadow = ''; }, 1400);
+                            }
+                            return;
+                        }
+                        const btn = form.querySelector('button[type="submit"]');
+                        if (btn && !btn.dataset.sending) {
+                            btn.dataset.sending = '1';
+                            btn.style.opacity = '0.75';
+                            btn.style.pointerEvents = 'none';
+                            const label = btn.querySelector('span');
+                            if (label) label.textContent = 'שולח את הפרטים…';
+                        }
+                    });
+                }
             })();
         </script>
     </section>
