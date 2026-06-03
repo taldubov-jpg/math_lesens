@@ -761,6 +761,7 @@
 
 </main>
 
+<script src="https://math-crm.onrender.com/mathboost-tracking.js" data-api-base="https://math-crm.onrender.com"></script>
 <script>
   // ════════════════ Config ════════════════
   // URL of the live website's contact form. The "השאירו פרטים" CTA on the
@@ -773,6 +774,16 @@
   let currentStep = 0;
   let isAdvancing = false;   // Fix #1: prevent double-advance from rapid clicks
   const answers = {};
+  let latestRecommendation = null;
+  const quizSessionId = (() => {
+    const id = (window.crypto && crypto.randomUUID) ? `mbq_${crypto.randomUUID()}` : `mbq_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+    try { sessionStorage.setItem('mathboost_quiz_session', id); localStorage.setItem('mathboost_quiz_session', id); } catch {}
+    if (window.MathBoostTracking) window.MathBoostTracking.setQuizSessionId(id);
+    return id;
+  })();
+  if (window.MathBoostTracking) {
+    window.MathBoostTracking.track('quiz_start', { quiz_session_id: quizSessionId });
+  }
 
   function updateProgress() {
     const pct = (currentStep / TOTAL_STEPS) * 100;
@@ -815,6 +826,9 @@
       opt.classList.add('selected');
       // Store
       answers[key] = value;
+      if (window.MathBoostTracking) {
+        window.MathBoostTracking.track('quiz_answer', { quiz_session_id: quizSessionId, step: currentStep, key, value });
+      }
       // Enable the next button
       const step = opt.closest('.step');
       const btn = step.querySelector('.btn-primary');
@@ -830,6 +844,7 @@
   function showResult() {
     answers.freeText = document.getElementById('freeText').value.trim();
     const rec = buildRecommendation(answers);
+    latestRecommendation = rec;
 
     // Render fields
     document.getElementById('resultTag').textContent = rec.tag;
@@ -856,6 +871,17 @@
 
     // Save answers to localStorage in case the site wants to consume them
     try { localStorage.setItem('mathboost_quiz_answers', JSON.stringify(answers)); } catch {}
+    if (window.MathBoostTracking) {
+      window.MathBoostTracking.track('quiz_complete', {
+        quiz_session_id: quizSessionId,
+        grade: answers.grade || '',
+        challenge: answers.challenge || '',
+        current_grade: answers['current-grade'] || '',
+        frequency: answers.frequency || '',
+        timeline: answers.timeline || '',
+        recommendation: rec.title || '',
+      });
+    }
 
     nextStep();
     fireConfetti();
@@ -949,6 +975,15 @@
     submitBtn.innerHTML = '<span class="spinner"></span><span class="btn-text">שולח...</span>';
 
     try {
+      const quizJson = JSON.stringify({
+        quiz_session_id: quizSessionId,
+        answers,
+        recommendation: latestRecommendation,
+      });
+      if (window.MathBoostTracking) {
+        window.MathBoostTracking.enrichForm(form, { quiz_session_id: quizSessionId, quiz_json: quizJson });
+        window.MathBoostTracking.track('quiz_lead_submit_attempt', { quiz_session_id: quizSessionId });
+      }
       const formData = new FormData(form);
       // POST as url-encoded form (same as the main site form on mathboost.co.il)
       const body = new URLSearchParams();
@@ -972,8 +1007,10 @@
       try {
         if (typeof window.fbq === 'function') window.fbq('track', 'Lead');
         if (typeof window.gtag === 'function') window.gtag('event', 'generate_lead', { event_category: 'quiz' });
+        if (window.MathBoostTracking) window.MathBoostTracking.track('quiz_lead_submit_success', { quiz_session_id: quizSessionId });
       } catch {}
     } catch (err) {
+      if (window.MathBoostTracking) window.MathBoostTracking.track('quiz_lead_submit_error', { quiz_session_id: quizSessionId, message: err.message || '' });
       errorBox.textContent = 'לא הצלחנו לשלוח. אפשר לנסות שוב או לכתוב לנו בוואטסאפ.';
       errorBox.style.display = 'block';
       submitBtn.disabled = false;
