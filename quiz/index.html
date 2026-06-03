@@ -732,6 +732,7 @@
         <!-- Hidden context from the quiz -->
         <input type="hidden" name="כיתה" id="lf_grade" />
         <input type="hidden" name="סיפור על המתמטיקה" id="lf_story" />
+        <input type="hidden" name="המלצה" id="lf_recommendation" />
         <input type="hidden" name="רוצים שנחזור אליכם" value="כן" />
         <input type="hidden" name="מקור" value="quiz" />
 
@@ -868,6 +869,12 @@
     const gradeLabel = mapGradeToHebrew(answers.grade);
     document.getElementById('lf_grade').value = gradeLabel;
     document.getElementById('lf_story').value = buildStoryFromQuiz(answers, rec);
+    document.getElementById('lf_recommendation').value = [
+      rec.title,
+      rec.description,
+      (rec.steps && rec.steps.length) ? ('שלבים מומלצים:\n• ' + rec.steps.join('\n• ')) : '',
+      rec.note ? ('לתשומת לבך: ' + rec.note) : '',
+    ].filter(Boolean).join('\n\n');
 
     // Save answers to localStorage in case the site wants to consume them
     try { localStorage.setItem('mathboost_quiz_answers', JSON.stringify(answers)); } catch {}
