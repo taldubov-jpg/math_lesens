@@ -765,6 +765,14 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
         <div class="relative max-w-5xl mx-auto px-5 sm:px-8">
 
+            <!-- הכרזת פיצ'ר חדש AI -->
+            <button onclick="document.getElementById('aiModal').classList.remove('hidden')" class="inline-flex items-center gap-2 bg-gradient-to-r from-fuchsia-600 to-purple-600 border border-fuchsia-400 text-white text-sm font-bold px-4 py-1.5 rounded-full mb-5 hover:scale-105 transition-transform shadow-[0_0_20px_rgba(192,38,211,0.6)] animate-pulse hover:animate-none">
+                <span class="bg-white text-purple-800 text-[11px] px-2 py-0.5 rounded-full font-black tracking-wide">חדש!</span>
+                <span class="hidden sm:inline">מערכת AI מתקדמת לליווי אישי 24/7 לכל תלמיד</span>
+                <span class="sm:hidden">מורה AI צמוד 24/7</span>
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+            </button><br>
+
             <!-- תג עדות מספרית עם counter מונפש -->
             <div class="inline-block bg-white/15 border border-white/25 text-white text-sm font-semibold px-5 py-2 rounded-full mb-8">
                 ליווינו מעל <span id="studentsCounter" data-target="300">300</span> תלמידים — מכיתה א׳ ועד בגרות
@@ -2019,6 +2027,52 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
       data-api-base="https://math-crm.onrender.com"
     ></script>
 
+    <!-- AI Feature Modal -->
+    <div id="aiModal" class="fixed inset-0 z-[999999] hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="document.getElementById('aiModal').classList.add('hidden')"></div>
+        <!-- Modal Content -->
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[92%] max-w-md bg-white rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden text-center transition-all" dir="rtl">
+            <button onclick="document.getElementById('aiModal').classList.add('hidden')" class="absolute top-4 left-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors focus:outline-none" aria-label="סגירה">✕</button>
+            
+            <div class="w-16 h-16 mx-auto bg-gradient-to-br from-fuchsia-100 to-purple-100 rounded-2xl flex items-center justify-center mb-5 shadow-inner">
+                <span class="text-3xl">🤖</span>
+            </div>
+            
+            <h3 class="text-2xl font-extrabold text-purple-900 mb-2">מערכת ה-AI החדשה שלנו!</h3>
+            <p class="text-gray-600 mb-6 leading-relaxed text-sm">
+                מעכשיו, הילד שלכם לא נשאר לבד עם המתמטיקה — אפילו בשעות הקטנות של הלילה.
+            </p>
+            
+            <ul class="text-right space-y-4 mb-8">
+                <li class="flex items-start gap-3">
+                    <span class="bg-purple-100 text-purple-700 p-1.5 rounded-lg shrink-0 text-lg leading-none">💬</span>
+                    <div>
+                        <strong class="block text-gray-800 text-sm mb-0.5">מורה AI צמוד 24/7</strong>
+                        <span class="text-xs text-gray-500">זמין תמיד לענות על כל שאלה ולהסביר כל שלב בפתרון.</span>
+                    </div>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="bg-purple-100 text-purple-700 p-1.5 rounded-lg shrink-0 text-lg leading-none">🎮</span>
+                    <div>
+                        <strong class="block text-gray-800 text-sm mb-0.5">משחקים ללימוד מתמטיקה</strong>
+                        <span class="text-xs text-gray-500">מגוון משחקים אינטראקטיביים שהופכים את הלמידה לחוויה.</span>
+                    </div>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="bg-purple-100 text-purple-700 p-1.5 rounded-lg shrink-0 text-lg leading-none">🎯</span>
+                    <div>
+                        <strong class="block text-gray-800 text-sm mb-0.5">תרגולים מותאמים אישית</strong>
+                        <span class="text-xs text-gray-500">מערכת שיודעת ליצור תרגילים ספציפיים לפי בקשת התלמיד.</span>
+                    </div>
+                </li>
+            </ul>
+            
+            <button onclick="document.getElementById('aiModal').classList.add('hidden')" class="w-full bg-gradient-to-r from-purple-600 to-fuchsia-600 text-white font-bold py-3.5 rounded-xl hover:shadow-[0_0_20px_rgba(147,51,234,0.4)] transition-all">
+                מעולה, הבנתי
+            </button>
+        </div>
+    </div>
 
 </body>
 </html>
