@@ -519,12 +519,69 @@
     50% { transform: scale(1.05); }
   }
 
+  /* ═══════════════ Directional slide transitions ═══════════════ */
+  .step { display: none; }
+  .step.active { display: block; }
+  .step.active.dir-forward  { animation: slideInForward .38s cubic-bezier(.2,.8,.2,1); }
+  .step.active.dir-backward { animation: slideInBackward .38s cubic-bezier(.2,.8,.2,1); }
+  @keyframes slideInForward  { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes slideInBackward { from { opacity: 0; transform: translateX(28px); }  to { opacity: 1; transform: translateX(0); } }
+
+  /* ═══════════════ Step dot indicator ═══════════════ */
+  .step-dots {
+    display: flex; justify-content: center; gap: 7px;
+    padding: 10px 0 2px; opacity: 1; transition: opacity .3s;
+  }
+  .step-dots.hidden { opacity: 0; pointer-events: none; }
+  .step-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border); transition: all .35s cubic-bezier(.2,.8,.2,1);
+  }
+  .step-dot.done   { background: var(--purple); opacity: 0.4; transform: scale(0.9); }
+  .step-dot.active { background: var(--purple); transform: scale(1.4); }
+
+  /* ═══════════════ Option pop micro-feedback ═══════════════ */
+  @keyframes optionPop { 0% { transform: scale(1); } 35% { transform: scale(0.96); } 70% { transform: scale(1.025); } 100% { transform: scale(1); } }
+  .option.selected { animation: optionPop .32s cubic-bezier(.2,.8,.2,1); }
+  .option.selected .option-check { animation: checkPop .3s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes checkPop { from { transform: scale(0) rotate(-10deg); } to { transform: scale(1.1) rotate(0); } }
+
+  /* ═══════════════ Encouragement toast ═══════════════ */
+  .encourage-toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 100%);
+    color: #fff; border-radius: 100px; padding: 12px 24px;
+    font-size: 14px; font-weight: 700; white-space: nowrap;
+    box-shadow: 0 12px 32px -8px rgba(126,34,206,0.5);
+    z-index: 200; pointer-events: none;
+    transition: transform .45s cubic-bezier(.34,1.4,.64,1), opacity .3s;
+    opacity: 0;
+  }
+  .encourage-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* ═══════════════ Result numbered steps ═══════════════ */
+  #resultSteps { list-style: none; padding: 0; }
+  #resultSteps li {
+    display: flex; align-items: flex-start; gap: 10px;
+    margin-bottom: 10px; font-size: 14px;
+    opacity: 0; transform: translateY(6px);
+    animation: stepReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .step-num {
+    min-width: 26px; height: 26px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 100%);
+    color: #fff; font-size: 12px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+
   /* ═══════════════ Mobile ═══════════════ */
   @media (max-width: 600px) {
     .topnav { padding: 14px 18px; }
     main { padding: 30px 18px 60px; }
     .intro-stats { gap: 18px; }
     .floating-math span { font-size: 32px !important; }
+    .option { min-height: 56px; }
   }
 </style>
 </head>
@@ -548,6 +605,20 @@
 
 <!-- Progress bar -->
 <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<!-- Step dots (steps 1–7) -->
+<div class="step-dots hidden" id="stepDots">
+  <div class="step-dot" data-dot="1"></div>
+  <div class="step-dot" data-dot="2"></div>
+  <div class="step-dot" data-dot="3"></div>
+  <div class="step-dot" data-dot="4"></div>
+  <div class="step-dot" data-dot="5"></div>
+  <div class="step-dot" data-dot="6"></div>
+  <div class="step-dot" data-dot="7"></div>
+</div>
+
+<!-- Encouragement toast -->
+<div class="encourage-toast" id="encourageToast"></div>
 
 <main>
 
@@ -786,33 +857,68 @@
     window.MathBoostTracking.track('quiz_start', { quiz_session_id: quizSessionId });
   }
 
+  const ENCOURAGEMENTS = {
+    3: 'יפה מאוד! כמעט עשינו את זה 💪',
+    5: 'עוד שתי שאלות ומסיימים 🎉',
+  };
+
   function updateProgress() {
     const pct = (currentStep / TOTAL_STEPS) * 100;
     document.getElementById('progressBar').style.width = pct + '%';
+  }
+
+  function updateDots(step) {
+    const dotsEl = document.getElementById('stepDots');
+    const inQuestions = step >= 1 && step <= 7;
+    dotsEl.classList.toggle('hidden', !inQuestions);
+    dotsEl.querySelectorAll('.step-dot').forEach(d => {
+      const n = Number(d.dataset.dot);
+      d.classList.toggle('active', n === step);
+      d.classList.toggle('done', n < step);
+      d.classList.remove('active', 'done');
+      if (n === step) d.classList.add('active');
+      else if (n < step) d.classList.add('done');
+    });
+  }
+
+  let toastTimer = null;
+  function showToast(msg) {
+    const t = document.getElementById('encourageToast');
+    if (toastTimer) clearTimeout(toastTimer);
+    t.textContent = msg;
+    t.classList.add('show');
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  function showStep(newStep, direction) {
+    const prev = document.getElementById('step-' + currentStep);
+    prev.classList.remove('active', 'dir-forward', 'dir-backward');
+    currentStep = newStep;
+    const next = document.getElementById('step-' + currentStep);
+    next.classList.remove('dir-forward', 'dir-backward');
+    void next.offsetWidth; // force reflow for animation restart
+    next.classList.add('active', direction === 'forward' ? 'dir-forward' : 'dir-backward');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateProgress();
+    updateDots(currentStep);
+    if (direction === 'forward' && ENCOURAGEMENTS[currentStep]) {
+      setTimeout(() => showToast(ENCOURAGEMENTS[currentStep]), 300);
+    }
+    setTimeout(() => { isAdvancing = false; }, 380);
   }
 
   function nextStep() {
     if (isAdvancing) return;
     if (currentStep >= TOTAL_STEPS) return;
     isAdvancing = true;
-    document.getElementById('step-' + currentStep).classList.remove('active');
-    currentStep++;
-    document.getElementById('step-' + currentStep).classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    updateProgress();
-    setTimeout(() => { isAdvancing = false; }, 300);
+    showStep(currentStep + 1, 'forward');
   }
 
   function prevStep() {
     if (isAdvancing) return;
     if (currentStep <= 0) return;
     isAdvancing = true;
-    document.getElementById('step-' + currentStep).classList.remove('active');
-    currentStep--;
-    document.getElementById('step-' + currentStep).classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    updateProgress();
-    setTimeout(() => { isAdvancing = false; }, 300);
+    showStep(currentStep - 1, 'backward');
   }
 
   // ════════════════ Option selection ════════════════
@@ -822,8 +928,11 @@
       if (!opt) return;
       const key = group.dataset.key;
       const value = opt.dataset.value;
-      // Mark visually
-      group.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+      // Deselect others, re-trigger animation on newly selected
+      group.querySelectorAll('.option').forEach(o => {
+        o.classList.remove('selected');
+        void o.offsetWidth;
+      });
       opt.classList.add('selected');
       // Store
       answers[key] = value;
@@ -831,13 +940,13 @@
         window.MathBoostTracking.track('quiz_answer', { quiz_session_id: quizSessionId, step: currentStep, key, value });
       }
       // Enable the next button
-      const step = opt.closest('.step');
-      const btn = step.querySelector('.btn-primary');
+      const stepEl = opt.closest('.step');
+      const btn = stepEl.querySelector('.btn-primary');
       if (btn) btn.disabled = false;
-      // Auto-advance after small delay for satisfaction
+      // Auto-advance after short satisfaction delay
       setTimeout(() => {
         if (btn && !btn.disabled) btn.click();
-      }, 400);
+      }, 420);
     });
   });
 
@@ -855,8 +964,14 @@
     stepsList.innerHTML = '';
     rec.steps.forEach((s, i) => {
       const li = document.createElement('li');
-      li.textContent = s;
       li.style.animationDelay = (0.12 + i * 0.09) + 's';
+      const num = document.createElement('span');
+      num.className = 'step-num';
+      num.textContent = i + 1;
+      const txt = document.createElement('span');
+      txt.textContent = s;
+      li.appendChild(num);
+      li.appendChild(txt);
       stepsList.appendChild(li);
     });
     // Optional gentle "why more sessions" note — only shown when relevant
