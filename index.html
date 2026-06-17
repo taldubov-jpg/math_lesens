@@ -735,7 +735,6 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 <!-- דסקטופ: תפריט -->
                 <div class="hidden md:flex items-center gap-8 font-semibold text-gray-600 text-base">
                     <a href="#pain" class="hover:text-purple-700 transition">מכירים את זה?</a>
-                    <a href="#quiz-intro" onclick="document.getElementById('quiz-intro').scrollIntoView({behavior:'smooth'});return false;" class="hover:text-purple-700 transition">אבחון</a>
                     <a href="#unique" class="hover:text-purple-700 transition">השיטה שלנו</a>
                     <a href="#reviews" class="hover:text-purple-700 transition">המלצות</a>
                     <a onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'});return false;" href="#contact" class="hover:text-purple-700 transition">צרו קשר</a>
@@ -784,7 +783,6 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             <input type="checkbox" id="menu-toggle" class="hidden peer" />
             <div class="mobile-menu hidden md:hidden flex-col bg-white border-t border-purple-100 py-5 px-5 space-y-4 font-semibold text-gray-700 peer-checked:flex">
                 <a href="#pain" class="hover:text-purple-700 transition py-1">מכירים את זה?</a>
-                <a href="#quiz-intro" onclick="document.getElementById('quiz-intro').scrollIntoView({behavior:'smooth'});return false;" class="hover:text-purple-700 transition py-1">אבחון</a>
                 <a href="#unique" class="hover:text-purple-700 transition py-1">השיטה שלנו</a>
                 <a href="#reviews" class="hover:text-purple-700 transition py-1">המלצות</a>
                 <a onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'});return false;" href="#contact" class="hover:text-purple-700 transition py-1">צרו קשר</a>
@@ -917,66 +915,6 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     </section>
 
     <!-- ============================================================ -->
-    <!-- ✨ אבחון מצב (שאלון להורה)                                 -->
-    <!-- ============================================================ -->
-    <section id="quiz-intro" class="py-16 sm:py-20 bg-white">
-      <div class="max-w-5xl mx-auto px-5 sm:px-8 fade-up">
-        <div class="relative rounded-3xl overflow-hidden p-8 sm:p-12 text-white"
-             style="background: linear-gradient(135deg, #6B21A8 0%, #7E22CE 60%, #EC4899 100%);
-                    box-shadow: 0 24px 60px -20px rgba(126,34,206,0.5);">
-          <!-- Decorative orbs -->
-          <div style="position:absolute;top:-80px;left:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.18),transparent 65%);"></div>
-          <div style="position:absolute;bottom:-100px;right:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(254,240,138,0.25),transparent 65%);"></div>
-          <!-- Floating math symbols -->
-          <div style="position:absolute;top:10%;left:8%;font-size:80px;opacity:0.07;font-family:'Times New Roman',serif;">π</div>
-          <div style="position:absolute;bottom:15%;right:8%;font-size:90px;opacity:0.07;font-family:'Times New Roman',serif;">∫</div>
-          <div style="position:absolute;top:50%;right:20%;font-size:60px;opacity:0.08;font-family:'Times New Roman',serif;">√</div>
-
-          <div class="relative grid sm:grid-cols-5 gap-8 items-center">
-            <!-- Copy (right in RTL) -->
-            <div class="sm:col-span-3 text-right">
-              <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-extrabold mb-5"
-                    style="background: rgba(255,255,255,0.18); backdrop-filter: blur(10px);">
-                ✨ אבחון מצב לפני שיעור היכרות
-              </span>
-              <h2 class="text-3xl sm:text-5xl font-extrabold leading-tight mb-4">
-                לא בטוחים מה התלמיד/ה צריך?
-                <br>
-                <span style="color: #FEF08A;">בואו ננתח את המצב יחד.</span>
-              </h2>
-              <p class="text-lg text-purple-100 leading-relaxed mb-7 max-w-xl">
-                כמה שאלות שיעזרו לנו להבין איפה התלמיד/ה עומד/ת, ולתת
-                סיכום עם תוכנית התחלתית — לפני שמתחילים שיעור היכרות.
-              </p>
-              <div class="flex flex-wrap gap-3 items-center">
-                <a href="quiz/" class="btn-cta-light btn-lg">
-                  התחילו אבחון
-                </a>
-                <span class="text-sm text-purple-200">
-                  או דלגו ישר ל<a href="#contact" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'});return false;" class="underline font-bold">השארת פרטים</a>
-                </span>
-              </div>
-            </div>
-            <!-- Visual mockup (left in RTL) -->
-            <div class="sm:col-span-2">
-              <div class="rounded-2xl p-5 text-purple-950 text-right"
-                   style="background:#fff;box-shadow:0 20px 50px -10px rgba(0,0,0,0.3);transform:rotate(-2deg);">
-                <div class="text-xs font-extrabold text-purple-600 mb-2">שאלה 1 מתוך 7</div>
-                <div class="text-lg font-extrabold mb-4">באיזו כיתה הלומד/ת?</div>
-                <div class="space-y-2">
-                  <div class="p-3 rounded-xl border-2 border-purple-400 bg-purple-50 text-sm font-bold">🎓 כיתה י״ב (בגרות השנה!)</div>
-                  <div class="p-3 rounded-xl border border-gray-200 text-sm text-gray-600">📊 כיתה י׳ — י״א</div>
-                  <div class="p-3 rounded-xl border border-gray-200 text-sm text-gray-600">📐 כיתה ז׳ — ט׳</div>
-                </div>
-                <div class="mt-4 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                  <div style="height:100%;width:15%;background:linear-gradient(90deg,#7E22CE,#EC4899);"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- ============================================================ -->
     <!-- STATS BAR                                                    -->
@@ -1348,7 +1286,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
                 <!-- ספרו על המצב -->
                 <div class="form-group">
-                    <label for="mathHistory" class="form-label">ספרו קצת על המצב הנוכחי</label>
+                    <label for="mathHistory" class="form-label">ספרו קצת על המצב הנוכחי <span style="font-weight:400;color:#9ca3af;font-size:0.85em">(אופציונלי)</span></label>
                     <textarea id="mathHistory" name="סיפור על המתמטיקה" rows="3" class="form-textarea" placeholder="למשל: הבן שלי בכיתה ז׳, מתקשה עם שברים ואלגברה בסיסית..."></textarea>
                 </div>
 
