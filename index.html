@@ -574,17 +574,17 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         .btn-whatsapp-inline svg { width: 1rem; height: 1rem; }
 
         /* שדות טופס */
-        .form-group { margin-bottom: 1.25rem; }
+        .form-group { margin-bottom: 0.85rem; }
         .form-label {
             display: block;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             color: #374151;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.3rem;
         }
         .form-input, .form-select, .form-textarea {
             width: 100%;
-            padding: 0.875rem 1.125rem;
+            padding: 0.75rem 1.125rem;
             border: 1.5px solid #d1d5db;
             border-radius: 0.875rem;
             font-size: 1rem;
@@ -1221,7 +1221,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 action="https://math-crm.onrender.com/api/leads/webhook"
                 method="POST"
                 class="fade-up"
-                style="background: #FFFFFF; border: 1px solid rgba(126,34,206,0.12); border-radius: 1.75rem; padding: 2rem 2rem 1.75rem; box-shadow: 0 20px 60px -15px rgba(109,40,217,0.18), 0 0 0 1px rgba(255,255,255,0.4);"
+                style="background: #FFFFFF; border: 1px solid rgba(126,34,206,0.12); border-radius: 1.75rem; padding: 1.5rem 1.5rem 1.5rem; box-shadow: 0 20px 60px -15px rgba(109,40,217,0.18), 0 0 0 1px rgba(255,255,255,0.4);"
             >
                 <!-- שם מלא -->
                 <div class="form-group">
@@ -1249,11 +1249,11 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 <div class="form-group">
                     <label class="form-label">באיזו כיתה הלומד/ת?</label>
                     <input type="hidden" id="grade" name="כיתה" required>
-                    <div id="gradeGroups" class="space-y-3">
+                    <div id="gradeGroups" class="space-y-2">
                         <!-- יסודי -->
                         <div>
-                            <div class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1.5">יסודי</div>
-                            <div class="flex flex-wrap gap-1.5">
+                            <div class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">יסודי</div>
+                            <div class="flex flex-wrap gap-1">
                                 <button type="button" class="grade-pill" data-grade="א׳">א׳</button>
                                 <button type="button" class="grade-pill" data-grade="ב׳">ב׳</button>
                                 <button type="button" class="grade-pill" data-grade="ג׳">ג׳</button>
@@ -1264,8 +1264,8 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                         </div>
                         <!-- חטיבה -->
                         <div>
-                            <div class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1.5">חטיבה</div>
-                            <div class="flex flex-wrap gap-1.5">
+                            <div class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">חטיבה</div>
+                            <div class="flex flex-wrap gap-1">
                                 <button type="button" class="grade-pill" data-grade="ז׳">ז׳</button>
                                 <button type="button" class="grade-pill" data-grade="ח׳">ח׳</button>
                                 <button type="button" class="grade-pill" data-grade="ט׳">ט׳</button>
@@ -1273,8 +1273,8 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                         </div>
                         <!-- תיכון -->
                         <div>
-                            <div class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1.5">תיכון ובגרות</div>
-                            <div class="flex flex-wrap gap-1.5">
+                            <div class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">תיכון ובגרות</div>
+                            <div class="flex flex-wrap gap-1">
                                 <button type="button" class="grade-pill" data-grade="י׳">י׳</button>
                                 <button type="button" class="grade-pill" data-grade="י״א">י״א</button>
                                 <button type="button" class="grade-pill" data-grade="י״ב">י״ב</button>
@@ -1287,32 +1287,14 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 <!-- ספרו על המצב -->
                 <div class="form-group">
                     <label for="mathHistory" class="form-label">ספרו קצת על המצב הנוכחי <span style="font-weight:400;color:#9ca3af;font-size:0.85em">(אופציונלי)</span></label>
-                    <textarea id="mathHistory" name="סיפור על המתמטיקה" rows="3" class="form-textarea" placeholder="למשל: הבן שלי בכיתה ז׳, מתקשה עם שברים ואלגברה בסיסית..."></textarea>
-                </div>
-
-                <!-- שעה מועדפת -->
-                <div class="form-group">
-                    <label for="callTime" class="form-label">באיזו שעה תרצו שנחזור אליכם?</label>
-                    <div class="relative">
-                        <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 z-10" style="pointer-events:none;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        </span>
-                        <select id="callTime" name="שעה מועדפת לחזרה" class="form-select" style="padding-right: 2.5rem;">
-                            <option value="" disabled selected>בחרו שעה מועדפת</option>
-                            <option value="בוקר 08:00–10:00">בוקר · 08:00 – 10:00</option>
-                            <option value="בוקר 10:00–12:00">בוקר · 10:00 – 12:00</option>
-                            <option value="צהריים 12:00–14:00">צהריים · 12:00 – 14:00</option>
-                            <option value="אחר הצהריים 14:00–17:00">אחר הצהריים · 14:00 – 17:00</option>
-                            <option value="ערב 17:00–20:00">ערב · 17:00 – 20:00</option>
-                        </select>
-                    </div>
+                    <textarea id="mathHistory" name="סיפור על המתמטיקה" rows="2" class="form-textarea" placeholder="למשל: הבן שלי בכיתה ז׳, מתקשה עם שברים ואלגברה בסיסית..."></textarea>
                 </div>
 
                 <!-- checkbox -->
-                <label for="callback" class="flex items-start gap-3 cursor-pointer mt-1 mb-4 bg-purple-50 border border-purple-100 rounded-xl p-3">
-                    <input type="checkbox" id="callback" name="רוצים שנחזור אליכם" class="form-checkbox mt-0.5" checked>
-                    <span class="text-sm text-gray-700 leading-relaxed">
-                        <strong class="text-purple-900">כן</strong>, אני רוצה שיחת טלפון או הודעה חזרה בהקדם
+                <label for="callback" class="flex items-center gap-3 cursor-pointer mt-1 mb-3 bg-purple-50 border border-purple-100 rounded-xl p-2.5">
+                    <input type="checkbox" id="callback" name="רוצים שנחזור אליכם" class="form-checkbox" checked>
+                    <span class="text-sm text-gray-700">
+                        <strong class="text-purple-900">כן</strong>, אשמח שתחזרו אליי בהקדם
                     </span>
                 </label>
 
@@ -1323,9 +1305,9 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 </button>
 
                 <!-- חתימת אמון -->
-                <div class="flex items-center justify-center gap-2 text-xs text-gray-500 mt-4">
+                <div class="flex items-center justify-center gap-2 text-xs text-gray-500 mt-3">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    שליחה מאובטחת · הפרטים ישמשו רק לצורך יצירת קשר
+                    שליחה מאובטחת · ליצירת קשר בלבד
                 </div>
             </form>
 
@@ -1346,12 +1328,12 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         <!-- Style + JS for grade pills -->
         <style>
             .grade-pill {
-                padding: 0.5rem 0.9rem;
+                padding: 0.4rem 0.7rem;
                 border: 1.5px solid #E9D5FF;
                 background: #FFFFFF;
                 color: #6B21A8;
                 border-radius: 9999px;
-                font-size: 0.875rem;
+                font-size: 0.8rem;
                 font-weight: 600;
                 cursor: pointer;
                 transition: all 0.18s ease;
