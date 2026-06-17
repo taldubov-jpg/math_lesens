@@ -1285,25 +1285,14 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 class="fade-up"
                 style="background: #FFFFFF; border: 1px solid rgba(126,34,206,0.12); border-radius: 1.75rem; padding: 2rem 2rem 1.75rem; box-shadow: 0 20px 60px -15px rgba(109,40,217,0.18), 0 0 0 1px rgba(255,255,255,0.4);"
             >
-                <!-- שם פרטי + שם משפחה -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="form-group">
-                        <label for="firstName" class="form-label">שם פרטי</label>
-                        <div class="relative">
-                            <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400" style="pointer-events:none;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            </span>
-                            <input type="text" id="firstName" name="שם פרטי" required class="form-input" placeholder="שם פרטי" style="padding-right: 2.5rem;">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName" class="form-label">שם משפחה</label>
-                        <div class="relative">
-                            <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400" style="pointer-events:none;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                            </span>
-                            <input type="text" id="lastName" name="שם משפחה" required class="form-input" placeholder="שם משפחה" style="padding-right: 2.5rem;">
-                        </div>
+                <!-- שם מלא -->
+                <div class="form-group">
+                    <label for="fullName" class="form-label">שם מלא</label>
+                    <div class="relative">
+                        <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400" style="pointer-events:none;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        </span>
+                        <input type="text" id="fullName" name="שם" required class="form-input" placeholder="שם פרטי ומשפחה" style="padding-right: 2.5rem;">
                     </div>
                 </div>
 
@@ -1950,7 +1939,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             const activeTrack = diagnosticTracks[diagnosticState.trackKey];
             const gradeField = document.getElementById('grade');
             const historyField = document.getElementById('mathHistory');
-            const firstNameField = document.getElementById('firstName');
+            const firstNameField = document.getElementById('fullName');
             const contactSection = document.getElementById('contact');
             const diagnosticNote = diagnosticElements.leadButton.dataset.diagnosticNote;
 
@@ -2189,7 +2178,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             cta.querySelector('a').addEventListener('click', (e) => {
                 e.preventDefault();
                 contact.scrollIntoView({ behavior: 'smooth' });
-                window.setTimeout(() => document.getElementById('firstName')?.focus(), 600);
+                window.setTimeout(() => document.getElementById('fullName')?.focus(), 600);
             });
 
             window.addEventListener('scroll', update, { passive: true });
