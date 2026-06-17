@@ -2123,5 +2123,80 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         </div>
     </div>
 
+    <!-- ===== כפתור צף: קביעת שיעור היכרות ===== -->
+    <style>
+        .sticky-cta{
+            position:fixed; z-index:60;
+            bottom:18px; left:50%;
+            transform:translateX(-50%) translateY(24px);
+            opacity:0; pointer-events:none;
+            transition:opacity .35s ease, transform .35s ease;
+        }
+        .sticky-cta.is-visible{
+            opacity:1; transform:translateX(-50%) translateY(0); pointer-events:auto;
+        }
+        .sticky-cta__btn{
+            display:inline-flex; align-items:center; gap:.55rem;
+            background:linear-gradient(135deg,#6d28d9 0%,#7c3aed 100%);
+            color:#fff; font-weight:800; font-size:1rem;
+            padding:.85rem 1.7rem; border-radius:9999px;
+            box-shadow:0 10px 30px -8px rgba(109,40,217,.55);
+            text-decoration:none; white-space:nowrap;
+            transition:transform .15s ease, box-shadow .15s ease;
+        }
+        .sticky-cta__btn:hover{
+            transform:translateY(-2px);
+            box-shadow:0 14px 36px -8px rgba(109,40,217,.65);
+        }
+        .sticky-cta__icon{ font-size:1.05rem; line-height:1; }
+        @media (max-width:640px){
+            .sticky-cta{ left:16px; right:16px; transform:translateY(24px); }
+            .sticky-cta.is-visible{ transform:translateY(0); }
+            .sticky-cta__btn{ width:100%; justify-content:center; padding:1rem; font-size:1.05rem; border-radius:1rem; }
+        }
+    </style>
+    <div id="stickyCta" class="sticky-cta" aria-hidden="true">
+        <a href="#contact" class="sticky-cta__btn">
+            <span class="sticky-cta__icon">←</span>
+            <span>לקביעת שיעור היכרות</span>
+        </a>
+    </div>
+    <script>
+        (function(){
+            const cta = document.getElementById('stickyCta');
+            const contact = document.getElementById('contact');
+            if (!cta || !contact) return;
+            let contactVisible = false;
+
+            if ('IntersectionObserver' in window) {
+                new IntersectionObserver((entries) => {
+                    contactVisible = entries[0].isIntersecting;
+                    update();
+                }, { threshold: 0.15 }).observe(contact);
+            }
+
+            function update(){
+                const pastHero = window.scrollY > (window.innerHeight * 0.6);
+                if (pastHero && !contactVisible) {
+                    cta.classList.add('is-visible');
+                    cta.setAttribute('aria-hidden', 'false');
+                } else {
+                    cta.classList.remove('is-visible');
+                    cta.setAttribute('aria-hidden', 'true');
+                }
+            }
+
+            cta.querySelector('a').addEventListener('click', (e) => {
+                e.preventDefault();
+                contact.scrollIntoView({ behavior: 'smooth' });
+                window.setTimeout(() => document.getElementById('firstName')?.focus(), 600);
+            });
+
+            window.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+            update();
+        })();
+    </script>
+
 </body>
 </html>
