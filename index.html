@@ -574,17 +574,17 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         .btn-whatsapp-inline svg { width: 1rem; height: 1rem; }
 
         /* שדות טופס */
-        .form-group { margin-bottom: 0.85rem; }
+        .form-group { margin-bottom: 0.55rem; }
         .form-label {
             display: block;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: #374151;
-            margin-bottom: 0.3rem;
+            margin-bottom: 0.25rem;
         }
         .form-input, .form-select, .form-textarea {
             width: 100%;
-            padding: 0.75rem 1.125rem;
+            padding: 0.6rem 1.125rem;
             border: 1.5px solid #d1d5db;
             border-radius: 0.875rem;
             font-size: 1rem;
@@ -1198,7 +1198,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     <!-- ============================================================ -->
     <!-- טופס יצירת קשר                                              -->
     <!-- ============================================================ -->
-    <section id="contact" class="py-20 sm:py-24 relative overflow-hidden"
+    <section id="contact" class="py-8 sm:py-24 relative overflow-hidden"
              style="background: linear-gradient(180deg, #FFFFFF 0%, #FAF5FF 100%);">
         <!-- רקע דקורטיבי -->
         <div style="position:absolute;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,rgba(126,34,206,0.10) 0%,transparent 70%);pointer-events:none;"></div>
@@ -1206,12 +1206,12 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
         <div class="max-w-2xl mx-auto px-5 sm:px-6 relative">
             <!-- כותרת -->
-            <div class="text-center mb-8 fade-up">
-                <span class="inline-block bg-purple-100 text-purple-800 text-xs font-extrabold px-4 py-1.5 rounded-full mb-4 tracking-wider">קביעת שיעור היכרות</span>
-                <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-900 mb-3 leading-tight">
+            <div class="text-center mb-3 sm:mb-8 fade-up">
+                <span class="hidden sm:inline-block bg-purple-100 text-purple-800 text-xs font-extrabold px-4 py-1.5 rounded-full mb-4 tracking-wider">קביעת שיעור היכרות</span>
+                <h2 class="text-xl sm:text-5xl font-extrabold text-purple-900 mb-1 sm:mb-3 leading-tight">
                     השאירו פרטים — נחזור אליכם עוד היום
                 </h2>
-                <p class="text-base text-gray-600 max-w-xl mx-auto leading-relaxed">
+                <p class="hidden sm:block text-base text-gray-600 max-w-xl mx-auto leading-relaxed">
                     שיעור היכרות עם מורה מקצועי — אבחון רמה והבנת התלמיד.
                 </p>
             </div>
@@ -1221,7 +1221,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 action="https://math-crm.onrender.com/api/leads/webhook"
                 method="POST"
                 class="fade-up"
-                style="background: #FFFFFF; border: 1px solid rgba(126,34,206,0.12); border-radius: 1.75rem; padding: 1.5rem 1.5rem 1.5rem; box-shadow: 0 20px 60px -15px rgba(109,40,217,0.18), 0 0 0 1px rgba(255,255,255,0.4);"
+                style="background: #FFFFFF; border: 1px solid rgba(126,34,206,0.12); border-radius: 1.75rem; padding: 1.1rem 1.25rem 1.1rem; box-shadow: 0 20px 60px -15px rgba(109,40,217,0.18), 0 0 0 1px rgba(255,255,255,0.4);"
             >
                 <!-- שם מלא -->
                 <div class="form-group">
@@ -1245,49 +1245,42 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                     </div>
                 </div>
 
-                <!-- כיתה — pills במקום dropdown -->
+                <!-- כיתה — select קומפקטי -->
                 <div class="form-group">
-                    <label class="form-label">באיזו כיתה הלומד/ת?</label>
-                    <input type="hidden" id="grade" name="כיתה" required>
-                    <div id="gradeGroups" class="space-y-2">
-                        <!-- יסודי -->
-                        <div>
-                            <div class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">יסודי</div>
-                            <div class="flex flex-wrap gap-1">
-                                <button type="button" class="grade-pill" data-grade="א׳">א׳</button>
-                                <button type="button" class="grade-pill" data-grade="ב׳">ב׳</button>
-                                <button type="button" class="grade-pill" data-grade="ג׳">ג׳</button>
-                                <button type="button" class="grade-pill" data-grade="ד׳">ד׳</button>
-                                <button type="button" class="grade-pill" data-grade="ה׳">ה׳</button>
-                                <button type="button" class="grade-pill" data-grade="ו׳">ו׳</button>
-                            </div>
-                        </div>
-                        <!-- חטיבה -->
-                        <div>
-                            <div class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">חטיבה</div>
-                            <div class="flex flex-wrap gap-1">
-                                <button type="button" class="grade-pill" data-grade="ז׳">ז׳</button>
-                                <button type="button" class="grade-pill" data-grade="ח׳">ח׳</button>
-                                <button type="button" class="grade-pill" data-grade="ט׳">ט׳</button>
-                            </div>
-                        </div>
-                        <!-- תיכון -->
-                        <div>
-                            <div class="text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">תיכון ובגרות</div>
-                            <div class="flex flex-wrap gap-1">
-                                <button type="button" class="grade-pill" data-grade="י׳">י׳</button>
-                                <button type="button" class="grade-pill" data-grade="י״א">י״א</button>
-                                <button type="button" class="grade-pill" data-grade="י״ב">י״ב</button>
-                                <button type="button" class="grade-pill" data-grade="אחר">אחר / השלמות</button>
-                            </div>
-                        </div>
+                    <label for="grade" class="form-label">באיזו כיתה הלומד/ת?</label>
+                    <div class="relative">
+                        <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 z-10" style="pointer-events:none;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                        </span>
+                        <select id="grade" name="כיתה" required class="form-select" style="padding-right: 2.5rem;">
+                            <option value="" disabled selected>בחרו כיתה</option>
+                            <optgroup label="יסודי">
+                                <option value="א׳">א׳</option>
+                                <option value="ב׳">ב׳</option>
+                                <option value="ג׳">ג׳</option>
+                                <option value="ד׳">ד׳</option>
+                                <option value="ה׳">ה׳</option>
+                                <option value="ו׳">ו׳</option>
+                            </optgroup>
+                            <optgroup label="חטיבה">
+                                <option value="ז׳">ז׳</option>
+                                <option value="ח׳">ח׳</option>
+                                <option value="ט׳">ט׳</option>
+                            </optgroup>
+                            <optgroup label="תיכון ובגרות">
+                                <option value="י׳">י׳</option>
+                                <option value="י״א">י״א</option>
+                                <option value="י״ב">י״ב</option>
+                                <option value="אחר">אחר / השלמות</option>
+                            </optgroup>
+                        </select>
                     </div>
                 </div>
 
                 <!-- ספרו על המצב -->
                 <div class="form-group">
                     <label for="mathHistory" class="form-label">ספרו קצת על המצב הנוכחי <span style="font-weight:400;color:#9ca3af;font-size:0.85em">(אופציונלי)</span></label>
-                    <textarea id="mathHistory" name="סיפור על המתמטיקה" rows="2" class="form-textarea" placeholder="למשל: הבן שלי בכיתה ז׳, מתקשה עם שברים ואלגברה בסיסית..."></textarea>
+                    <textarea id="mathHistory" name="סיפור על המתמטיקה" rows="1" class="form-textarea" placeholder="למשל: הבן שלי בכיתה ז׳, מתקשה עם שברים..."></textarea>
                 </div>
 
                 <!-- checkbox -->
@@ -1305,7 +1298,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 </button>
 
                 <!-- חתימת אמון -->
-                <div class="flex items-center justify-center gap-2 text-xs text-gray-500 mt-3">
+                <div class="flex items-center justify-center gap-2 text-xs text-gray-500 mt-2">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                     שליחה מאובטחת · ליצירת קשר בלבד
                 </div>
@@ -1326,70 +1319,20 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         </div>
 
         <!-- Style + JS for grade pills -->
-        <style>
-            .grade-pill {
-                padding: 0.4rem 0.7rem;
-                border: 1.5px solid #E9D5FF;
-                background: #FFFFFF;
-                color: #6B21A8;
-                border-radius: 9999px;
-                font-size: 0.8rem;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.18s ease;
-                font-family: inherit;
-            }
-            .grade-pill:hover {
-                background: #FAF5FF;
-                border-color: #C084FC;
-                transform: translateY(-1px);
-            }
-            .grade-pill.selected {
-                background: linear-gradient(135deg, #7E22CE, #A855F7);
-                color: #FFFFFF;
-                border-color: transparent;
-                box-shadow: 0 4px 12px -2px rgba(126,34,206,0.4);
-            }
-        </style>
         <script>
-            (function initGradePills(){
-                const pills = document.querySelectorAll('#gradeGroups .grade-pill');
-                const hidden = document.getElementById('grade');
-                const form = hidden ? hidden.closest('form') : null;
-                pills.forEach(pill => {
-                    pill.addEventListener('click', () => {
-                        pills.forEach(p => p.classList.remove('selected'));
-                        pill.classList.add('selected');
-                        if (hidden) hidden.value = pill.dataset.grade;
-                    });
+            (function initSubmitUX(){
+                const form = document.getElementById('grade') ? document.getElementById('grade').closest('form') : null;
+                if (!form) return;
+                form.addEventListener('submit', () => {
+                    const btn = form.querySelector('button[type="submit"]');
+                    if (btn && !btn.dataset.sending) {
+                        btn.dataset.sending = '1';
+                        btn.style.opacity = '0.75';
+                        btn.style.pointerEvents = 'none';
+                        const label = btn.querySelector('span');
+                        if (label) label.textContent = 'שולח את הפרטים…';
+                    }
                 });
-
-                // Submit UX: validate grade is chosen + show a loading state.
-                // We do NOT call preventDefault on success — the native POST →
-                // webhook → thank-you redirect keeps working as before.
-                if (form) {
-                    form.addEventListener('submit', (e) => {
-                        if (hidden && !hidden.value) {
-                            e.preventDefault();
-                            const groups = document.getElementById('gradeGroups');
-                            if (groups) {
-                                groups.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                groups.style.transition = 'box-shadow .2s ease';
-                                groups.style.boxShadow = '0 0 0 2px #EC4899';
-                                setTimeout(() => { groups.style.boxShadow = ''; }, 1400);
-                            }
-                            return;
-                        }
-                        const btn = form.querySelector('button[type="submit"]');
-                        if (btn && !btn.dataset.sending) {
-                            btn.dataset.sending = '1';
-                            btn.style.opacity = '0.75';
-                            btn.style.pointerEvents = 'none';
-                            const label = btn.querySelector('span');
-                            if (label) label.textContent = 'שולח את הפרטים…';
-                        }
-                    });
-                }
             })();
         </script>
     </section>
