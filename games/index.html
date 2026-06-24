@@ -101,14 +101,6 @@ h1,h2,h3{margin:0; font-weight:800;}
   background:var(--surface); border-bottom:1px solid var(--border); flex-wrap:wrap; gap:8px;
 }
 .game-topbar .left, .game-topbar .right{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
-.scoreboard{display:flex; gap:8px; flex-wrap:wrap;}
-.score-chip{
-  display:flex; align-items:center; gap:8px; padding:6px 12px; border-radius:999px; font-weight:800; font-size:14px;
-  border:2px solid var(--border); background:var(--bg);
-}
-.score-chip .dot{width:10px; height:10px; border-radius:50%;}
-.score-chip .val{font-size:16px;}
-.score-chip button{font-size:14px; padding:2px 6px; border-radius:6px; background:rgba(0,0,0,.06);}
 .timer-pill{
   font-weight:800; font-size:18px; padding:6px 16px; border-radius:999px; background:#FFF7E6; color:#92660B;
   border:2px solid #F5D98A; min-width:70px; text-align:center;
@@ -143,20 +135,12 @@ h1,h2,h3{margin:0; font-weight:800;}
 .feedback.bad{color:#B91C1C;}
 .explain{font-size:14px; color:var(--text-soft); margin-top:6px; font-weight:600;}
 
-/* group pick bar */
-.group-bar{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:24px;}
-.group-pick-btn{
-  padding:10px 18px; border-radius:12px; font-weight:800; font-size:15px; color:#fff; border:2px solid transparent;
-}
+/* answer judge row (buzzer template) */
+.answer-judge{display:flex; gap:10px; justify-content:center;}
 
-/* setup screen */
+/* settings modal card */
 .setup-card{max-width:520px; margin:40px auto; background:var(--surface); border-radius:var(--radius); padding:30px; box-shadow:var(--shadow);}
 .setup-card h3{font-size:22px; margin-bottom:18px; text-align:center;}
-.group-row{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
-.group-row input[type=text]{
-  flex:1; padding:10px 12px; border-radius:10px; border:1px solid var(--border); font-size:15px; font-family:inherit;
-}
-.group-color-dot{width:24px; height:24px; border-radius:50%; flex-shrink:0; border:2px solid #fff; box-shadow:0 0 0 1px var(--border);}
 .setting-row{display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-top:1px solid var(--border); font-weight:700; font-size:14px;}
 .switch{position:relative; width:46px; height:26px; border-radius:999px; background:var(--border); transition:.15s; flex-shrink:0;}
 .switch.on{background:var(--green);}
@@ -236,6 +220,15 @@ function fmtNum(x){
   return (Object.is(r,-0)?0:r).toString();
 }
 function ltr(html){ return '<span class="ltr-num">'+html+'</span>'; }
+function parseFracOrPct(s){
+  s = String(s).trim().replace(/\s/g,'');
+  const isPercent = s.includes('%');
+  s = s.replace('%','');
+  let val;
+  if(s.includes('/')){ const parts=s.split('/'); val = parts.length===2? parseFloat(parts[0])/parseFloat(parts[1]) : NaN; }
+  else val = parseFloat(s);
+  return isPercent ? val/100 : val;
+}
 
 /* ---------------------------------------------------------------------- */
 /* Sound (Web Audio, no external files)                                   */
@@ -300,7 +293,6 @@ const Confetti = (function(){
 /* ---------------------------------------------------------------------- */
 const State = {
   grade: null,
-  groups: [],          // [{name,color,score}]
   settings: { sound:true, timerOn:true, fx:true },
   activeGameId: null,
   activeUnmount: null,
@@ -315,13 +307,6 @@ function loadSettings(){
 }
 function saveSettings(){
   try{ localStorage.setItem('mb_games_settings', JSON.stringify(State.settings)); }catch(e){}
-}
-const GROUP_COLORS = [
-  {bg:'#3B82F6', name:'קבוצה כחולה'}, {bg:'#EF4444', name:'קבוצה אדומה'},
-  {bg:'#10B981', name:'קבוצה ירוקה'}, {bg:'#F59E0B', name:'קבוצה צהובה'},
-];
-function defaultGroups(n){
-  return GROUP_COLORS.slice(0,n).map(c=>({name:c.name, color:c.bg, score:0}));
 }
 
 /* ---------------------------------------------------------------------- */
@@ -340,32 +325,6 @@ function render(view){
 function toggleFullscreen(){
   if(!document.fullscreenElement){ document.documentElement.requestFullscreen?.().catch(()=>{}); }
   else{ document.exitFullscreen?.().catch(()=>{}); }
-}
-
-/* ---------------------------------------------------------------------- */
-/* Scoreboard component (shared by all engines)                            */
-/* ---------------------------------------------------------------------- */
-function buildScoreboardHTML(){
-  if(!State.groups.length) return '';
-  return '<div class="scoreboard">' + State.groups.map((g,i)=>(
-    '<div class="score-chip" style="border-color:'+g.color+'33">'+
-      '<span class="dot" style="background:'+g.color+'"></span>'+
-      '<span class="val">'+g.name+': <b class="ltr-num">'+g.score+'</b></span>'+
-      '<button data-act="dec" data-i="'+i+'" title="הפחת נקודה">−</button>'+
-      '<button data-act="inc" data-i="'+i+'" title="הוסף נקודה">+</button>'+
-    '</div>'
-  )).join('') + '</div>';
-}
-function wireScoreboard(container){
-  container.querySelectorAll('.score-chip button').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const i = +btn.dataset.i;
-      State.groups[i].score += (btn.dataset.act==='inc'? 1 : -1);
-      const valEl = btn.parentElement.querySelector('.val b');
-      if(valEl) valEl.textContent = State.groups[i].score;
-      Sound.click();
-    });
-  });
 }
 
 /* ---------------------------------------------------------------------- */
@@ -401,7 +360,6 @@ function gameShell(container, opts){
         '</div>'+
         '<div class="left">'+
           (State.settings.timerOn && showTimer!==false ? '<div class="timer-pill" id="gs-timer">--</div>' : '')+
-          buildScoreboardHTML()+
           '<button class="icon-btn" id="gs-sound" title="סאונד">'+(State.settings.sound?'🔊':'🔇')+'</button>'+
           '<button class="icon-btn" id="gs-full" title="מסך מלא">⛶</button>'+
         '</div>'+
@@ -415,7 +373,6 @@ function gameShell(container, opts){
     State.settings.sound = !State.settings.sound; Sound.setEnabled(State.settings.sound); saveSettings();
     soundBtn.textContent = State.settings.sound?'🔊':'🔇';
   });
-  wireScoreboard(container);
   return container.querySelector('#gs-stage');
 }
 function setTimerDisplay(container, text, low){
@@ -453,7 +410,7 @@ function mountMCQTemplate(stage, config, hooks){
         btn.classList.add(isCorrect?'correct':'wrong');
         stage.querySelectorAll('.choice-btn').forEach((b2,j)=>{ if(choices[j]===q.answer) b2.classList.add('correct'); });
         if(isCorrect){ Sound.correct(); correctCount++; if(State.settings.fx) Confetti.burst(); fb.className='feedback ok'; fb.textContent='נכון! 🎉'; }
-        else{ Sound.wrong(); fb.className='feedback bad'; fb.textContent='לא מדויק — התשובה הנכונה: '+q.answer; }
+        else{ Sound.wrong(); fb.className='feedback bad'; fb.innerHTML='לא מדויק — התשובה הנכונה: '+ltr(q.answer); }
         if(q.explain) fb.innerHTML += '<div class="explain">'+q.explain+'</div>';
         setTimeout(nextQuestion, 1600);
       });
@@ -462,7 +419,7 @@ function mountMCQTemplate(stage, config, hooks){
       timer = createTimer(perQSeconds, (r)=>setTimerDisplay(stage.closest('.game-screen'), r, r<=5), ()=>{
         if(answered) return; answered=true;
         stage.querySelectorAll('.choice-btn').forEach((b2,j)=>{ if(choices[j]===q.answer) b2.classList.add('correct'); });
-        Sound.wrong(); fb.className='feedback bad'; fb.textContent='נגמר הזמן! התשובה: '+q.answer;
+        Sound.wrong(); fb.className='feedback bad'; fb.innerHTML='נגמר הזמן! התשובה: '+ltr(q.answer)+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
         setTimeout(nextQuestion, 1600);
       });
       timer.start();
@@ -504,7 +461,7 @@ function mountTypeAnswerTemplate(stage, config, hooks){
       const ok = q.check ? q.check(val) : (parseFloat(val)===q.answer);
       if(ok){ Sound.correct(); streak++; totalScore += 10 + Math.min(streak,5)*2; if(State.settings.fx) Confetti.burst();
         fb.className='feedback ok'; fb.textContent='נכון! 🎉 ('+streak+' רצף)'; }
-      else{ Sound.wrong(); streak=0; fb.className='feedback bad'; fb.textContent='התשובה הנכונה: '+ltr(q.displayAnswer||q.answer); }
+      else{ Sound.wrong(); streak=0; fb.className='feedback bad'; fb.innerHTML='התשובה הנכונה: '+ltr(q.displayAnswer??q.answer)+(q.explain?'<div class="explain">'+q.explain+'</div>':''); }
       setTimeout(nextQuestion, 1300);
     }
     stage.querySelector('#ta-submit').addEventListener('click', submit);
@@ -512,7 +469,7 @@ function mountTypeAnswerTemplate(stage, config, hooks){
     if(State.settings.timerOn && config.timed!==false){
       timer = createTimer(perQSeconds, (r)=>setTimerDisplay(stage.closest('.game-screen'), r, r<=5), ()=>{
         if(answered) return; answered=true; streak=0;
-        Sound.wrong(); fb.className='feedback bad'; fb.textContent='נגמר הזמן! התשובה: '+ltr(q.displayAnswer||q.answer);
+        Sound.wrong(); fb.className='feedback bad'; fb.innerHTML='נגמר הזמן! התשובה: '+ltr(q.displayAnswer??q.answer)+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
         setTimeout(nextQuestion, 1300);
       });
       timer.start();
@@ -637,27 +594,12 @@ function mountJeopardyTemplate(stage, config){
         '<div class="q-prompt">'+q.prompt+'</div>'+
         '<button class="btn" id="jp-reveal">חשוף תשובה</button>'+
         '<div class="feedback" id="jp-fb"></div>'+
-        '<div class="group-bar" id="jp-groups"></div>'+
       '</div>';
     stage.querySelector('#jp-reveal').addEventListener('click', ()=>{
       const fb = stage.querySelector('#jp-fb');
       fb.className='feedback ok'; fb.innerHTML='התשובה: '+ltr(q.answer)+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
-      Sound.correct();
-      if(State.groups.length){
-        const gb = stage.querySelector('#jp-groups');
-        gb.innerHTML = '<div style="font-size:13px;font-weight:700;color:var(--text-soft);width:100%;margin-bottom:6px">איזו קבוצה ענתה נכון?</div>'+
-          State.groups.map((g,i)=>'<button class="group-pick-btn" style="background:'+g.color+'" data-i="'+i+'">'+g.name+'</button>').join('');
-        gb.querySelectorAll('.group-pick-btn').forEach(btn=>{
-          btn.addEventListener('click', ()=>{
-            State.groups[+btn.dataset.i].score += cell.value/100;
-            const sb = stage.closest('.game-screen').querySelector('.scoreboard');
-            if(sb){ sb.outerHTML = buildScoreboardHTML(); wireScoreboard(stage.closest('.game-screen')); }
-            renderBoard();
-          });
-        });
-      } else {
-        setTimeout(renderBoard, 1400);
-      }
+      Sound.correct(); if(State.settings.fx) Confetti.burst();
+      setTimeout(renderBoard, 1600);
     });
   }
   renderBoard();
@@ -668,7 +610,9 @@ function mountBingoTemplate(stage, config){
   let destroyed=false;
   const size = config.size || 4;
   function buildCard(){
-    const nums = shuffle(config.pool.slice()).slice(0, size*size);
+    let nums = shuffle(config.pool.slice());
+    while(nums.length < size*size){ nums = nums.concat(shuffle(config.pool.slice())); }
+    nums = nums.slice(0, size*size);
     return nums.map(n=>({n, marked:false}));
   }
   let cells = buildCard();
@@ -776,7 +720,7 @@ function mountWheelTemplate(stage, config){
         result.innerHTML = '<div class="q-prompt" style="font-size:24px">'+q.prompt+'</div>'+
           '<button class="btn" id="wheel-reveal">חשוף תשובה</button><div class="feedback" id="wheel-fb"></div>';
         document.getElementById('wheel-reveal').addEventListener('click', ()=>{
-          document.getElementById('wheel-fb').innerHTML = 'התשובה: '+ltr(q.answer);
+          document.getElementById('wheel-fb').innerHTML = 'התשובה: '+ltr(q.answer)+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
           Sound.correct(); if(State.settings.fx) Confetti.burst();
         });
       } else {
@@ -793,7 +737,7 @@ function mountWheelTemplate(stage, config){
 /* Buzzer / group quiz template (quiz-buzzer, speed-showdown, true-false) */
 /* ---------------------------------------------------------------------- */
 function mountBuzzerTemplate(stage, config){
-  let destroyed=false; let qIndex=0;
+  let destroyed=false; let qIndex=0; let correctCount=0;
   const totalQ = config.count || 12;
   function nextQuestion(){
     if(destroyed) return;
@@ -801,45 +745,37 @@ function mountBuzzerTemplate(stage, config){
     const q = config.generator();
     qIndex++;
     const isTF = !!q.isTrueFalse;
-    const choices = isTF ? ['נכון','לא נכון'] : shuffle(q.choices||[]);
+    const hasChoices = !isTF && Array.isArray(q.choices) && q.choices.length>0;
+    const displayChoices = isTF ? ['נכון','לא נכון'] : (hasChoices ? shuffle(q.choices) : []);
     stage.innerHTML =
       '<div class="game-card-stage">'+
         '<div style="font-size:13px;font-weight:800;color:var(--text-soft);margin-bottom:10px">שאלה '+qIndex+'/'+totalQ+'</div>'+
         '<div class="q-prompt">'+q.prompt+'</div>'+
-        (choices.length? '<div class="choices-grid">'+choices.map(c=>'<div class="choice-btn" style="cursor:default">'+ltr(c)+'</div>').join('')+'</div>' : '')+
+        (displayChoices.length? '<div class="choices-grid">'+displayChoices.map(c=>'<div class="choice-btn" style="cursor:default;opacity:.85">'+ltr(c)+'</div>').join('')+'</div>' : '')+
         '<button class="btn" id="bz-reveal" style="margin-top:22px">חשוף תשובה</button>'+
         '<div class="feedback" id="bz-fb"></div>'+
-        '<div class="group-bar" id="bz-groups"></div>'+
+        '<div class="answer-judge" id="bz-judge" style="display:none;margin-top:14px;gap:10px;justify-content:center"></div>'+
       '</div>';
     stage.querySelector('#bz-reveal').addEventListener('click', ()=>{
       const fb = stage.querySelector('#bz-fb');
       const ansText = isTF ? (q.answer? 'נכון':'לא נכון') : q.answer;
       fb.className='feedback ok'; fb.innerHTML='התשובה: '+ltr(ansText)+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
       Sound.correct();
-      if(State.groups.length){
-        const gb = stage.querySelector('#bz-groups');
-        gb.innerHTML = '<div style="font-size:13px;font-weight:700;color:var(--text-soft);width:100%;margin-bottom:6px">מי ענה ראשון ונכון?</div>'+
-          State.groups.map((g,i)=>'<button class="group-pick-btn" style="background:'+g.color+'" data-i="'+i+'">'+g.name+'</button>').join('')+
-          '<button class="group-pick-btn" style="background:#94A3B8" data-i="-1">אף אחד</button>';
-        gb.querySelectorAll('.group-pick-btn').forEach(btn=>{
-          btn.addEventListener('click', ()=>{
-            const i=+btn.dataset.i;
-            if(i>=0){ State.groups[i].score += 1; if(State.settings.fx) Confetti.burst(); }
-            const sb = stage.closest('.game-screen').querySelector('.scoreboard');
-            if(sb){ sb.outerHTML = buildScoreboardHTML(); wireScoreboard(stage.closest('.game-screen')); }
-            setTimeout(nextQuestion, 400);
-          });
-        });
-      } else {
-        setTimeout(nextQuestion, 1500);
-      }
+      const judge = stage.querySelector('#bz-judge');
+      judge.style.display='flex';
+      judge.innerHTML =
+        '<button class="btn" id="bz-right">התלמיד ענה נכון ✓</button>'+
+        '<button class="btn secondary" id="bz-wrong">לא נכון ✗</button>';
+      judge.querySelector('#bz-right').addEventListener('click', ()=>{ correctCount++; if(State.settings.fx) Confetti.burst(); nextQuestion(); });
+      judge.querySelector('#bz-wrong').addEventListener('click', ()=>{ nextQuestion(); });
     });
   }
   function finish(){
     stage.innerHTML = '<div class="game-card-stage"><div style="font-size:54px">🏆</div><h2 style="font-size:26px;margin:10px 0">סיום הסבב!</h2>'+
-      '<button class="btn big" id="bz-again">סבב נוסף</button></div>';
+      '<div style="font-size:18px;color:var(--text-soft)">נכון: <b class="ltr-num">'+correctCount+'</b>/<span class="ltr-num">'+totalQ+'</span></div>'+
+      '<button class="btn big" id="bz-again" style="margin-top:18px">סבב נוסף</button></div>';
     Sound.win(); if(State.settings.fx) Confetti.burst();
-    stage.querySelector('#bz-again').addEventListener('click', ()=>{ qIndex=0; nextQuestion(); });
+    stage.querySelector('#bz-again').addEventListener('click', ()=>{ qIndex=0; correctCount=0; nextQuestion(); });
   }
   nextQuestion();
   return function unmount(){ destroyed=true; };
@@ -852,10 +788,15 @@ function mountBuzzerTemplate(stage, config){
 const CG = {};
 
 function mcqFromAnswer(promptHtml, answer, distractorFn, n, explain){
-  const set = new Set([answer]);
+  const ansStr = String(answer);
+  const set = new Set([ansStr]);
   let guard=0;
-  while(set.size < n && guard<50){ set.add(distractorFn()); guard++; }
-  return { prompt: promptHtml, answer: String(answer), choices: Array.from(set).map(String), explain };
+  while(set.size < n && guard<80){
+    const d = String(distractorFn());
+    if(d !== ansStr) set.add(d);
+    guard++;
+  }
+  return { prompt: promptHtml, answer: ansStr, choices: Array.from(set), explain };
 }
 
 /* ---- חיבור / חיסור ---- */
@@ -864,30 +805,40 @@ CG.addSub = (max, allowSub=true) => () => {
   const op = allowSub && Math.random()<0.5 ? '−' : '+';
   const ans = op==='+' ? a+b : (a>=b? a-b : b-a);
   const x = op==='+'? a : Math.max(a,b), y = op==='+'? b : Math.min(a,b);
-  return mcqFromAnswer(x+' '+op+' '+y+' = ?', ans, ()=>Math.max(0,ans+pick([-3,-2,-1,1,2,3])), 4);
+  return mcqFromAnswer(ltr(x+' '+op+' '+y+' = ?'), ans, ()=>Math.max(0,ans+pick([-3,-2,-1,1,2,3])), 4);
 };
 CG.addSubType = (max, allowSub=true) => () => {
   const a=ri(1,max), b=ri(1,max);
   const op = allowSub && Math.random()<0.5 ? '−' : '+';
   const ans = op==='+' ? a+b : (a>=b? a-b : b-a);
   const x = op==='+'? a : Math.max(a,b), y = op==='+'? b : Math.min(a,b);
-  return { prompt: x+' '+op+' '+y+' = ?', answer: ans, displayAnswer: ans };
+  return { prompt: ltr(x+' '+op+' '+y+' = ?'), answer: ans, displayAnswer: ans };
 };
 
 /* ---- כפל / חילוק ---- */
 CG.mulTable = (maxFactor=10) => () => {
   const a=ri(1,maxFactor), b=ri(1,maxFactor); const ans=a*b;
-  return mcqFromAnswer(a+' × '+b+' = ?', ans, ()=>Math.max(1,ans+pick([-10,-5,-2,2,5,10])), 4);
+  const q = mcqFromAnswer(ltr(a+' × '+b+' = ?'), ans, ()=>Math.max(1,ans+pick([-10,-5,-2,2,5,10])), 4);
+  q.check = v => parseFloat(v)===ans;
+  return q;
 };
 CG.mulType = (maxFactor=12) => () => {
   const a=ri(2,maxFactor), b=ri(2,maxFactor);
-  return { prompt: a+' × '+b+' = ?', answer: a*b, displayAnswer: a*b };
+  return { prompt: ltr(a+' × '+b+' = ?'), answer: a*b, displayAnswer: a*b };
 };
 CG.divType = (maxFactor=12) => () => {
   const b=ri(2,maxFactor), ans=ri(2,maxFactor), a=b*ans;
-  return { prompt: a+' ÷ '+b+' = ?', answer: ans, displayAnswer: ans };
+  return { prompt: ltr(a+' ÷ '+b+' = ?'), answer: ans, displayAnswer: ans };
 };
 CG.mulDivMixed = (maxFactor=12) => () => Math.random()<.5 ? CG.mulType(maxFactor)() : CG.divType(maxFactor)();
+CG.decimalMulType = () => {
+  const whole=ri(1,9), tenth=ri(1,9);
+  const dec = whole + tenth/10;
+  const mult = ri(2,9);
+  const ans = Math.round(dec*mult*10)/10;
+  return { prompt: ltr(dec.toFixed(1)+' × '+mult+' = ?'), answer: ans, displayAnswer: ans,
+    check: v=> Math.abs(parseFloat(v)-ans)<0.05 };
+};
 
 /* ---- מרתון מעורב (כל הכיתות, רמה מתכווננת) ---- */
 CG.marathonMixed = (level) => () => {
@@ -899,37 +850,60 @@ CG.marathonMixed = (level) => () => {
   else if(op==='-'){ a=ri(1,max); b=ri(1,max); if(a<b)[a,b]=[b,a]; ans=a-b; prompt=a+' − '+b; }
   else if(op==='×'){ a=ri(1,12); b=ri(1,12); ans=a*b; prompt=a+' × '+b; }
   else { b=ri(2,12); ans=ri(2,12); a=b*ans; prompt=a+' ÷ '+b; }
-  return { prompt: prompt+' = ?', answer: ans, displayAnswer: ans };
+  return { prompt: ltr(prompt+' = ?'), answer: ans, displayAnswer: ans };
 };
 
 /* ---- שברים ---- */
 CG.fractionVisualMCQ = () => {
   const d=pick([2,3,4,5,6,8]); const n=ri(1,d-1);
-  return mcqFromAnswer('איזה שבר מהפיצה נשאר אם חולקים ל-'+d+' חלקים ואוכלים '+n+'?', fmtFrac(d-n,d), ()=>fmtFrac(ri(1,d),d), 4);
+  const ans = fmtFrac(d-n,d);
+  return mcqFromAnswer('🍕 איזה שבר מהפיצה נשאר אם חולקים אותה ל-'+ltr(d)+' חלקים ואוכלים '+ltr(n)+' מהם?', ans,
+    ()=>{ const dd=pick([2,3,4,5,6,8]); const nn=ri(1,dd-1); return fmtFrac(nn,dd); }, 4);
 };
 CG.fractionAddType = (sameDen=true) => () => {
   const d = pick([2,3,4,5,6,8,10]);
   let n1=ri(1,d-1), n2=ri(1,d-1);
   const sum = n1+n2;
-  return { prompt: fmtFrac(n1,d)+' + '+fmtFrac(n2,d)+' = ? (כתוב כ-n/d)', answer: fmtFrac(sum,d),
+  return { prompt: ltr(fmtFrac(n1,d)+' + '+fmtFrac(n2,d)+' = ?')+' (כתבו כ-n/d)', answer: fmtFrac(sum,d),
            check: v => { const s=fmtFrac(sum,d); const vv=v.replace(/\s/g,''); return vv===s || parseFloat(vv)===sum/d; },
            displayAnswer: fmtFrac(sum,d) };
 };
+CG.fractionAddMCQ = () => {
+  const d = pick([3,4,5,6,8,10]);
+  const n1=ri(1,d-2), n2=ri(1,d-1-n1);
+  const ans = fmtFrac(n1+n2,d);
+  return mcqFromAnswer(ltr(fmtFrac(n1,d)+' + '+fmtFrac(n2,d))+' = ?', ans,
+    ()=>fmtFrac(Math.max(1,n1+n2+pick([-2,-1,1,2])),d), 4);
+};
+CG.fractionMulMCQ = () => {
+  const d1=pick([2,3,4,5]), n1=ri(1,d1-1);
+  const d2=pick([2,3,4,5]), n2=ri(1,d2-1);
+  const ans = fmtFrac(n1*n2,d1*d2);
+  return mcqFromAnswer(ltr(fmtFrac(n1,d1)+' × '+fmtFrac(n2,d2))+' = ?', ans,
+    ()=>fmtFrac(n1*n2,Math.max(2,d1*d2+pick([-2,-1,1,2]))), 4);
+};
 CG.fractionToDecimalType = () => {
-  const pairs = [[1,2,'0.5'],[1,4,'0.25'],[3,4,'0.75'],[1,5,'0.2'],[2,5,'0.4'],[1,10,'0.1'],[3,10,'0.3'],[1,8,'0.125'],[3,8,'0.375'],[1,3,'0.33']];
+  const pairs = [[1,2,'0.5'],[1,4,'0.25'],[3,4,'0.75'],[1,5,'0.2'],[2,5,'0.4'],[1,10,'0.1'],[3,10,'0.3'],[1,8,'0.125'],[3,8,'0.375']];
   const p = pick(pairs);
-  return { prompt: 'הפוך לעשרוני: '+fmtFrac(p[0],p[1]), answer: p[2], displayAnswer: p[2],
-           check: v=> Math.abs(parseFloat(v)-parseFloat(p[2]))<0.02 };
+  return { prompt: 'הפכו לעשרוני: '+ltr(fmtFrac(p[0],p[1])), answer: p[2], displayAnswer: p[2],
+           check: v=> Math.abs(parseFloat(v)-parseFloat(p[2]))<0.005 };
 };
 CG.fractionPercentDecimalMCQ = () => {
-  const items=[['1/2','50%','0.5'],['1/4','25%','0.25'],['3/4','75%','0.75'],['1/5','20%','0.2'],['1/10','10%','0.1'],['1/3','33%','0.33'],['2/5','40%','0.4'],['3/5','60%','0.6']];
+  const items=[['1/2','50%','0.5'],['1/4','25%','0.25'],['3/4','75%','0.75'],['1/5','20%','0.2'],['1/10','10%','0.1'],['2/5','40%','0.4'],['3/5','60%','0.6'],['4/5','80%','0.8']];
   const it = pick(items); const askIdx = ri(0,2); const giveIdx = (askIdx+1)%3;
   const labels=['שבר','אחוז','עשרוני'];
-  return mcqFromAnswer('מה שווה ל-'+it[giveIdx]+' ('+labels[giveIdx]+')? בחר את ה-'+labels[askIdx]+' המתאים', it[askIdx], ()=>pick(items.flat()), 4);
+  const q = mcqFromAnswer('מה שווה ל-'+ltr(it[giveIdx])+' ('+labels[giveIdx]+')? בחרו את ה-'+labels[askIdx]+' המתאים', it[askIdx],
+    ()=>pick(items)[askIdx], 4);
+  const targetVal = parseFracOrPct(it[askIdx]);
+  q.check = v => Math.abs(parseFracOrPct(v)-targetVal) < 0.01;
+  return q;
 };
 CG.equivFractionMCQ = () => {
   const d=pick([2,3,4,5,6]); const n=ri(1,d-1); const k=ri(2,4);
-  return mcqFromAnswer('איזה שבר שווה ל-'+fmtFrac(n,d)+'?', fmtFrac(n*k,d*k), ()=>fmtFrac(n*k+ri(1,3),d*k), 4);
+  const target = n/d;
+  const q = mcqFromAnswer('איזה שבר שווה ל-'+ltr(fmtFrac(n,d))+'?', fmtFrac(n*k,d*k), ()=>fmtFrac(n*k+pick([-2,-1,1,2]),d*k), 4);
+  q.check = v => Math.abs(parseFracOrPct(v)-target) < 0.01;
+  return q;
 };
 
 /* ---- אחוזים / יחס ---- */
@@ -937,30 +911,29 @@ CG.percentOfType = (level=1) => () => {
   const base = level<=1? pick([10,20,50,100,200]) : pick([40,60,80,120,150,250,300]);
   const pct = pick([10,20,25,50,75,5]);
   const ans = base*pct/100;
-  return { prompt: pct+'% מתוך '+base+' = ?', answer: ans, displayAnswer: fmtNum(ans) };
+  return { prompt: ltr(pct+'% מתוך '+base)+' = ?', answer: ans, displayAnswer: fmtNum(ans) };
 };
 CG.ratioType = () => {
   const a=ri(1,6), b=ri(1,6); const k=ri(2,5);
-  return { prompt:'יחס בין שני מספרים הוא '+a+':'+b+'. אם המספר הראשון הוא '+(a*k)+', מה המספר השני?', answer: b*k, displayAnswer: b*k };
+  return { prompt:'היחס בין שני מספרים הוא '+ltr(a+':'+b)+'. אם המספר הראשון הוא '+ltr(a*k)+', מה המספר השני?', answer: b*k, displayAnswer: b*k };
 };
 CG.proportionPotionType = () => {
   const a=ri(1,5), b=ri(2,8); const k=ri(2,6);
-  return { prompt:'מתכון דורש '+a+' כוסות קמח על '+b+' כוסות מים. כמה מים צריך עבור '+(a*k)+' כוסות קמח?', answer: b*k, displayAnswer: b*k,
-    explain:'יחס שווה: '+a+'/'+b+' = '+(a*k)+'/x'};
+  return { prompt:'מתכון דורש '+ltr(a)+' כוסות קמח על '+ltr(b)+' כוסות מים. כמה כוסות מים צריך עבור '+ltr(a*k)+' כוסות קמח?', answer: b*k, displayAnswer: b*k,
+    explain:'יחס שווה: '+ltr(a+'/'+b+' = '+(a*k)+'/x')};
 };
 
 /* ---- מספרים מכוונים ---- */
 CG.integerOpsType = () => {
   const a=ri(-15,15), b=ri(-15,15); const op=pick(['+','-']);
   const ans = op==='+'? a+b : a-b;
-  return { prompt: ltrSigned(a)+' '+op+' '+ltrSigned(b,true)+' = ?', answer: ans, displayAnswer: ans };
+  return { prompt: ltr(ltrSigned(a)+' '+op+' '+ltrSigned(b,true)+' = ?'), answer: ans, displayAnswer: ans };
 };
 function ltrSigned(n, paren){ const s = n<0? '(' + n + ')' : (paren? '('+n+')': String(n)); return s; }
 CG.integerTrailType = () => {
-  const stones = Array.from({length:3},()=> ri(-9,9));
-  const target = stones[0]+stones[1]+stones[2];
-  return { prompt:'בחרו 3 מספרים מהרשימה ['+stones.join(', ')+'] שסכומם '+target+' (לדוגמה: כולם)', answer: stones.join('+'),
-    displayAnswer: stones.join(' + ')+' = '+target, check: ()=>true };
+  const a=ri(-12,12), b=ri(-12,12), c=ri(-12,12);
+  const ans = a - b + c;
+  return { prompt: ltr(ltrSigned(a)+' − '+ltrSigned(b,true)+' + '+ltrSigned(c,true)+' = ?'), answer: ans, displayAnswer: ans };
 };
 
 /* ---- אלגברה / משוואות ---- */
@@ -968,41 +941,41 @@ CG.evalExprMCQ = (level=1) => () => {
   const x = ri(1,6);
   let a=ri(2,9), b=ri(1,10);
   const ans = a*x+b;
-  return mcqFromAnswer('אם x = '+x+', מה ערך הביטוי '+a+'x + '+b+'?', ans, ()=>ans+pick([-4,-2,2,4,a]), 4);
+  return mcqFromAnswer('אם '+ltr('x = '+x)+', מה ערך הביטוי '+ltr(a+'x + '+b)+'?', ans, ()=>ans+pick([-4,-2,2,4,a]), 4);
 };
 CG.simplifyExprMCQ = () => {
   const a=ri(1,8), b=ri(1,8), c=ri(1,6);
   const sum=a+c;
-  return mcqFromAnswer('פשט: '+a+'x + '+c+'x − '+b+' (כתוב את מקדם x)', sum, ()=>sum+pick([-2,-1,1,2]), 4);
+  return mcqFromAnswer('פשטו: '+ltr(a+'x + '+c+'x − '+b)+' (כתבו את מקדם x)', sum, ()=>sum+pick([-2,-1,1,2]), 4);
 };
 CG.linearEquationType = () => {
   const a=ri(2,9), x=ri(-8,8), b=ri(1,12);
   const c = a*x+b;
-  return { prompt: a+'x + '+b+' = '+c+'  · מצאו x', answer:x, displayAnswer:x };
+  return { prompt: ltr(a+'x + '+b+' = '+c)+'  · מצאו x', answer:x, displayAnswer:x };
 };
 CG.linearEquationEscapeType = () => {
   const a=ri(2,7), x=ri(1,9), b=ri(1,10);
-  const c=a*x+b;
-  return { prompt:'פתרו ומצאו את הקוד: '+a+'x − '+b+' = '+(a*x-b===c? c : a*x-b), answer:x, displayAnswer:x };
+  const c=a*x-b;
+  return { prompt:'פתרו ומצאו את הקוד: '+ltr(a+'x − '+b+' = '+c), answer:x, displayAnswer:x };
 };
 CG.quadraticRootsType = () => {
   const r1=ri(-6,6), r2=ri(-6,6);
   const b = -(r1+r2), c = r1*r2;
   const bStr = b===0? '' : (b>0? ' + '+b+'x' : ' − '+Math.abs(b)+'x');
   const cStr = c===0? '' : (c>0? ' + '+c : ' − '+Math.abs(c));
-  return { prompt:'מצאו שורש אחד של: x²'+bStr+cStr+' = 0', answer: r1, displayAnswer: r1+' או '+r2,
+  return { prompt:'מצאו שורש אחד של: '+ltr('x²'+bStr+cStr+' = 0'), answer: r1, displayAnswer: r1+' או '+r2,
     check: v => parseFloat(v)===r1 || parseFloat(v)===r2 };
 };
 CG.factoringMCQ = () => {
   const r1=ri(1,6), r2=ri(1,6);
   const b=r1+r2, c=r1*r2;
   const correct = '(x − '+r1+')(x − '+r2+')';
-  return mcqFromAnswer('פרקו לגורמים: x² − '+b+'x + '+c, correct, ()=>'(x − '+ri(1,6)+')(x − '+ri(1,6)+')', 4);
+  return mcqFromAnswer('פרקו לגורמים: '+ltr('x² − '+b+'x + '+c), correct, ()=>{const a1=ri(1,6),a2=ri(1,6); return '(x − '+a1+')(x − '+a2+')';}, 4);
 };
 CG.inequalityType = () => {
   const a=ri(2,6), b=ri(1,10), c=ri(5,20);
   const x = Math.floor((c-b)/a);
-  return { prompt:'פתרו: '+a+'x + '+b+' < '+c+'  · כתבו את הערך השלם הגדול ביותר האפשרי עבור x', answer:x, displayAnswer:x };
+  return { prompt:'פתרו: '+ltr(a+'x + '+b+' < '+c)+'  · כתבו את הערך השלם הגדול ביותר האפשרי עבור x', answer:x, displayAnswer:x };
 };
 
 /* ---- צורות / מרחב (יסודי) ---- */
@@ -1013,25 +986,47 @@ CG.shapeMCQ = () => {
 };
 CG.perimeterAreaType = (mode) => () => {
   const w=ri(3,12), h=ri(3,12);
-  if(mode==='area') return { prompt:'מלבן ברוחב '+w+' ובאורך '+h+'. מה שטחו?', answer:w*h, displayAnswer:w*h };
-  return { prompt:'מלבן ברוחב '+w+' ובאורך '+h+'. מה היקפו?', answer:2*(w+h), displayAnswer:2*(w+h) };
+  if(mode==='area') return { prompt:'מלבן ברוחב '+ltr(w)+' ובאורך '+ltr(h)+'. מה שטחו?', answer:w*h, displayAnswer:w*h };
+  return { prompt:'מלבן ברוחב '+ltr(w)+' ובאורך '+ltr(h)+'. מה היקפו?', answer:2*(w+h), displayAnswer:2*(w+h) };
 };
 CG.spaceDirectionMCQ = () => {
-  const dirs=['צפון','דרום','מזרח','מערב'];
-  const dist=ri(2,9);
-  return mcqFromAnswer('החללית טסה '+dist+' יחידות '+pick(dirs)+'. כמה יחידות עליה לחזור כדי להגיע למוצא?', dist, ()=>dist+pick([-2,-1,1,2]), 4);
+  const axisPairs = [['צפון','דרום'],['מזרח','מערב']];
+  const axis = pick(axisPairs);
+  const d1=ri(3,15), d2=ri(1,15);
+  const sameDir = Math.random()<0.5;
+  const dir1 = pick(axis);
+  const dir2 = sameDir ? dir1 : axis.find(d=>d!==dir1);
+  const net = sameDir ? d1+d2 : Math.abs(d1-d2);
+  return mcqFromAnswer('החללית טסה '+ltr(d1)+' יחידות '+dir1+', ולאחר מכן '+ltr(d2)+' יחידות '+dir2+'. כמה יחידות היא מהבסיס כעת?',
+    net, ()=>Math.max(0,net+pick([-3,-2,-1,1,2,3])), 4);
 };
 
 /* ---- גיאומטריה אנליטית / קואורדינטות ---- */
 CG.coordinateReadMCQ = () => {
-  const x=ri(-5,5), y=ri(-5,5);
-  return mcqFromAnswer('מה הקואורדינטות של נקודה שהוזזה מ-(0,0) ב-'+x+' ימינה ו-'+y+' מעלה?', '('+x+','+y+')', ()=>'('+(x+ri(-2,2))+','+(y+ri(-2,2))+')', 4);
+  const dx=ri(1,6), dy=ri(1,6);
+  const signX = Math.random()<0.5? 1 : -1, signY = Math.random()<0.5? 1 : -1;
+  const x = dx*signX, y = dy*signY;
+  const dirX = signX>0? 'ימינה':'שמאלה', dirY = signY>0? 'מעלה':'מטה';
+  const correct = '('+x+','+y+')';
+  return mcqFromAnswer('מה הקואורדינטות של נקודה שהוזזה מ-'+ltr('(0,0)')+' ב-'+ltr(dx)+' יחידות '+dirX+' ו-'+ltr(dy)+' יחידות '+dirY+'?',
+    correct, ()=>'('+(x+pick([-2,-1,1,2]))+','+(y+pick([-2,-1,1,2]))+')', 4);
 };
+const PYTH_LEGS = [[3,4,5],[6,8,10],[5,12,13],[8,15,17],[9,12,15],[7,24,25]];
 CG.distanceMidpointType = (mode) => () => {
-  const x1=ri(-6,6), y1=ri(-6,6), x2=ri(-6,6), y2=ri(-6,6);
-  if(mode==='midpoint') return { prompt:'אמצע הקטע בין ('+x1+','+y1+') ל-('+x2+','+y2+') הוא?', answer:'('+((x1+x2)/2)+','+((y1+y2)/2)+')', displayAnswer:'('+((x1+x2)/2)+','+((y1+y2)/2)+')' };
-  const d2=(x2-x1)**2+(y2-y1)**2;
-  return { prompt:'המרחק בין ('+x1+','+y1+') ל-('+x2+','+y2+') בריבוע הוא?', answer:d2, displayAnswer:d2 };
+  if(mode==='midpoint'){
+    const mx=ri(-6,6), my=ri(-6,6);
+    const dx=ri(1,6)*2, dy=ri(1,6)*2;
+    const x1=mx-dx/2, y1=my-dy/2, x2=mx+dx/2, y2=my+dy/2;
+    const correct = '('+mx+','+my+')';
+    return { prompt:'אמצע הקטע בין '+ltr('('+x1+','+y1+')')+' ל-'+ltr('('+x2+','+y2+')')+' הוא?',
+      answer: correct, displayAnswer: correct,
+      check: v=>{ const vv=v.replace(/[()\s]/g,''); return vv===(mx+','+my); } };
+  }
+  const t = pick(PYTH_LEGS);
+  const [legA,legB,hyp] = Math.random()<0.5? [t[0],t[1],t[2]] : [t[1],t[0],t[2]];
+  const x1=ri(-4,4), y1=ri(-4,4);
+  const x2 = x1+legA*pick([1,-1]), y2=y1+legB*pick([1,-1]);
+  return { prompt:'המרחק בין '+ltr('('+x1+','+y1+')')+' ל-'+ltr('('+x2+','+y2+')')+' הוא?', answer:hyp, displayAnswer:hyp };
 };
 CG.angleDefenderType = () => {
   const sides = pick([3,4,5,6]);
@@ -1039,64 +1034,76 @@ CG.angleDefenderType = () => {
   const known = Array.from({length:sides-1},()=>ri(50,150));
   const last = sumAngles - known.reduce((a,b)=>a+b,0);
   if(last<=0 || last>=170) return CG.angleDefenderType();
-  return { prompt:'במצולע בעל '+sides+' צלעות, סכום הזוויות הוא '+sumAngles+'°. אם '+(sides-1)+' זוויות הן: '+known.join('°, ')+'°, מה הזווית האחרונה?', answer:last, displayAnswer:last };
+  return { prompt:'במצולע בעל '+ltr(sides)+' צלעות, סכום הזוויות הוא '+ltr(sumAngles+'°')+'. אם '+ltr(sides-1)+' מהזוויות הן '+ltr(known.join('°, ')+'°')+', מה הזווית האחרונה?', answer:last, displayAnswer:last };
 };
 
 /* ---- פונקציות / גרפים ---- */
 CG.linearGraphMCQ = () => {
   const m=ri(-4,4)||1, b=ri(-5,5);
   const correct = 'y = '+(m===1?'':m===-1?'−':m)+'x'+(b===0?'':(b>0?' + '+b:' − '+Math.abs(b)));
-  return mcqFromAnswer('גרף עם שיפוע '+m+' וחיתוך עם ציר y בנקודה '+b+' — מה המשוואה?', correct,
-    ()=>'y = '+(ri(-4,4))+'x + '+ri(-5,5), 4);
+  return mcqFromAnswer('גרף עם שיפוע '+ltr(m)+' וחיתוך עם ציר y בנקודה '+ltr(b)+' — מה המשוואה?', correct,
+    ()=>{ const mm=ri(-4,4)||1, bb=ri(-5,5); return 'y = '+(mm===1?'':mm===-1?'−':mm)+'x'+(bb===0?'':(bb>0?' + '+bb:' − '+Math.abs(bb))); }, 4);
 };
 CG.slopeInterceptType = (mode) => () => {
   const x1=ri(-5,5), y1=ri(-10,10), x2=ri(-5,5);
   if(x2===x1) return CG.slopeInterceptType(mode)();
   const m = ri(-5,5)||1;
   const y2 = y1 + m*(x2-x1);
-  if(mode==='slope') return { prompt:'מצאו שיפוע הישר העובר בנקודות ('+x1+','+y1+') ו-('+x2+','+y2+')', answer:m, displayAnswer:m };
-  return { prompt:'ישר עם שיפוע '+m+' עובר בנקודה ('+x1+','+y1+'). מה חיתוכו עם ציר y? (y = mx+b)', answer: y1-m*x1, displayAnswer: y1-m*x1 };
+  if(mode==='slope') return { prompt:'מצאו שיפוע הישר העובר בנקודות '+ltr('('+x1+','+y1+')')+' ו-'+ltr('('+x2+','+y2+')'), answer:m, displayAnswer:m };
+  return { prompt:'ישר עם שיפוע '+ltr(m)+' עובר בנקודה '+ltr('('+x1+','+y1+')')+'. מה חיתוכו עם ציר y? '+ltr('(y = mx+b)'), answer: y1-m*x1, displayAnswer: y1-m*x1 };
 };
 CG.quadraticVertexMCQ = () => {
   const h=ri(-5,5), k=ri(-8,8);
   const correct='('+h+','+k+')';
-  return mcqFromAnswer('פרבולה y = (x − '+h+')² + '+k+' — מה קדקודה?', correct, ()=>'('+(h+ri(-2,2))+','+(k+ri(-2,2))+')', 4);
+  const q = mcqFromAnswer('פרבולה '+ltr('y = (x − '+h+')² + '+k)+' — מה קדקודה?', correct, ()=>'('+(h+pick([-2,-1,1,2]))+','+(k+pick([-2,-1,1,2]))+')', 4);
+  q.check = v => v.replace(/[()\s]/g,'') === correct.replace(/[()\s]/g,'');
+  return q;
 };
 CG.functionHuntMCQ = (level) => () => level>=2 ? CG.quadraticVertexMCQ() : CG.linearGraphMCQ();
+CG.quadraticInvestigateMCQ = () => {
+  const h=ri(-5,5), k=ri(-8,8); const a=pick([1,-1,2,-2]);
+  const mode = pick(['vertex','axis','opens','yint']);
+  const fnStr = 'y = '+(a===1?'':a===-1?'−':a)+'(x − '+h+')² + '+k;
+  if(mode==='vertex'){ const correct='('+h+','+k+')'; return mcqFromAnswer('פרבולה '+ltr(fnStr)+' — מה קדקודה?', correct, ()=>'('+(h+pick([-2,-1,1,2]))+','+(k+pick([-2,-1,1,2]))+')', 4); }
+  if(mode==='axis'){ const correct='x = '+h; return mcqFromAnswer('פרבולה '+ltr(fnStr)+' — מה ציר הסימטריה שלה?', correct, ()=>'x = '+(h+pick([-2,-1,1,2])), 4); }
+  if(mode==='opens'){ const correct = a>0? 'נפתחת למעלה' : 'נפתחת למטה'; return mcqFromAnswer('פרבולה '+ltr(fnStr)+' — לאיזה כיוון היא נפתחת?', correct, ()=>pick(['נפתחת למעלה','נפתחת למטה']), 2); }
+  const yint = a*h*h+k; return mcqFromAnswer('פרבולה '+ltr(fnStr)+' — מה חיתוכה עם ציר y (x=0)?', yint, ()=>yint+pick([-4,-2,2,4]), 4);
+};
 CG.transformationMCQ = () => {
   const moves = [
     ['הזזה ימינה ב-3','f(x − 3)'],['הזזה שמאלה ב-2','f(x + 2)'],['הזזה למעלה ב-4','f(x) + 4'],
     ['הזזה למטה ב-1','f(x) − 1'],['שיקוף לפי ציר x','−f(x)'],['מתיחה אנכית כפול 2','2·f(x)']
   ];
   const m = pick(moves);
-  return mcqFromAnswer('איזו פעולה מתארת את '+m[1]+'?', m[0], ()=>pick(moves)[0], 4);
+  return mcqFromAnswer('איזו פעולה מתארת את '+ltr(m[1])+'?', m[0], ()=>pick(moves)[0], 4);
 };
 
 /* ---- הסתברות / סטטיסטיקה ---- */
 CG.probabilityBasicType = () => {
   const total=ri(6,12), fav=ri(1,total-1);
-  return { prompt:'בכלי יש '+total+' כדורים, '+fav+' מהם אדומים. מה ההסתברות לשלוף כדור אדום? (כתוב כשבר n/d)', answer: fmtFrac(fav,total), displayAnswer: fmtFrac(fav,total) };
+  const ans = fmtFrac(fav,total);
+  return { prompt:'בכלי יש '+ltr(total)+' כדורים, '+ltr(fav)+' מהם אדומים. מה ההסתברות לשלוף כדור אדום? (כתבו כשבר n/d)', answer: ans, displayAnswer: ans,
+    check: v => Math.abs(parseFracOrPct(v) - fav/total) < 0.02 };
 };
 CG.probabilityCondType = () => {
   const total=ri(8,14), fav=ri(2,6);
   const p = (fav/total).toFixed(2);
-  return { prompt:'הסתברות לאירוע A היא '+fav+'/'+total+'. מה ההסתברות בעשרוני (2 ספרות)?', answer:p, displayAnswer:p,
+  return { prompt:'ההסתברות לאירוע A היא '+ltr(fav+'/'+total)+'. מה ההסתברות בעשרוני (2 ספרות)?', answer:p, displayAnswer:p,
     check:v=>Math.abs(parseFloat(v)-parseFloat(p))<0.02 };
 };
 CG.statsMCQ = () => {
   const arr = Array.from({length:5},()=>ri(1,20)).sort((a,b)=>a-b);
-  const mean = (arr.reduce((a,b)=>a+b,0)/arr.length);
-  return mcqFromAnswer('עבור הנתונים ['+arr.join(', ')+'] — מה החציון?', arr[2], ()=>pick(arr), 4);
+  return mcqFromAnswer('עבור הנתונים '+ltr('['+arr.join(', ')+']')+' — מה החציון?', arr[2], ()=>pick(arr.filter(v=>v!==arr[2])), 4);
 };
 CG.normalCurveType = () => {
   const mean=ri(50,100), sd=pick([5,10,15]); const x=mean+sd*pick([-2,-1,1,2]);
   const z=(x-mean)/sd;
-  return { prompt:'ממוצע = '+mean+', סטיית תקן = '+sd+'. מה ציון התקן (z) של x = '+x+'?', answer:z, displayAnswer:z };
+  return { prompt:'ממוצע = '+ltr(mean)+', סטיית תקן = '+ltr(sd)+'. מה ציון התקן (z) של '+ltr('x = '+x)+'?', answer:z, displayAnswer:z };
 };
 CG.regressionMCQ = () => {
   const m=ri(1,5), b=ri(0,10);
   const x=ri(1,10); const y=m*x+b;
-  return mcqFromAnswer('קו רגרסיה: y = '+m+'x + '+b+'. מה הניבוי עבור x = '+x+'?', y, ()=>y+pick([-m,m,-2*m,2*m]), 4);
+  return mcqFromAnswer('קו רגרסיה: '+ltr('y = '+m+'x + '+b)+'. מה הניבוי עבור '+ltr('x = '+x)+'?', y, ()=>y+pick([-m,m,-2*m,2*m]), 4);
 };
 
 /* ---- טריגונומטריה ---- */
@@ -1110,7 +1117,13 @@ CG.trigWheelMCQ = () => {
   const deg = pick(TRIG_SPECIAL); const fn = pick(['sin','cos','tan']);
   if(fn==='tan' && deg===90) return CG.trigWheelMCQ();
   const ans = trigVal(fn, deg);
-  return mcqFromAnswer(fn+'('+deg+'°) = ?', ans, ()=>trigVal(pick(['sin','cos','tan']), pick(TRIG_SPECIAL)), 4);
+  const q = mcqFromAnswer(ltr(fn+'('+deg+'°) = ?'), ans, ()=>{
+    let dfn,ddeg,dv;
+    do{ dfn=pick(['sin','cos','tan']); ddeg=pick(TRIG_SPECIAL); dv=(dfn==='tan'&&ddeg===90)?null:trigVal(dfn,ddeg); }while(dv===null);
+    return dv;
+  }, 4);
+  q.check = v => Math.abs(parseFloat(v)-ans) < 0.02;
+  return q;
 };
 CG.trigIdentityMatch = (n=5) => {
   const pairs = shuffle([
@@ -1126,42 +1139,49 @@ CG.trigIdentityMatch = (n=5) => {
 };
 CG.logEquationType = () => {
   const base=pick([2,3,5,10]); const exp=ri(1,4);
-  return { prompt:'log'+sub(base)+'( x ) = '+exp+'  · מצאו x', answer: Math.pow(base,exp), displayAnswer: Math.pow(base,exp) };
+  return { prompt: ltr('log'+sub(base)+'(x) = '+exp)+'  · מצאו x', answer: Math.pow(base,exp), displayAnswer: Math.pow(base,exp) };
 };
-function sub(n){ return '₂₃₅₇₈₉₀₁₄₆'.length? toSubscript(n) : '_'+n; }
+function sub(n){ return toSubscript(n); }
 function toSubscript(n){ const map={'0':'₀','1':'₁','2':'₂','3':'₃','4':'₄','5':'₅','6':'₆','7':'₇','8':'₈','9':'₉'}; return String(n).split('').map(c=>map[c]||c).join(''); }
 CG.expEquationType = () => {
   const base=pick([2,3,5]); const exp=ri(1,5);
-  return { prompt: base+'^x = '+Math.pow(base,exp)+'  · מצאו x', answer: exp, displayAnswer: exp };
+  return { prompt: ltr(base+'^x = '+Math.pow(base,exp))+'  · מצאו x', answer: exp, displayAnswer: exp };
 };
 CG.logRulesMCQ = () => {
   const rules=[
-    ['log(a·b)','log a + log b'],['log(a/b)','log a − log b'],['log(aⁿ)','n·log a'],['log_a(a)','1'],['log_a(1)','0']
+    ['log(a·b)','log a + log b'],['log(a/b)','log a − log b'],['log(aⁿ)','n·log a'],['logₐ(a)','1'],['logₐ(1)','0']
   ];
   const r=pick(rules);
-  return mcqFromAnswer('מה שווה ל-'+r[0]+'?', r[1], ()=>pick(rules)[1], 4);
+  return mcqFromAnswer('מה שווה ל-'+ltr(r[0])+'?', r[1], ()=>pick(rules)[1], 4);
 };
 
 /* ---- חדו"א: נגזרות / אינטגרלים / גבולות ---- */
 CG.derivativePowerType = () => {
   const n=ri(2,6); const coef=ri(1,6);
-  return { prompt:'הנגזרת של f(x) = '+(coef===1?'':coef)+'x^'+n+' היא? (כתבו רק את המקדם של x^'+(n-1)+')', answer: coef*n, displayAnswer: coef*n+'x^'+(n-1) };
+  return { prompt:'הנגזרת של '+ltr('f(x) = '+(coef===1?'':coef)+'x^'+n)+' היא? (כתבו רק את המקדם של '+ltr('x^'+(n-1))+')', answer: coef*n, displayAnswer: ltr(coef*n+'x^'+(n-1)) };
 };
 CG.derivativeMCQ = () => {
   const funcs = [
     ['x³','3x²'],['x⁴','4x³'],['sin x','cos x'],['cos x','−sin x'],['eˣ','eˣ'],['ln x','1/x'],['x²','2x'],['5x','5']
   ];
   const f=pick(funcs);
-  return mcqFromAnswer('הנגזרת של f(x) = '+f[0]+' היא?', f[1], ()=>pick(funcs)[1], 4);
+  return mcqFromAnswer('הנגזרת של '+ltr('f(x) = '+f[0])+' היא?', f[1], ()=>pick(funcs)[1], 4);
 };
+CG.derivativeProductType = () => {
+  const a=ri(1,5), m=ri(1,4), b=ri(1,5), n=ri(1,4);
+  const coef = a*b*(m+n);
+  return { prompt:'לפי כלל המכפלה, הנגזרת של '+ltr('f(x) = '+(a===1?'':a)+'x^'+m+' · '+(b===1?'':b)+'x^'+n)+' היא? (כתבו רק את המקדם של '+ltr('x^'+(m+n-1))+')',
+    answer: coef, displayAnswer: ltr(coef+'x^'+(m+n-1)) };
+};
+CG.derivativeMixedType = () => Math.random()<0.5 ? CG.derivativePowerType() : CG.derivativeProductType();
 CG.integralPowerType = () => {
   const n=ri(1,5);
-  return { prompt:'∫ x^'+n+' dx = ? (כתבו את המכנה של x^'+(n+1)+'/...)', answer:n+1, displayAnswer:'x^'+(n+1)+'/'+(n+1)+' + C' };
+  return { prompt: ltr('∫ x^'+n+' dx = ?')+' (כתבו את המכנה של '+ltr('x^'+(n+1)+'/...')+')', answer:n+1, displayAnswer:ltr('x^'+(n+1)+'/'+(n+1)+' + C') };
 };
 CG.integralMCQ = () => {
   const items=[['2x','x² + C'],['cos x','sin x + C'],['sin x','−cos x + C'],['eˣ','eˣ + C'],['1/x','ln|x| + C'],['3x²','x³ + C']];
   const it=pick(items);
-  return mcqFromAnswer('∫ '+it[0]+' dx = ?', it[1], ()=>pick(items)[1], 4);
+  return mcqFromAnswer(ltr('∫ '+it[0]+' dx = ?'), it[1], ()=>pick(items)[1], 4);
 };
 CG.limitMCQ = () => {
   const a=ri(1,6);
@@ -1172,23 +1192,26 @@ CG.limitMCQ = () => {
     ['lim(x→'+a+') (x + '+a+')', String(2*a)],
   ];
   const it=pick(items);
-  return mcqFromAnswer(it[0]+' = ?', it[1], ()=>String(pick([0,1,2*a,a,a*a])), 4);
+  return mcqFromAnswer(ltr(it[0])+' = ?', it[1], ()=>String(pick([0,1,2*a,a,a*a])), 4);
 };
 CG.vectorAddType = () => {
   const x1=ri(-6,6), y1=ri(-6,6), x2=ri(-6,6), y2=ri(-6,6);
-  return { prompt:'(' +x1+','+y1+') + ('+x2+','+y2+') = ? (כתבו x,y בלי רווח)', answer:(x1+x2)+','+(y1+y2), displayAnswer:'('+(x1+x2)+','+(y1+y2)+')',
-    check: v=> v.replace(/[()\s]/g,'')===(x1+x2)+','+(y1+y2) };
+  const sumStr=(x1+x2)+','+(y1+y2);
+  return { prompt: ltr('('+x1+','+y1+') + ('+x2+','+y2+')')+' = ? (כתבו x,y בלי רווח)', answer:sumStr, displayAnswer:'('+sumStr+')',
+    check: v=> v.replace(/[()\s]/g,'')===sumStr };
 };
 CG.vectorDotMCQ = () => {
   const x1=ri(-5,5), y1=ri(-5,5), x2=ri(-5,5), y2=ri(-5,5);
   const ans = x1*x2+y1*y2;
-  return mcqFromAnswer('המכפלה הסקלרית של ('+x1+','+y1+') ו-('+x2+','+y2+') היא?', ans, ()=>ans+pick([-4,-2,2,4]), 4);
+  const q = mcqFromAnswer('המכפלה הסקלרית של '+ltr('('+x1+','+y1+')')+' ו-'+ltr('('+x2+','+y2+')')+' היא?', ans, ()=>ans+pick([-4,-2,2,4]), 4);
+  q.check = v => parseFloat(v)===ans;
+  return q;
 };
 CG.sequenceType = (kind) => () => {
   const a1=ri(1,10);
-  if(kind==='geo'){ const r=pick([2,3]); const n=ri(2,5); return { prompt:'סדרה הנדסית: '+a1+', '+(a1*r)+', '+(a1*r*r)+', ... מה האיבר ה-'+n+'?', answer: a1*Math.pow(r,n-1), displayAnswer: a1*Math.pow(r,n-1) }; }
+  if(kind==='geo'){ const r=pick([2,3]); const n=ri(2,5); return { prompt:'סדרה הנדסית: '+ltr(a1+', '+(a1*r)+', '+(a1*r*r)+', ...')+' מה האיבר ה-'+ltr(n)+'?', answer: a1*Math.pow(r,n-1), displayAnswer: a1*Math.pow(r,n-1) }; }
   const d=ri(2,8); const n=ri(3,8);
-  return { prompt:'סדרה חשבונית: '+a1+', '+(a1+d)+', '+(a1+2*d)+', ... מה האיבר ה-'+n+'?', answer: a1+(n-1)*d, displayAnswer: a1+(n-1)*d };
+  return { prompt:'סדרה חשבונית: '+ltr(a1+', '+(a1+d)+', '+(a1+2*d)+', ...')+' מה האיבר ה-'+ltr(n)+'?', answer: a1+(n-1)*d, displayAnswer: a1+(n-1)*d };
 };
 
 /* =========================================================================
@@ -1264,7 +1287,8 @@ function mountMarathon(stage, e){
     let answered=false;
     function submit(){
       if(answered || destroyed) return; answered=true;
-      const ok = parseFloat((input.value||'').replace(',','.'))===q.answer;
+      const val = (input.value||'').replace(',','.');
+      const ok = q.check ? q.check(val) : parseFloat(val)===parseFloat(q.answer);
       if(ok){ score+=10; Sound.correct(); } else { timeLeft=Math.max(0,timeLeft-3); Sound.wrong(); }
       nextQ();
     }
@@ -1349,10 +1373,10 @@ CURRICULUM['א'] = [
     jeopardyTopic('חיסור', Array.from({length:5},(_,i)=>CG.addSubType(10+i*4,true))),
     jeopardyTopic('צורות', Array.from({length:5},()=>CG.shapeMCQ)),
   ]}},
-  {id:'a15', engineId:'balloons', name:'בלון — השלמה ל-10', skill:'השלמה ל-10', emoji:'🎈', color:'from-rose-400 to-pink-500', config:{gen:()=>{const a=ri(1,9); return {prompt:a+' + ? = 10', answer:10-a, displayAnswer:10-a};}}},
-  {id:'a16', engineId:'math-ninja', name:'נינג׳ה — זוגי/אי-זוגי', skill:'זוגי ואי-זוגי', emoji:'⚔️', color:'from-red-500 to-rose-600', config:{gen:()=>{const n=ri(1,30); return {prompt:'האם '+n+' זוגי? (1=כן, 0=לא)', answer:(n%2===0?1:0), displayAnswer:(n%2===0?'כן (1)':'לא (0)')};}}},
+  {id:'a15', engineId:'balloons', name:'בלון — השלמה ל-10', skill:'השלמה ל-10', emoji:'🎈', color:'from-rose-400 to-pink-500', config:{gen:()=>{const a=ri(1,9); return {prompt:ltr(a+' + ? = 10'), answer:10-a, displayAnswer:10-a};}}},
+  {id:'a16', engineId:'math-ninja', name:'נינג׳ה — זוגי/אי-זוגי', skill:'זוגי ואי-זוגי', emoji:'⚔️', color:'from-red-500 to-rose-600', config:{gen:()=>{const n=ri(1,30); return {prompt:'האם '+ltr(n)+' זוגי? (1=כן, 0=לא)', answer:(n%2===0?1:0), displayAnswer:(n%2===0?'כן (1)':'לא (0)')};}}},
   {id:'a17', engineId:'mental-marathon', name:'מרתון — חיסור', skill:'חיסור עד 20', emoji:'⚡', color:'from-rose-500 to-orange-600', config:{gen:CG.addSubType(20,true)}},
-  {id:'a18', engineId:'treasure-chest', name:'תיבת האוצר — דפוסים', skill:'דפוסי מספרים', emoji:'💎', color:'from-amber-500 to-yellow-600', config:{gen:()=>{const a=ri(1,10),d=ri(1,5); return {prompt:'מה הבא בדפוס: '+a+', '+(a+d)+', '+(a+2*d)+', ?', answer:a+3*d, displayAnswer:a+3*d};}}},
+  {id:'a18', engineId:'treasure-chest', name:'תיבת האוצר — דפוסים', skill:'דפוסי מספרים', emoji:'💎', color:'from-amber-500 to-yellow-600', config:{gen:()=>{const a=ri(1,10),d=ri(1,5); return {prompt:'מה הבא בדפוס: '+ltr(a+', '+(a+d)+', '+(a+2*d)+', ?'), answer:a+3*d, displayAnswer:a+3*d};}}},
   {id:'a19', engineId:'quiz-buzzer', name:'חידון — צורות ומספרים', skill:'צורות ומספרים', emoji:'🎙️', color:'from-blue-400 to-cyan-500', config:{gen:()=>Math.random()<0.5?CG.addSubType(15,true)():CG.shapeMCQ()}},
   {id:'a20', engineId:'memory-duel', name:'דו-קרב זיכרון — צורות', skill:'צורות', emoji:'🧠', color:'from-violet-400 to-purple-500', config:{pairCount:4, pairsGen:(n)=>{const shapes=[['⬛','ריבוע'],['🔺','משולש'],['⭕','עיגול'],['▬','מלבן'],['⬠','מחומש']]; return shuffle(shapes).slice(0,n).map((s,i)=>({id:i,left:s[0],right:s[1]}));}}},
 ];
@@ -1379,9 +1403,9 @@ CURRICULUM['ב'] = [
   ]}},
   {id:'b16', engineId:'pizza-fractions', name:'פיצה — שלישים', skill:'שלישים ורבעים', emoji:'🍕', color:'from-orange-400 to-rose-500', config:{gen:CG.fractionVisualMCQ}},
   {id:'b17', engineId:'multiplication-race', name:'מירוץ כפל — ×3,×4', skill:'כפל ב-3,4', emoji:'🏎️', color:'from-amber-400 to-orange-500', config:{gen:CG.mulTable(4)}},
-  {id:'b18', engineId:'mental-marathon', name:'מרתון — השלמות', skill:'השלמה ל-100', emoji:'⚡', color:'from-rose-500 to-orange-600', config:{gen:()=>{const a=ri(10,90); return {prompt:a+' + ? = 100', answer:100-a, displayAnswer:100-a};}}},
+  {id:'b18', engineId:'mental-marathon', name:'מרתון — השלמות', skill:'השלמה ל-100', emoji:'⚡', color:'from-rose-500 to-orange-600', config:{gen:()=>{const a=ri(10,90); return {prompt:ltr(a+' + ? = 100'), answer:100-a, displayAnswer:100-a};}}},
   {id:'b19', engineId:'balloons', name:'בלון — חיסור עד 100', skill:'חיסור עד 100', emoji:'🎈', color:'from-rose-400 to-pink-500', config:{gen:CG.addSubType(100,true)}},
-  {id:'b20', engineId:'quiz-buzzer', name:'חידון — כסף וזמן', skill:'כסף וזמן', emoji:'🎙️', color:'from-blue-400 to-cyan-500', config:{gen:()=>{const a=ri(1,12),b=ri(1,59); return {prompt:'אם השעה '+a+':00, מה תהיה השעה בעוד שעה? (כתבו רק את המספר)', answer:(a%12)+1, displayAnswer:(a%12)+1};}}},
+  {id:'b20', engineId:'quiz-buzzer', name:'חידון — כסף וזמן', skill:'כסף וזמן', emoji:'🎙️', color:'from-blue-400 to-cyan-500', config:{gen:()=>{const a=ri(1,12); return {prompt:'אם השעה '+ltr(a+':00')+', מה תהיה השעה בעוד שעה? (כתבו רק את המספר)', answer:(a%12)+1, displayAnswer:(a%12)+1};}}},
 ];
 
 CURRICULUM['ג'] = [
@@ -1392,12 +1416,12 @@ CURRICULUM['ג'] = [
   {id:'c5', engineId:'mental-marathon', name:'מרתון — כפל/חילוק', skill:'כפל וחילוק', emoji:'⚡', color:'from-rose-500 to-orange-600', config:{gen:CG.mulDivMixed(10)}},
   {id:'c6', engineId:'balloons', name:'בלון — חילוק', skill:'חילוק', emoji:'🎈', color:'from-rose-400 to-pink-500', config:{gen:CG.divType(10)}},
   {id:'c7', engineId:'mystery-number', name:'המספר הנעלם עד 1000', skill:'תחושת מספר', emoji:'🔍', color:'from-emerald-400 to-teal-500', config:{min:1,max:1000}},
-  {id:'c8', engineId:'treasure-chest', name:'תיבת האוצר — 2 שלבים', skill:'בעיות דו-שלביות', emoji:'💎', color:'from-amber-500 to-yellow-600', config:{gen:()=>{const a=ri(2,10),b=ri(2,10),c=ri(1,5); return {prompt:'יש '+a+' קופסאות עם '+b+' פריטים בכל אחת. נשארו '+c+'. כמה פריטים בסך הכל?', answer:a*b+c, displayAnswer:a*b+c};}}},
+  {id:'c8', engineId:'treasure-chest', name:'תיבת האוצר — 2 שלבים', skill:'בעיות דו-שלביות', emoji:'💎', color:'from-amber-500 to-yellow-600', config:{gen:()=>{const a=ri(2,10),b=ri(2,10),c=ri(1,5); return {prompt:'יש '+ltr(a)+' קופסאות עם '+ltr(b)+' פריטים בכל אחת, ועוד '+ltr(c)+' פריטים בודדים בצד. כמה פריטים בסך הכל?', answer:a*b+c, displayAnswer:a*b+c};}}},
   {id:'c9', engineId:'memory-duel', name:'דו-קרב זיכרון — חילוק', skill:'חילוק↔מנה', emoji:'🧠', color:'from-violet-400 to-purple-500', config:{pairCount:5, pairsGen:(n)=>Array.from({length:n},(_,i)=>{const b=ri(2,9),ans=ri(2,9); return {id:i,left:(b*ans)+'÷'+b,right:String(ans)};})}},
   {id:'c10', engineId:'quiz-buzzer', name:'חידון כיתתי — כפל וחילוק', skill:'כפל וחילוק', emoji:'🎙️', color:'from-blue-400 to-cyan-500', config:{gen:CG.mulDivMixed(10)}},
   {id:'c11', engineId:'math-bingo', name:'בינגו — לוח הכפל', skill:'לוח הכפל', emoji:'🎯', color:'from-amber-400 to-orange-500', config:{gen:CG.mulTable(10), pool:Array.from({length:80},(_,i)=>i+1)}},
   {id:'c12', engineId:'speed-showdown', name:'דו-קרב מהירות — כפל/חילוק', skill:'כפל וחילוק', emoji:'🏃', color:'from-cyan-500 to-blue-500', config:{gen:CG.mulDivMixed(10)}},
-  {id:'c13', engineId:'true-false-race', name:'נכון/לא-נכון — שברים', skill:'שברים שווי-ערך', emoji:'✅', color:'from-emerald-500 to-teal-600', config:{gen:()=>{const d=pick([2,4,6,8]); const n=ri(1,d-1); const k=ri(2,3); const eq=Math.random()<0.5; return {prompt:fmtFrac(n,d)+' = '+(eq?fmtFrac(n*k,d*k):fmtFrac(n*k+1,d*k))+'?', isTrueFalse:true, answer:eq};}}},
+  {id:'c13', engineId:'true-false-race', name:'נכון/לא-נכון — שברים', skill:'שברים שווי-ערך', emoji:'✅', color:'from-emerald-500 to-teal-600', config:{gen:()=>{const d=pick([2,4,6,8]); const n=ri(1,d-1); const k=ri(2,3); const eq=Math.random()<0.5; return {prompt:ltr(fmtFrac(n,d)+' = '+(eq?fmtFrac(n*k,d*k):fmtFrac(n*k+1,d*k))+'?'), isTrueFalse:true, answer:eq};}}},
   {id:'c14', engineId:'wheel-spinner', name:'גלגל המזל — מעורב', skill:'כפל/חילוק/שברים', emoji:'🎡', color:'from-fuchsia-500 to-pink-500', config:{segments:makeWheel([CG.mulTable(9),CG.divType(9),CG.fractionVisualMCQ,CG.mulTable(7),CG.divType(7),CG.equivFractionMCQ,CG.mulTable(8),CG.divType(8)])}},
   {id:'c15', engineId:'jeopardy-board', name:'לוח השאלות — כפל/חילוק/שברים', skill:'מעורב', emoji:'🏆', color:'from-indigo-500 to-blue-600', config:{topics:[
     jeopardyTopic('כפל', Array.from({length:5},(_,i)=>CG.mulTable(5+i))),
@@ -1405,24 +1429,24 @@ CURRICULUM['ג'] = [
     jeopardyTopic('שברים', Array.from({length:5},()=>CG.fractionVisualMCQ)),
   ]}},
   {id:'c16', engineId:'shape-sorter', name:'ממיין צורות — מצולעים', skill:'מצולעים', emoji:'📐', color:'from-green-400 to-teal-500', config:{gen:CG.shapeMCQ}},
-  {id:'c17', engineId:'pizza-fractions', name:'פיצה — השוואת שברים', skill:'השוואת שברים', emoji:'🍕', color:'from-orange-400 to-rose-500', config:{gen:CG.equivFractionMCQ}},
+  {id:'c17', engineId:'pizza-fractions', name:'פיצה — שברים שווי ערך', skill:'שברים שווי ערך', emoji:'🍕', color:'from-orange-400 to-rose-500', config:{gen:CG.equivFractionMCQ}},
   {id:'c18', engineId:'mental-marathon', name:'מרתון — חזרה מעורבת', skill:'חזרה כללית', emoji:'⚡', color:'from-rose-500 to-orange-600', config:{gen:CG.marathonMixed(1)}},
   {id:'c19', engineId:'multiplication-race', name:'מירוץ כפל — מספרים גדולים', skill:'כפל מתקדם', emoji:'🏎️', color:'from-amber-400 to-orange-500', config:{gen:CG.mulType(12)}},
-  {id:'c20', engineId:'quiz-buzzer', name:'חידון — מדידה ויחידות', skill:'מדידה', emoji:'🎙️', color:'from-blue-400 to-cyan-500', config:{gen:()=>{const m=ri(1,9); return {prompt:m+' מטר = כמה ס״מ?', answer:m*100, displayAnswer:m*100};}}},
+  {id:'c20', engineId:'quiz-buzzer', name:'חידון — מדידה ויחידות', skill:'מדידה', emoji:'🎙️', color:'from-blue-400 to-cyan-500', config:{gen:()=>{const m=ri(1,9); return {prompt:ltr(m)+' מטר = כמה ס״מ?', answer:m*100, displayAnswer:m*100};}}},
 ];
 
 CURRICULUM['ד'] = [
   {id:'d1', engineId:'fraction-bridge', name:'גשר השברים — שבר↔עשרוני', skill:'שבר ועשרוני', emoji:'🌉', color:'from-sky-400 to-emerald-500', config:{gen:CG.fractionToDecimalType}},
-  {id:'d2', engineId:'pizza-fractions', name:'פיצה שברים — חיבור שברים', skill:'חיבור שברים', emoji:'🍕', color:'from-orange-400 to-rose-500', config:{gen:CG.fractionVisualMCQ}},
+  {id:'d2', engineId:'pizza-fractions', name:'פיצה שברים — חיבור שברים', skill:'חיבור שברים', emoji:'🍕', color:'from-orange-400 to-rose-500', config:{gen:CG.fractionAddMCQ}},
   {id:'d3', engineId:'multiplication-race', name:'מירוץ כפל — כפל דו-ספרתי', skill:'כפל דו-ספרתי', emoji:'🏎️', color:'from-amber-400 to-orange-500', config:{gen:CG.mulType(20)}},
   {id:'d4', engineId:'space-explorer', name:'חוקר חלל — מרחק/כיוון', skill:'גיאומטריה ומרחב', emoji:'🚀', color:'from-slate-700 to-indigo-800', config:{gen:CG.spaceDirectionMCQ}},
   {id:'d5', engineId:'math-ninja', name:'נינג׳ה — עשרוניים', skill:'מספרים עשרוניים', emoji:'⚔️', color:'from-red-500 to-rose-600', config:{gen:CG.fractionToDecimalType}},
   {id:'d6', engineId:'mental-marathon', name:'מרתון חישוב — מעורב', skill:'חזרה מעורבת', emoji:'⚡', color:'from-rose-500 to-orange-600', config:{gen:CG.marathonMixed(2)}},
   {id:'d7', engineId:'mystery-number', name:'המספר הנעלם — כפולות', skill:'כפולות וגורמים', emoji:'🔍', color:'from-emerald-400 to-teal-500', config:{min:1,max:200}},
-  {id:'d8', engineId:'treasure-chest', name:'תיבת האוצר — רב-שלבי', skill:'בעיות רב-שלביות', emoji:'💎', color:'from-amber-500 to-yellow-600', config:{gen:()=>{const a=ri(2,9),b=ri(2,9),c=ri(2,9); return {prompt:'קנו '+a+' חברות, כל אחת '+b+' עפרונות. השתמשו ב-'+c+'. כמה נשארו?', answer:a*b-c, displayAnswer:a*b-c};}}},
+  {id:'d8', engineId:'treasure-chest', name:'תיבת האוצר — רב-שלבי', skill:'בעיות רב-שלביות', emoji:'💎', color:'from-amber-500 to-yellow-600', config:{gen:()=>{const a=ri(2,9),b=ri(2,9),c=ri(2,Math.min(8,a*b-1)); return {prompt:'קנו '+ltr(a)+' חברות, כל אחת קיבלה '+ltr(b)+' עפרונות. נתנו '+ltr(c)+' עפרונות לחברה אחרת. כמה עפרונות נשארו בסך הכל?', answer:a*b-c, displayAnswer:a*b-c};}}},
   {id:'d9', engineId:'memory-duel', name:'דו-קרב זיכרון — שבר↔עשרוני', skill:'שבר ועשרוני', emoji:'🧠', color:'from-violet-400 to-purple-500', config:{pairCount:5, pairsGen:(n)=>{const items=[['1/2','0.5'],['1/4','0.25'],['3/4','0.75'],['1/5','0.2'],['1/10','0.1'],['3/10','0.3']]; return shuffle(items).slice(0,n).map((it,i)=>({id:i,left:it[0],right:it[1]}));}}},
   {id:'d10', engineId:'quiz-buzzer', name:'חידון כיתתי — שברים/עשרוני', skill:'שברים ועשרוני', emoji:'🎙️', color:'from-blue-400 to-cyan-500', config:{gen:CG.fractionToDecimalType}},
-  {id:'d11', engineId:'math-bingo', name:'בינגו — עשרוניים', skill:'עשרוניים', emoji:'🎯', color:'from-amber-400 to-orange-500', config:{gen:CG.mulType(15), pool:Array.from({length:90},(_,i)=>i+5)}},
+  {id:'d11', engineId:'math-bingo', name:'בינגו — עשרוניים', skill:'עשרוניים', emoji:'🎯', color:'from-amber-400 to-orange-500', config:{gen:CG.decimalMulType, pool:Array.from({length:178},(_,i)=>Math.round((i*0.5+1)*10)/10)}},
   {id:'d12', engineId:'speed-showdown', name:'דו-קרב מהירות — מעורב', skill:'חזרה מעורבת', emoji:'🏃', color:'from-cyan-500 to-blue-500', config:{gen:CG.marathonMixed(2)}},
   {id:'d13', engineId:'true-false-race', name:'נכון/לא-נכון — שברים/עשרוני', skill:'שווי ערך', emoji:'✅', color:'from-emerald-500 to-teal-600', config:{gen:tfWrap(CG.fractionToDecimalType)}},
   {id:'d14', engineId:'wheel-spinner', name:'גלגל המזל — מעורב', skill:'חזרה מעורבת', emoji:'🎡', color:'from-fuchsia-500 to-pink-500', config:{segments:makeWheel([CG.fractionVisualMCQ,CG.mulType(15),CG.spaceDirectionMCQ,CG.fractionToDecimalType,CG.equivFractionMCQ,CG.divType(12),CG.perimeterAreaType('area'),CG.perimeterAreaType('perimeter')])}},
@@ -1441,7 +1465,7 @@ CURRICULUM['ד'] = [
 CURRICULUM['ה'] = [
   {id:'e1', engineId:'fraction-bridge', name:'גשר השברים — שבר↔אחוז↔עשרוני', skill:'שלושת הייצוגים', emoji:'🌉', color:'from-sky-400 to-emerald-500', config:{gen:CG.fractionPercentDecimalMCQ}},
   {id:'e2', engineId:'proportion-potions', name:'שיקויי פרופורציה — יחס בסיסי', skill:'יחס ופרופורציה', emoji:'🧪', color:'from-purple-500 to-fuchsia-600', config:{gen:CG.ratioType}},
-  {id:'e3', engineId:'pizza-fractions', name:'פיצה שברים — כפל שברים', skill:'כפל שברים', emoji:'🍕', color:'from-orange-400 to-rose-500', config:{gen:CG.fractionVisualMCQ}},
+  {id:'e3', engineId:'pizza-fractions', name:'פיצה שברים — כפל שברים', skill:'כפל שברים', emoji:'🍕', color:'from-orange-400 to-rose-500', config:{gen:CG.fractionMulMCQ}},
   {id:'e4', engineId:'multiplication-race', name:'מירוץ כפל — מספרים גדולים', skill:'כפל מתקדם', emoji:'🏎️', color:'from-amber-400 to-orange-500', config:{gen:CG.mulType(25)}},
   {id:'e5', engineId:'space-explorer', name:'חוקר חלל — קואורדינטות', skill:'קואורדינטות', emoji:'🚀', color:'from-slate-700 to-indigo-800', config:{gen:CG.coordinateReadMCQ}},
   {id:'e6', engineId:'math-ninja', name:'נינג׳ה — אחוזים', skill:'אחוזים', emoji:'⚔️', color:'from-red-500 to-rose-600', config:{gen:CG.percentOfType(1)}},
@@ -1460,8 +1484,8 @@ CURRICULUM['ה'] = [
     jeopardyTopic('שברים', Array.from({length:5},()=>CG.fractionPercentDecimalMCQ)),
   ]}},
   {id:'e17', engineId:'proportion-potions', name:'שיקויי פרופורציה — מתכונים', skill:'יחס במתכונים', emoji:'🧪', color:'from-purple-500 to-fuchsia-600', config:{gen:CG.proportionPotionType}},
-  {id:'e18', engineId:'fraction-bridge', name:'גשר השברים — שברים מדומים', skill:'שברים מדומים', emoji:'🌉', color:'from-sky-400 to-emerald-500', config:{gen:CG.equivFractionMCQ}},
-  {id:'e19', engineId:'angle-defender', name:'ממיין צורות — שטח מתקדם', skill:'שטח מתקדם', emoji:'📐', color:'from-green-400 to-teal-500', config:{gen:CG.perimeterAreaType('area')}},
+  {id:'e18', engineId:'fraction-bridge', name:'גשר השברים — שברים שווי ערך', skill:'שברים שווי ערך', emoji:'🌉', color:'from-sky-400 to-emerald-500', config:{gen:CG.equivFractionMCQ}},
+  {id:'e19', engineId:'angle-defender', name:'מגדיר השטחים — מלבן מתקדם', skill:'שטח והיקף מלבן', emoji:'📐', color:'from-green-400 to-teal-500', config:{gen:()=>Math.random()<0.5?CG.perimeterAreaType('area')():CG.perimeterAreaType('perimeter')()}},
   {id:'e20', engineId:'quiz-buzzer', name:'חידון — גיאומטריה', skill:'גיאומטריה', emoji:'🎙️', color:'from-blue-400 to-cyan-500', config:{gen:CG.shapeMCQ}},
 ];
 
@@ -1529,7 +1553,7 @@ CURRICULUM['ח'] = [
   {id:'h7', engineId:'graph-racer', name:'קווסט קואורדינטות — מדרון/אורך', skill:'גיאומטריה אנליטית', emoji:'🗺️', color:'from-indigo-400 to-sky-500', config:{gen:CG.distanceMidpointType('distance')}},
   {id:'h8', engineId:'equation-escape', name:'חדר בריחה — מערכת משוואות', skill:'מערכת משוואות', emoji:'🚪', color:'from-slate-600 to-gray-800', config:{gen:CG.linearEquationEscapeType}},
   {id:'h9', engineId:'proportion-potions', name:'שיקויי פרופורציה — ישר/הפוך', skill:'פרופורציה', emoji:'🧪', color:'from-purple-500 to-fuchsia-600', config:{gen:CG.proportionPotionType}},
-  {id:'h10', engineId:'math-ninja', name:'נינג׳ה — פיתגורס', skill:'משפט פיתגורס', emoji:'⚔️', color:'from-red-500 to-rose-600', config:{gen:()=>{const a=ri(3,10),b=ri(3,10); const c2=a*a+b*b; return {prompt:'משולש ישר זווית עם ניצבים '+a+' ו-'+b+'. מה ריבוע היתר?', answer:c2, displayAnswer:c2};}}},
+  {id:'h10', engineId:'math-ninja', name:'נינג׳ה — פיתגורס', skill:'משפט פיתגורס', emoji:'⚔️', color:'from-red-500 to-rose-600', config:{gen:()=>{const a=ri(3,10),b=ri(3,10); const c2=a*a+b*b; return {prompt:'במשולש ישר-זווית הניצבים הם '+ltr(a)+' ו-'+ltr(b)+'. מה ריבוע היתר '+ltr('(a²+b²)')+'?', answer:c2, displayAnswer:c2};}}},
   {id:'h11', engineId:'mental-marathon', name:'מרתון חישוב — אלגברה', skill:'אלגברה', emoji:'⚡', color:'from-rose-500 to-orange-600', config:{gen:CG.evalExprMCQ(1)}},
   {id:'h12', engineId:'memory-duel', name:'דו-קרב זיכרון — פונקציה↔גרף', skill:'פונקציה וגרף', emoji:'🧠', color:'from-violet-400 to-purple-500', config:{pairCount:5, pairsGen:(n)=>Array.from({length:n},(_,i)=>{const m=ri(1,4),b=ri(0,5); return {id:i,left:'y='+m+'x+'+b,right:'שיפוע '+m+', חיתוך '+b};})}},
   {id:'h13', engineId:'quiz-buzzer', name:'חידון כיתתי — פונקציה קווית', skill:'פונקציה קווית', emoji:'🎙️', color:'from-blue-400 to-cyan-500', config:{gen:CG.slopeInterceptType('intercept')}},
@@ -1543,7 +1567,7 @@ CURRICULUM['ח'] = [
     jeopardyTopic('גיאומטריה', Array.from({length:5},()=>CG.angleDefenderType)),
   ]}},
   {id:'h19', engineId:'graph-racer', name:'מירוץ הגרפים — חיתוך עם הצירים', skill:'חיתוך עם צירים', emoji:'📈', color:'from-cyan-500 to-teal-500', config:{gen:CG.slopeInterceptType('intercept')}},
-  {id:'h20', engineId:'quiz-buzzer', name:'חידון — פיתגורס', skill:'פיתגורס', emoji:'🎙️', color:'from-blue-400 to-cyan-500', config:{gen:()=>{const a=ri(3,10),b=ri(3,10); const c2=a*a+b*b; return {prompt:'ניצבים '+a+' ו-'+b+'. מה ריבוע היתר (a²+b²)?', answer:c2, displayAnswer:c2};}}},
+  {id:'h20', engineId:'quiz-buzzer', name:'חידון — פיתגורס', skill:'פיתגורס', emoji:'🎙️', color:'from-blue-400 to-cyan-500', config:{gen:()=>{const a=ri(3,10),b=ri(3,10); const c2=a*a+b*b; return {prompt:'הניצבים הם '+ltr(a)+' ו-'+ltr(b)+'. מה ריבוע היתר '+ltr('(a²+b²)')+'?', answer:c2, displayAnswer:c2};}}},
 ];
 
 CURRICULUM['ט'] = [
@@ -1553,10 +1577,10 @@ CURRICULUM['ט'] = [
   {id:'i4', engineId:'equation-escape', name:'חדר בריחה — מערכת משוואות', skill:'מערכת משוואות', emoji:'🚪', color:'from-slate-600 to-gray-800', config:{gen:CG.linearEquationEscapeType}},
   {id:'i5', engineId:'algebraic-maze', name:'מבוך אלגברי — פירוק לגורמים', skill:'פירוק לגורמים', emoji:'🌿', color:'from-teal-500 to-emerald-600', config:{gen:CG.factoringMCQ}},
   {id:'i6', engineId:'probability-slots', name:'מכונת הסתברות — מורכבת', skill:'הסתברות מורכבת', emoji:'🎰', color:'from-pink-500 to-rose-500', config:{gen:CG.probabilityCondType}},
-  {id:'i7', engineId:'angle-defender', name:'מגן הזוויות — מעגל/משיקים', skill:'מעגל וזוויות', emoji:'🛡️', color:'from-orange-500 to-red-500', config:{gen:CG.angleDefenderType}},
+  {id:'i7', engineId:'angle-defender', name:'מגן הזוויות — מצולעים מורכבים', skill:'סכום זוויות במצולע', emoji:'🛡️', color:'from-orange-500 to-red-500', config:{gen:CG.angleDefenderType}},
   {id:'i8', engineId:'graph-racer', name:'קווסט קואורדינטות — אמצע/מרחק', skill:'אמצע קטע ומרחק', emoji:'🗺️', color:'from-indigo-400 to-sky-500', config:{gen:CG.distanceMidpointType('midpoint')}},
-  {id:'i9', engineId:'integer-trail', name:'שביל המספרים — חזקות ושורשים', skill:'חזקות ושורשים', emoji:'🧭', color:'from-lime-400 to-emerald-500', config:{gen:()=>{const b=ri(2,6),e=ri(2,4); return {prompt:b+'^'+e+' = ?', answer:Math.pow(b,e), displayAnswer:Math.pow(b,e)};}}},
-  {id:'i10', engineId:'math-ninja', name:'נינג׳ה — פירוק/חזקות', skill:'פירוק וחזקות', emoji:'⚔️', color:'from-red-500 to-rose-600', config:{gen:()=>{const b=ri(2,9); return {prompt:'√'+(b*b)+' = ?', answer:b, displayAnswer:b};}}},
+  {id:'i9', engineId:'integer-trail', name:'שביל המספרים — חזקות ושורשים', skill:'חזקות ושורשים', emoji:'🧭', color:'from-lime-400 to-emerald-500', config:{gen:()=>{const b=ri(2,6),e=ri(2,4); return {prompt:ltr(b+'^'+e+' = ?'), answer:Math.pow(b,e), displayAnswer:Math.pow(b,e)};}}},
+  {id:'i10', engineId:'math-ninja', name:'נינג׳ה — פירוק/חזקות', skill:'פירוק וחזקות', emoji:'⚔️', color:'from-red-500 to-rose-600', config:{gen:()=>{const b=ri(2,9); return {prompt:ltr('√'+(b*b)+' = ?'), answer:b, displayAnswer:b};}}},
   {id:'i11', engineId:'mental-marathon', name:'מרתון חישוב — אלגברה מתקדמת', skill:'אלגברה מתקדמת', emoji:'⚡', color:'from-rose-500 to-orange-600', config:{gen:CG.evalExprMCQ(2)}},
   {id:'i12', engineId:'memory-duel', name:'דו-קרב זיכרון — ריבועית↔שורשים', skill:'משוואה ריבועית', emoji:'🧠', color:'from-violet-400 to-purple-500', config:{pairCount:5, pairsGen:(n)=>Array.from({length:n},(_,i)=>{const r1=ri(1,5),r2=ri(1,5); return {id:i,left:'(x−'+r1+')(x−'+r2+')',right:'x='+r1+' או x='+r2};})}},
   {id:'i13', engineId:'quiz-buzzer', name:'חידון כיתתי — פונקציות וגרפים', skill:'פונקציות', emoji:'🎙️', color:'from-blue-400 to-cyan-500', config:{gen:CG.functionHuntMCQ(2)}},
@@ -1607,7 +1631,7 @@ CURRICULUM['יא'] = [
   {id:'k4', engineId:'trig-identities-match', name:'זהויות טריגו — חיבור זהויות', skill:'זהויות טריגונומטריות', emoji:'🔗', color:'from-fuchsia-600 to-pink-600', config:{pairCount:5, pairsGen:CG.trigIdentityMatch}},
   {id:'k5', engineId:'limit-breaker', name:'שובר הגבולות — גבולות בסיסיים', skill:'גבולות', emoji:'🧱', color:'from-amber-700 to-orange-800', config:{gen:CG.limitMCQ}},
   {id:'k6', engineId:'sequence-stacker', name:'סדרות — חשבונית/הנדסית', skill:'סדרות', emoji:'🧱', color:'from-emerald-500 to-teal-600', config:{gen:()=>Math.random()<0.5?CG.sequenceType('arith')():CG.sequenceType('geo')()}},
-  {id:'k7', engineId:'function-hunt', name:'ציד פונקציות — רציונלית', skill:'פונקציה רציונלית', emoji:'📈', color:'from-cyan-400 to-teal-500', config:{gen:CG.quadraticVertexMCQ}},
+  {id:'k7', engineId:'function-hunt', name:'ציד פונקציות — קדקוד פרבולה', skill:'קדקוד פרבולה', emoji:'📈', color:'from-cyan-400 to-teal-500', config:{gen:CG.quadraticVertexMCQ}},
   {id:'k8', engineId:'transformation-builder', name:'בונה טרנספורמציות — מורכבות', skill:'פונקציות מורכבות', emoji:'🧩', color:'from-fuchsia-500 to-violet-500', config:{gen:CG.transformationMCQ}},
   {id:'k9', engineId:'probability-slots', name:'מכונת הסתברות — עץ הסתברות', skill:'עץ הסתברות', emoji:'🎰', color:'from-pink-500 to-rose-500', config:{gen:CG.probabilityCondType}},
   {id:'k10', engineId:'normal-curve-rescue', name:'חילוץ העקומה הנורמלית — ציון תקן', skill:'התפלגות נורמלית', emoji:'📊', color:'from-blue-500 to-indigo-500', config:{gen:CG.normalCurveType}},
@@ -1623,21 +1647,21 @@ CURRICULUM['יא'] = [
     jeopardyTopic('טריגונומטריה', Array.from({length:5},()=>CG.trigWheelMCQ)),
     jeopardyTopic('הסתברות', Array.from({length:5},()=>CG.probabilityCondType)),
   ]}},
-  {id:'k19', engineId:'derivative-sprint', name:'ספרינט נגזרות — מכפלה/מנה', skill:'כלל המכפלה/מנה', emoji:'⚡', color:'from-violet-500 to-fuchsia-500', config:{gen:CG.derivativeMCQ}},
-  {id:'k20', engineId:'quiz-buzzer', name:'חידון — חקירת פונקציה', skill:'חקירת פונקציה', emoji:'🎙️', color:'from-blue-400 to-cyan-500', config:{gen:CG.quadraticVertexMCQ}},
+  {id:'k19', engineId:'derivative-sprint', name:'ספרינט נגזרות — כלל המכפלה', skill:'כלל המכפלה בנגזרות', emoji:'⚡', color:'from-violet-500 to-fuchsia-500', config:{gen:CG.derivativeProductType}},
+  {id:'k20', engineId:'quiz-buzzer', name:'חידון — חקירת פרבולה', skill:'חקירת פרבולה (קדקוד/ציר/כיוון)', emoji:'🎙️', color:'from-blue-400 to-cyan-500', config:{gen:CG.quadraticInvestigateMCQ}},
 ];
 
 CURRICULUM['יב'] = [
-  {id:'l1', engineId:'derivative-sprint', name:'ספרינט נגזרות — כל הכללים', skill:'נגזרות', emoji:'⚡', color:'from-violet-500 to-fuchsia-500', config:{gen:CG.derivativeMCQ}},
+  {id:'l1', engineId:'derivative-sprint', name:'ספרינט נגזרות — חזקה ומכפלה', skill:'כלל החזקה והמכפלה', emoji:'⚡', color:'from-violet-500 to-fuchsia-500', config:{gen:CG.derivativeMixedType}},
   {id:'l2', engineId:'integral-invaders', name:'פולשי האינטגרלים — פונקציה קדומה', skill:'אינטגרלים', emoji:'👾', color:'from-green-500 to-emerald-700', config:{gen:CG.integralPowerType}},
   {id:'l3', engineId:'limit-breaker', name:'שובר הגבולות — מתקדם', skill:'גבולות', emoji:'🧱', color:'from-amber-700 to-orange-800', config:{gen:CG.limitMCQ}},
   {id:'l4', engineId:'vector-voyage', name:'מסע וקטורים — חיבור וקטורים', skill:'וקטורים', emoji:'🧭', color:'from-indigo-500 to-purple-600', config:{gen:CG.vectorAddType}},
   {id:'l5', engineId:'trig-wheel', name:'גלגל טריגונומטריה — משוואות טריגו', skill:'משוואות טריגו', emoji:'🧭', color:'from-amber-500 to-orange-500', config:{gen:CG.trigWheelMCQ}},
   {id:'l6', engineId:'trig-identities-match', name:'זהויות טריגו — מתקדם', skill:'זהויות מתקדמות', emoji:'🔗', color:'from-fuchsia-600 to-pink-600', config:{pairCount:6, pairsGen:CG.trigIdentityMatch}},
-  {id:'l7', engineId:'normal-curve-rescue', name:'חילוץ העקומה הנורמלית — 471', skill:'התפלגות נורמלית', emoji:'📊', color:'from-blue-500 to-indigo-500', config:{gen:CG.normalCurveType}},
+  {id:'l7', engineId:'normal-curve-rescue', name:'חילוץ העקומה הנורמלית — ציון תקן', skill:'התפלגות נורמלית', emoji:'📊', color:'from-blue-500 to-indigo-500', config:{gen:CG.normalCurveType}},
   {id:'l8', engineId:'regression-lab', name:'מעבדת רגרסיה — שיפוע/אקסטרפולציה', skill:'רגרסיה', emoji:'🔬', color:'from-amber-500 to-orange-500', config:{gen:CG.regressionMCQ}},
-  {id:'l9', engineId:'logarithm-lockpick', name:'פורץ הלוגריתמים — מורכב', skill:'משוואות מורכבות', emoji:'🔓', color:'from-blue-600 to-indigo-700', config:{gen:CG.expEquationType}},
-  {id:'l10', engineId:'function-hunt', name:'ציד פונקציות — חקירה מלאה', skill:'חקירת פונקציה', emoji:'📈', color:'from-cyan-400 to-teal-500', config:{gen:CG.quadraticVertexMCQ}},
+  {id:'l9', engineId:'logarithm-lockpick', name:'פורץ הלוגריתמים — משוואות מעריכיות', skill:'משוואות מעריכיות', emoji:'🔓', color:'from-blue-600 to-indigo-700', config:{gen:CG.expEquationType}},
+  {id:'l10', engineId:'function-hunt', name:'ציד פונקציות — חקירה מלאה', skill:'חקירת פרבולה (קדקוד/ציר/כיוון)', emoji:'📈', color:'from-cyan-400 to-teal-500', config:{gen:CG.quadraticInvestigateMCQ}},
   {id:'l11', engineId:'mental-marathon', name:'מרתון חישוב — אינטגרלים/נגזרות', skill:'אינטגרלים ונגזרות', emoji:'⚡', color:'from-rose-500 to-orange-600', config:{gen:CG.derivativePowerType}},
   {id:'l12', engineId:'memory-duel', name:'דו-קרב זיכרון — נגזרת↔קדומה', skill:'נגזרת וקדומה', emoji:'🧠', color:'from-violet-400 to-purple-500', config:{pairCount:5, pairsGen:(n)=>{const items=[['2x','x²'],['3x²','x³'],['cos x','sin x'],['eˣ','eˣ'],['1/x','ln|x|'],['4x³','x⁴']]; return shuffle(items).slice(0,n).map((it,i)=>({id:i,left:'∫'+it[0],right:it[1]+' + C'}));}}},
   {id:'l13', engineId:'quiz-buzzer', name:'חידון כיתתי — חדו"א בגרות', skill:'חדו"א', emoji:'🎙️', color:'from-blue-400 to-cyan-500', config:{gen:CG.integralMCQ}},
@@ -1679,61 +1703,9 @@ function screenHome(container){
       '<div class="footer-note">MathBoost © · מערכת משחקי כיתה עצמאית למורים</div>'+
     '</div>';
   container.querySelectorAll('.grade-card').forEach(btn=>{
-    btn.addEventListener('click', ()=>{ State.grade = btn.dataset.grade; render(screenSetup); });
+    btn.addEventListener('click', ()=>{ State.grade = btn.dataset.grade; render(screenGradeGrid); });
   });
   container.querySelector('#home-settings').addEventListener('click', ()=> openSettingsModal(container, ()=>render(screenHome)));
-}
-
-function screenSetup(container){
-  const grade = State.grade;
-  container.innerHTML =
-    '<div class="topbar">'+
-      '<div class="brand"><button class="icon-btn" id="setup-back" title="חזרה">⟶</button> MathBoost</div>'+
-      '<div style="font-weight:800">'+GRADE_LABEL[grade]+'</div>'+
-    '</div>'+
-    '<div class="wrap">'+
-      '<div class="setup-card">'+
-        '<h3>הגדרת קבוצות לכיתה</h3>'+
-        '<div id="setup-groups"></div>'+
-        '<button class="btn secondary" id="setup-add-group" style="width:100%;margin-top:8px">+ הוסף קבוצה</button>'+
-        '<div class="setting-row"><span>טיימר לשאלה</span><div class="switch '+(State.settings.timerOn?'on':'')+'" id="sw-timer"></div></div>'+
-        '<div class="setting-row"><span>אפקטים (קונפטי)</span><div class="switch '+(State.settings.fx?'on':'')+'" id="sw-fx"></div></div>'+
-        '<div class="setting-row"><span>סאונד</span><div class="switch '+(State.settings.sound?'on':'')+'" id="sw-sound"></div></div>'+
-        '<button class="btn big" id="setup-start" style="width:100%;margin-top:22px">המשך למשחקים ←</button>'+
-      '</div>'+
-    '</div>';
-  let groups = State.groups.length ? State.groups.map(g=>({...g})) : defaultGroups(2);
-  function renderGroups(){
-    const el = container.querySelector('#setup-groups');
-    el.innerHTML = groups.map((g,i)=>(
-      '<div class="group-row">'+
-        '<span class="group-color-dot" style="background:'+g.color+'"></span>'+
-        '<input type="text" value="'+g.name+'" data-i="'+i+'">'+
-        (groups.length>1 ? '<button class="icon-btn" data-remove="'+i+'">✕</button>' : '')+
-      '</div>'
-    )).join('');
-    el.querySelectorAll('input').forEach(inp=>{
-      inp.addEventListener('input', ()=>{ groups[+inp.dataset.i].name = inp.value; });
-    });
-    el.querySelectorAll('[data-remove]').forEach(btn=>{
-      btn.addEventListener('click', ()=>{ groups.splice(+btn.dataset.remove,1); renderGroups(); });
-    });
-  }
-  renderGroups();
-  container.querySelector('#setup-add-group').addEventListener('click', ()=>{
-    if(groups.length>=4) return;
-    const c = GROUP_COLORS[groups.length];
-    groups.push({name:c.name, color:c.bg, score:0});
-    renderGroups();
-  });
-  container.querySelector('#sw-timer').addEventListener('click', e=>{ State.settings.timerOn=!State.settings.timerOn; e.target.classList.toggle('on'); saveSettings(); });
-  container.querySelector('#sw-fx').addEventListener('click', e=>{ State.settings.fx=!State.settings.fx; e.target.classList.toggle('on'); saveSettings(); });
-  container.querySelector('#sw-sound').addEventListener('click', e=>{ State.settings.sound=!State.settings.sound; Sound.setEnabled(State.settings.sound); e.target.classList.toggle('on'); saveSettings(); });
-  container.querySelector('#setup-back').addEventListener('click', ()=> render(screenHome));
-  container.querySelector('#setup-start').addEventListener('click', ()=>{
-    State.groups = groups.map(g=>({...g, score:0}));
-    render(screenGradeGrid);
-  });
 }
 
 function screenGradeGrid(container){
@@ -1746,8 +1718,8 @@ function screenGradeGrid(container){
     '</div>'+
     '<div class="wrap">'+
       '<div class="help-banner">'+
-        '💡 <b>למורה:</b> שתפו את המסך בזום, בחרו משחק, ולחצו <span class="kbd">⛶</span> למסך מלא. '+
-        'בכל משחק ניתן לעדכן ניקוד קבוצות עם <span class="kbd">+</span>/<span class="kbd">−</span>, ולכבות סאונד עם 🔊.'+
+        '💡 <b>למורה:</b> שתפו מסך בזום, בחרו משחק ושחקו יחד עם התלמיד. '+
+        'לחצו <span class="kbd">⛶</span> למסך מלא, ו-<span class="kbd">🔊</span> להפעלה/כיבוי סאונד.'+
       '</div>'+
       '<div class="grade-header">'+
         '<h2>'+GRADE_LABEL[grade]+' · משחקי כיתה</h2>'+
@@ -1767,7 +1739,7 @@ function screenGradeGrid(container){
         )).join('')+
       '</div>'+
     '</div>';
-  container.querySelector('#grid-back').addEventListener('click', ()=> render(screenSetup));
+  container.querySelector('#grid-back').addEventListener('click', ()=> render(screenHome));
   container.querySelector('#grid-settings').addEventListener('click', ()=> openSettingsModal(container, ()=>render(screenGradeGrid)));
   container.querySelectorAll('.game-card').forEach(btn=>{
     btn.addEventListener('click', ()=>{
