@@ -75,6 +75,16 @@ h1,h2,h3{margin:0; font-weight:800;}
 /* ---------- Game grid screen ---------- */
 .grade-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:10px;}
 .grade-header h2{font-size:28px;}
+.level-bar{display:flex; align-items:center; gap:8px; margin:0 0 18px; flex-wrap:wrap;}
+.level-bar .level-label{font-weight:800; font-size:14px; color:var(--text-soft);}
+.level-btn{
+  border:2px solid #E2E8F0; background:#fff; border-radius:999px;
+  padding:7px 16px; font-family:inherit; font-size:14px; font-weight:800;
+  color:var(--text-soft); cursor:pointer; transition:all .15s;
+}
+.level-btn:hover{border-color:#94A3B8;}
+.level-btn.active{background:var(--green); border-color:var(--green); color:#fff;}
+.level-hint{font-size:12px; color:var(--text-soft); width:100%;}
 .grade-header .count-pill{
   background:#ECFDF5; color:var(--green-dark); font-weight:800; font-size:13px;
   padding:5px 12px; border-radius:999px;
@@ -293,10 +303,25 @@ const Confetti = (function(){
 /* ---------------------------------------------------------------------- */
 const State = {
   grade: null,
-  settings: { sound:true, timerOn:true, fx:true },
+  settings: { sound:true, timerOn:true, fx:true, level:'normal' },
   activeGameId: null,
   activeUnmount: null,
 };
+
+/* ---------------------------------------------------------------------- */
+/* Difficulty levels — affect BOTH the per-question timer and the numeric  */
+/* ranges the shared generators draw from. Applied at question-generation  */
+/* time (not at CURRICULUM definition), so switching level takes effect    */
+/* on the very next question.                                              */
+/* ---------------------------------------------------------------------- */
+const LEVELS = {
+  easy:   { label:'🐢 רגוע',  timeFactor:1.8, rangeFactor:0.7 },
+  normal: { label:'⏱️ רגיל',  timeFactor:1,   rangeFactor:1 },
+  hard:   { label:'⚡ אתגר',  timeFactor:0.6, rangeFactor:1.4 },
+};
+function lvl(){ return LEVELS[State.settings.level] || LEVELS.normal; }
+function scaleSeconds(s){ return Math.max(6, Math.round(s * lvl().timeFactor)); }
+function scaleRange(max, floor){ return Math.max(floor || 5, Math.round(max * lvl().rangeFactor)); }
 
 function loadSettings(){
   try{
@@ -386,7 +411,7 @@ function setTimerDisplay(container, text, low){
 /* ---------------------------------------------------------------------- */
 function mountMCQTemplate(stage, config, hooks){
   let destroyed=false; let timer=null; let qIndex=0; let correctCount=0;
-  const perQSeconds = config.seconds || 18;
+  const perQSeconds = scaleSeconds(config.seconds || 18);
 
   function nextQuestion(){
     if(destroyed) return;
@@ -434,7 +459,7 @@ function mountMCQTemplate(stage, config, hooks){
 /* ---------------------------------------------------------------------- */
 function mountTypeAnswerTemplate(stage, config, hooks){
   let destroyed=false; let timer=null; let qIndex=0; let streak=0; let totalScore=0;
-  const perQSeconds = config.seconds || 15;
+  const perQSeconds = scaleSeconds(config.seconds || 15);
   const limitQuestions = config.count || 12;
 
   function nextQuestion(){
@@ -800,15 +825,20 @@ function mcqFromAnswer(promptHtml, answer, distractorFn, n, explain){
 }
 
 /* ---- חיבור / חיסור ---- */
+/* Range params are scaled by the global difficulty level INSIDE the        */
+/* generator body (factories run once at CURRICULUM definition — the level  */
+/* must be read per-question, not captured).                                */
 CG.addSub = (max, allowSub=true) => () => {
-  const a=ri(1,max), b=ri(1,max);
+  const M = scaleRange(max);
+  const a=ri(1,M), b=ri(1,M);
   const op = allowSub && Math.random()<0.5 ? '−' : '+';
   const ans = op==='+' ? a+b : (a>=b? a-b : b-a);
   const x = op==='+'? a : Math.max(a,b), y = op==='+'? b : Math.min(a,b);
   return mcqFromAnswer(ltr(x+' '+op+' '+y+' = ?'), ans, ()=>Math.max(0,ans+pick([-3,-2,-1,1,2,3])), 4);
 };
 CG.addSubType = (max, allowSub=true) => () => {
-  const a=ri(1,max), b=ri(1,max);
+  const M = scaleRange(max);
+  const a=ri(1,M), b=ri(1,M);
   const op = allowSub && Math.random()<0.5 ? '−' : '+';
   const ans = op==='+' ? a+b : (a>=b? a-b : b-a);
   const x = op==='+'? a : Math.max(a,b), y = op==='+'? b : Math.min(a,b);
@@ -817,17 +847,20 @@ CG.addSubType = (max, allowSub=true) => () => {
 
 /* ---- כפל / חילוק ---- */
 CG.mulTable = (maxFactor=10) => () => {
-  const a=ri(1,maxFactor), b=ri(1,maxFactor); const ans=a*b;
+  const M = scaleRange(maxFactor, 3);
+  const a=ri(1,M), b=ri(1,M); const ans=a*b;
   const q = mcqFromAnswer(ltr(a+' × '+b+' = ?'), ans, ()=>Math.max(1,ans+pick([-10,-5,-2,2,5,10])), 4);
   q.check = v => parseFloat(v)===ans;
   return q;
 };
 CG.mulType = (maxFactor=12) => () => {
-  const a=ri(2,maxFactor), b=ri(2,maxFactor);
+  const M = scaleRange(maxFactor, 4);
+  const a=ri(2,M), b=ri(2,M);
   return { prompt: ltr(a+' × '+b+' = ?'), answer: a*b, displayAnswer: a*b };
 };
 CG.divType = (maxFactor=12) => () => {
-  const b=ri(2,maxFactor), ans=ri(2,maxFactor), a=b*ans;
+  const M = scaleRange(maxFactor, 4);
+  const b=ri(2,M), ans=ri(2,M), a=b*ans;
   return { prompt: ltr(a+' ÷ '+b+' = ?'), answer: ans, displayAnswer: ans };
 };
 CG.mulDivMixed = (maxFactor=12) => () => Math.random()<.5 ? CG.mulType(maxFactor)() : CG.divType(maxFactor)();
@@ -1725,6 +1758,13 @@ function screenGradeGrid(container){
         '<h2>'+GRADE_LABEL[grade]+' · משחקי כיתה</h2>'+
         '<span class="count-pill">'+list.length+' משחקים</span>'+
       '</div>'+
+      '<div class="level-bar">'+
+        '<span class="level-label">רמת קושי:</span>'+
+        Object.keys(LEVELS).map(k=>(
+          '<button class="level-btn'+(State.settings.level===k?' active':'')+'" data-level="'+k+'">'+LEVELS[k].label+'</button>'
+        )).join('')+
+        '<span class="level-hint">הרמה קובעת את הזמן לכל שאלה ואת גודל המספרים בתרגילים — אפשר להחליף גם באמצע.</span>'+
+      '</div>'+
       '<div class="game-grid">'+
         list.map(g=>(
           '<button class="game-card" data-id="'+g.id+'">'+
@@ -1741,6 +1781,12 @@ function screenGradeGrid(container){
     '</div>';
   container.querySelector('#grid-back').addEventListener('click', ()=> render(screenHome));
   container.querySelector('#grid-settings').addEventListener('click', ()=> openSettingsModal(container, ()=>render(screenGradeGrid)));
+  container.querySelectorAll('.level-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      State.settings.level = btn.dataset.level; saveSettings();
+      container.querySelectorAll('.level-btn').forEach(b=>b.classList.toggle('active', b.dataset.level===State.settings.level));
+    });
+  });
   container.querySelectorAll('.game-card').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const entry = list.find(g=>g.id===btn.dataset.id);
