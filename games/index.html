@@ -125,6 +125,11 @@ h1,h2,h3{margin:0; font-weight:800;}
 }
 .q-prompt{font-size:30px; font-weight:800; margin-bottom:28px; line-height:1.5;}
 .q-prompt .ltr-num{font-size:inherit;}
+/* Stacked visual fraction — numerator over a bar over denominator */
+.vfr{display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; line-height:1.1; margin:0 3px;}
+.vfr .vfn{padding:0 7px; border-bottom:3px solid currentColor; font-size:0.72em;}
+.vfr .vfd{padding:0 7px; font-size:0.72em;}
+.choice-btn .vfr .vfn{border-bottom-width:2px;}
 .choices-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; max-width:620px; margin:0 auto;}
 @media(max-width:560px){.choices-grid{grid-template-columns:1fr;}}
 .choice-btn{
@@ -223,6 +228,15 @@ function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]];} return a; }
 function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){[a,b]=[b,a%b];} return a||1; }
 function fmtFrac(n,d){ const g=gcd(n,d); n/=g; d/=g; if(d<0){n=-n;d=-d;} return d===1? String(n) : (n+'/'+d); }
+/* Display-only transform: converts every "n/d" in an HTML string to a stacked
+   visual fraction. Values, answers, and check() functions keep the plain
+   "n/d" form — this runs ONLY at render time, so equality checks and typed
+   answers ("כתבו כ-n/d") are unaffected. Division uses ÷, so digit/digit
+   patterns in this app are always fractions. */
+function fracify(html){
+  return String(html == null ? '' : html).replace(/(\d+)\s*\/\s*(\d+)/g,
+    '<span class="vfr"><span class="vfn">$1</span><span class="vfd">$2</span></span>');
+}
 function fmtNum(x){
   if(!isFinite(x)) return '—';
   if(Math.abs(x)<1e-9) x=0;
@@ -412,6 +426,7 @@ function setTimerDisplay(container, text, low){
 function mountMCQTemplate(stage, config, hooks){
   let destroyed=false; let timer=null; let qIndex=0; let correctCount=0;
   const perQSeconds = scaleSeconds(config.seconds || 18);
+  if(config.timed===false){ const tp = stage.closest('.game-screen')?.querySelector('#gs-timer'); if(tp) tp.style.display='none'; }
 
   function nextQuestion(){
     if(destroyed) return;
@@ -420,9 +435,9 @@ function mountMCQTemplate(stage, config, hooks){
     stage.innerHTML =
       '<div class="game-card-stage">'+
         '<div style="font-size:13px;font-weight:800;color:var(--text-soft);margin-bottom:10px">שאלה '+(++qIndex)+' · '+config.skillLabel+'</div>'+
-        '<div class="q-prompt">'+q.prompt+'</div>'+
+        '<div class="q-prompt">'+fracify(q.prompt)+'</div>'+
         '<div class="choices-grid">'+
-          choices.map((c,i)=>'<button class="choice-btn" data-i="'+i+'">'+ltr(c)+'</button>').join('')+
+          choices.map((c,i)=>'<button class="choice-btn" data-i="'+i+'">'+fracify(ltr(c))+'</button>').join('')+
         '</div>'+
         '<div class="feedback" id="mcq-fb"></div>'+
       '</div>';
@@ -435,7 +450,7 @@ function mountMCQTemplate(stage, config, hooks){
         btn.classList.add(isCorrect?'correct':'wrong');
         stage.querySelectorAll('.choice-btn').forEach((b2,j)=>{ if(choices[j]===q.answer) b2.classList.add('correct'); });
         if(isCorrect){ Sound.correct(); correctCount++; if(State.settings.fx) Confetti.burst(); fb.className='feedback ok'; fb.textContent='נכון! 🎉'; }
-        else{ Sound.wrong(); fb.className='feedback bad'; fb.innerHTML='לא מדויק — התשובה הנכונה: '+ltr(q.answer); }
+        else{ Sound.wrong(); fb.className='feedback bad'; fb.innerHTML='לא מדויק — התשובה הנכונה: '+fracify(ltr(q.answer)); }
         if(q.explain) fb.innerHTML += '<div class="explain">'+q.explain+'</div>';
         setTimeout(nextQuestion, 1600);
       });
@@ -444,7 +459,7 @@ function mountMCQTemplate(stage, config, hooks){
       timer = createTimer(perQSeconds, (r)=>setTimerDisplay(stage.closest('.game-screen'), r, r<=5), ()=>{
         if(answered) return; answered=true;
         stage.querySelectorAll('.choice-btn').forEach((b2,j)=>{ if(choices[j]===q.answer) b2.classList.add('correct'); });
-        Sound.wrong(); fb.className='feedback bad'; fb.innerHTML='נגמר הזמן! התשובה: '+ltr(q.answer)+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
+        Sound.wrong(); fb.className='feedback bad'; fb.innerHTML='נגמר הזמן! התשובה: '+fracify(ltr(q.answer))+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
         setTimeout(nextQuestion, 1600);
       });
       timer.start();
@@ -461,6 +476,7 @@ function mountTypeAnswerTemplate(stage, config, hooks){
   let destroyed=false; let timer=null; let qIndex=0; let streak=0; let totalScore=0;
   const perQSeconds = scaleSeconds(config.seconds || 15);
   const limitQuestions = config.count || 12;
+  if(config.timed===false){ const tp = stage.closest('.game-screen')?.querySelector('#gs-timer'); if(tp) tp.style.display='none'; }
 
   function nextQuestion(){
     if(destroyed) return;
@@ -469,7 +485,7 @@ function mountTypeAnswerTemplate(stage, config, hooks){
     stage.innerHTML =
       '<div class="game-card-stage">'+
         '<div style="font-size:13px;font-weight:800;color:var(--text-soft);margin-bottom:10px">שאלה '+(qIndex+1)+'/'+limitQuestions+' · ניקוד: <span class="ltr-num">'+totalScore+'</span></div>'+
-        '<div class="q-prompt">'+q.prompt+'</div>'+
+        '<div class="q-prompt">'+fracify(q.prompt)+'</div>'+
         '<div class="type-answer-row">'+
           '<input type="text" inputmode="decimal" id="ta-input" autocomplete="off">'+
           '<button class="btn" id="ta-submit">בדוק</button>'+
@@ -486,7 +502,7 @@ function mountTypeAnswerTemplate(stage, config, hooks){
       const ok = q.check ? q.check(val) : (parseFloat(val)===q.answer);
       if(ok){ Sound.correct(); streak++; totalScore += 10 + Math.min(streak,5)*2; if(State.settings.fx) Confetti.burst();
         fb.className='feedback ok'; fb.textContent='נכון! 🎉 ('+streak+' רצף)'; }
-      else{ Sound.wrong(); streak=0; fb.className='feedback bad'; fb.innerHTML='התשובה הנכונה: '+ltr(q.displayAnswer??q.answer)+(q.explain?'<div class="explain">'+q.explain+'</div>':''); }
+      else{ Sound.wrong(); streak=0; fb.className='feedback bad'; fb.innerHTML='התשובה הנכונה: '+fracify(ltr(q.displayAnswer??q.answer))+(q.explain?'<div class="explain">'+q.explain+'</div>':''); }
       setTimeout(nextQuestion, 1300);
     }
     stage.querySelector('#ta-submit').addEventListener('click', submit);
@@ -494,7 +510,7 @@ function mountTypeAnswerTemplate(stage, config, hooks){
     if(State.settings.timerOn && config.timed!==false){
       timer = createTimer(perQSeconds, (r)=>setTimerDisplay(stage.closest('.game-screen'), r, r<=5), ()=>{
         if(answered) return; answered=true; streak=0;
-        Sound.wrong(); fb.className='feedback bad'; fb.innerHTML='נגמר הזמן! התשובה: '+ltr(q.displayAnswer??q.answer)+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
+        Sound.wrong(); fb.className='feedback bad'; fb.innerHTML='נגמר הזמן! התשובה: '+fracify(ltr(q.displayAnswer??q.answer))+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
         setTimeout(nextQuestion, 1300);
       });
       timer.start();
@@ -616,13 +632,13 @@ function mountJeopardyTemplate(stage, config){
     stage.innerHTML =
       '<div class="game-card-stage">'+
         '<div style="font-size:13px;font-weight:800;color:var(--amber);margin-bottom:10px">שאלה ב-<span class="ltr-num">'+cell.value+'</span> נקודות</div>'+
-        '<div class="q-prompt">'+q.prompt+'</div>'+
+        '<div class="q-prompt">'+fracify(q.prompt)+'</div>'+
         '<button class="btn" id="jp-reveal">חשוף תשובה</button>'+
         '<div class="feedback" id="jp-fb"></div>'+
       '</div>';
     stage.querySelector('#jp-reveal').addEventListener('click', ()=>{
       const fb = stage.querySelector('#jp-fb');
-      fb.className='feedback ok'; fb.innerHTML='התשובה: '+ltr(q.answer)+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
+      fb.className='feedback ok'; fb.innerHTML='התשובה: '+fracify(ltr(q.answer))+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
       Sound.correct(); if(State.settings.fx) Confetti.burst();
       setTimeout(renderBoard, 1600);
     });
@@ -669,7 +685,7 @@ function mountBingoTemplate(stage, config){
   function callOne(){
     const q = config.generator();
     const cleanPrompt = q.prompt.replace(/\s*=\s*\??\s*$/, '');
-    stage.querySelector('#bingo-q').innerHTML = cleanPrompt + ' = ' + ltr('<b>'+q.answer+'</b>');
+    stage.querySelector('#bingo-q').innerHTML = fracify(cleanPrompt) + ' = ' + fracify(ltr('<b>'+q.answer+'</b>'));
     Sound.click();
   }
   function checkBingo(){
@@ -742,10 +758,10 @@ function mountWheelTemplate(stage, config){
       if(!result) return;
       const q = seg.generator ? seg.generator() : null;
       if(q){
-        result.innerHTML = '<div class="q-prompt" style="font-size:24px">'+q.prompt+'</div>'+
+        result.innerHTML = '<div class="q-prompt" style="font-size:24px">'+fracify(q.prompt)+'</div>'+
           '<button class="btn" id="wheel-reveal">חשוף תשובה</button><div class="feedback" id="wheel-fb"></div>';
         document.getElementById('wheel-reveal').addEventListener('click', ()=>{
-          document.getElementById('wheel-fb').innerHTML = 'התשובה: '+ltr(q.answer)+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
+          document.getElementById('wheel-fb').innerHTML = 'התשובה: '+fracify(ltr(q.answer))+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
           Sound.correct(); if(State.settings.fx) Confetti.burst();
         });
       } else {
@@ -775,7 +791,7 @@ function mountBuzzerTemplate(stage, config){
     stage.innerHTML =
       '<div class="game-card-stage">'+
         '<div style="font-size:13px;font-weight:800;color:var(--text-soft);margin-bottom:10px">שאלה '+qIndex+'/'+totalQ+'</div>'+
-        '<div class="q-prompt">'+q.prompt+'</div>'+
+        '<div class="q-prompt">'+fracify(q.prompt)+'</div>'+
         (displayChoices.length? '<div class="choices-grid">'+displayChoices.map(c=>'<div class="choice-btn" style="cursor:default;opacity:.85">'+ltr(c)+'</div>').join('')+'</div>' : '')+
         '<button class="btn" id="bz-reveal" style="margin-top:22px">חשוף תשובה</button>'+
         '<div class="feedback" id="bz-fb"></div>'+
@@ -1269,8 +1285,8 @@ const GAME_ENGINES = {
 
   /* ---- נושאיים: יסודי ---- */
   'multiplication-race': (stage,e)=> mountTypeAnswerTemplate(stage, { generator:e.config.gen, skillLabel:e.skill, seconds:10, count:14 }),
-  'pizza-fractions': (stage,e)=> mountMCQTemplate(stage, { generator:e.config.gen, skillLabel:e.skill, seconds:16 }),
-  'fraction-bridge': (stage,e)=> mountTypeAnswerTemplate(stage, { generator:e.config.gen, skillLabel:e.skill, seconds:18, count:10 }),
+  'pizza-fractions': (stage,e)=> mountMCQTemplate(stage, { generator:e.config.gen, skillLabel:e.skill, timed:false }),
+  'fraction-bridge': (stage,e)=> mountTypeAnswerTemplate(stage, { generator:e.config.gen, skillLabel:e.skill, timed:false, count:10 }),
   'shape-sorter': (stage,e)=> mountMCQTemplate(stage, { generator:e.config.gen, skillLabel:e.skill, seconds:14 }),
   'space-explorer': (stage,e)=> mountMCQTemplate(stage, { generator:e.config.gen, skillLabel:e.skill, seconds:16 }),
 
@@ -1313,7 +1329,7 @@ function mountMarathon(stage, e){
     stage.innerHTML =
       '<div class="game-card-stage">'+
         '<div style="font-size:13px;font-weight:800;color:var(--text-soft);margin-bottom:10px">ניקוד: <span class="ltr-num">'+score+'</span></div>'+
-        '<div class="q-prompt">'+q.prompt+'</div>'+
+        '<div class="q-prompt">'+fracify(q.prompt)+'</div>'+
         '<div class="type-answer-row"><input type="text" inputmode="decimal" id="mm-input" autocomplete="off"><button class="btn" id="mm-submit">✓</button></div>'+
       '</div>';
     const input = stage.querySelector('#mm-input'); input.focus();
