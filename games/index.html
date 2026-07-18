@@ -111,11 +111,6 @@ h1,h2,h3{margin:0; font-weight:800;}
   background:var(--surface); border-bottom:1px solid var(--border); flex-wrap:wrap; gap:8px;
 }
 .game-topbar .left, .game-topbar .right{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
-.timer-pill{
-  font-weight:800; font-size:18px; padding:6px 16px; border-radius:999px; background:#FFF7E6; color:#92660B;
-  border:2px solid #F5D98A; min-width:70px; text-align:center;
-}
-.timer-pill.low{background:#FEE2E2; color:#B91C1C; border-color:#FCA5A5;}
 .game-stage{
   flex:1; display:flex; align-items:center; justify-content:center; padding:24px;
 }
@@ -317,24 +312,23 @@ const Confetti = (function(){
 /* ---------------------------------------------------------------------- */
 const State = {
   grade: null,
-  settings: { sound:true, timerOn:true, fx:true, level:'normal' },
+  settings: { sound:true, fx:true, level:'normal' },
   activeGameId: null,
   activeUnmount: null,
 };
 
 /* ---------------------------------------------------------------------- */
-/* Difficulty levels — affect BOTH the per-question timer and the numeric  */
-/* ranges the shared generators draw from. Applied at question-generation  */
-/* time (not at CURRICULUM definition), so switching level takes effect    */
-/* on the very next question.                                              */
+/* Difficulty levels — affect the numeric ranges the shared generators draw */
+/* from (no timer anywhere — every game is untimed by design). Applied at   */
+/* question-generation time (not at CURRICULUM definition), so switching    */
+/* level takes effect on the very next question.                           */
 /* ---------------------------------------------------------------------- */
 const LEVELS = {
-  easy:   { label:'🐢 רגוע',  timeFactor:1.8, rangeFactor:0.7 },
-  normal: { label:'⏱️ רגיל',  timeFactor:1,   rangeFactor:1 },
-  hard:   { label:'⚡ אתגר',  timeFactor:0.6, rangeFactor:1.4 },
+  easy:   { label:'🐢 רגוע',  rangeFactor:0.7 },
+  normal: { label:'🙂 רגיל',  rangeFactor:1 },
+  hard:   { label:'⚡ אתגר',  rangeFactor:1.4 },
 };
 function lvl(){ return LEVELS[State.settings.level] || LEVELS.normal; }
-function scaleSeconds(s){ return Math.max(6, Math.round(s * lvl().timeFactor)); }
 function scaleRange(max, floor){ return Math.max(floor || 5, Math.round(max * lvl().rangeFactor)); }
 
 function loadSettings(){
@@ -367,29 +361,11 @@ function toggleFullscreen(){
 }
 
 /* ---------------------------------------------------------------------- */
-/* Timer component (shared)                                                */
-/* ---------------------------------------------------------------------- */
-function createTimer(seconds, onTick, onEnd){
-  let remaining = seconds; let handle=null;
-  function start(){
-    stop();
-    handle = setInterval(()=>{
-      remaining--;
-      onTick && onTick(remaining);
-      if(remaining<=3 && remaining>0) Sound.tick();
-      if(remaining<=0){ stop(); onEnd && onEnd(); }
-    },1000);
-  }
-  function stop(){ if(handle){ clearInterval(handle); handle=null; } }
-  function reset(s){ remaining = s ?? seconds; }
-  return { start, stop, reset, get remaining(){ return remaining; } };
-}
-
-/* ---------------------------------------------------------------------- */
-/* Game chrome shell — wraps every engine with topbar (score/timer/exit)  */
+/* Game chrome shell — wraps every engine with topbar (sound/fullscreen/exit) */
+/* No per-question timer anywhere — every game is untimed by design.        */
 /* ---------------------------------------------------------------------- */
 function gameShell(container, opts){
-  const { title, emoji, onExit, showTimer } = opts;
+  const { title, emoji, onExit } = opts;
   container.innerHTML =
     '<div class="game-screen">'+
       '<div class="game-topbar">'+
@@ -398,7 +374,6 @@ function gameShell(container, opts){
           '<div style="font-weight:800;font-size:16px">'+ (emoji||'') +' '+ title +'</div>'+
         '</div>'+
         '<div class="left">'+
-          (State.settings.timerOn && showTimer!==false ? '<div class="timer-pill" id="gs-timer">--</div>' : '')+
           '<button class="icon-btn" id="gs-sound" title="סאונד">'+(State.settings.sound?'🔊':'🔇')+'</button>'+
           '<button class="icon-btn" id="gs-full" title="מסך מלא">⛶</button>'+
         '</div>'+
@@ -414,19 +389,13 @@ function gameShell(container, opts){
   });
   return container.querySelector('#gs-stage');
 }
-function setTimerDisplay(container, text, low){
-  const el = container.querySelector('#gs-timer'); if(!el) return;
-  el.textContent = text; el.classList.toggle('low', !!low);
-}
 
 /* ---------------------------------------------------------------------- */
 /* Generic MCQ engine template                                            */
 /* generator(config) -> { prompt, answer, choices, explain? }             */
 /* ---------------------------------------------------------------------- */
 function mountMCQTemplate(stage, config, hooks){
-  let destroyed=false; let timer=null; let qIndex=0; let correctCount=0;
-  const perQSeconds = scaleSeconds(config.seconds || 18);
-  if(config.timed===false){ const tp = stage.closest('.game-screen')?.querySelector('#gs-timer'); if(tp) tp.style.display='none'; }
+  let destroyed=false; let qIndex=0; let correctCount=0;
 
   function nextQuestion(){
     if(destroyed) return;
@@ -445,7 +414,7 @@ function mountMCQTemplate(stage, config, hooks){
     let answered=false;
     stage.querySelectorAll('.choice-btn').forEach((btn,i)=>{
       btn.addEventListener('click', ()=>{
-        if(answered) return; answered=true; timer && timer.stop();
+        if(answered) return; answered=true;
         const isCorrect = choices[i]===q.answer;
         btn.classList.add(isCorrect?'correct':'wrong');
         stage.querySelectorAll('.choice-btn').forEach((b2,j)=>{ if(choices[j]===q.answer) b2.classList.add('correct'); });
@@ -455,28 +424,17 @@ function mountMCQTemplate(stage, config, hooks){
         setTimeout(nextQuestion, 1600);
       });
     });
-    if(State.settings.timerOn && config.timed!==false){
-      timer = createTimer(perQSeconds, (r)=>setTimerDisplay(stage.closest('.game-screen'), r, r<=5), ()=>{
-        if(answered) return; answered=true;
-        stage.querySelectorAll('.choice-btn').forEach((b2,j)=>{ if(choices[j]===q.answer) b2.classList.add('correct'); });
-        Sound.wrong(); fb.className='feedback bad'; fb.innerHTML='נגמר הזמן! התשובה: '+fracify(ltr(q.answer))+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
-        setTimeout(nextQuestion, 1600);
-      });
-      timer.start();
-    }
   }
   nextQuestion();
-  return function unmount(){ destroyed=true; timer && timer.stop(); };
+  return function unmount(){ destroyed=true; };
 }
 
 /* ---------------------------------------------------------------------- */
 /* Type-answer engine template (numeric input)                             */
 /* ---------------------------------------------------------------------- */
 function mountTypeAnswerTemplate(stage, config, hooks){
-  let destroyed=false; let timer=null; let qIndex=0; let streak=0; let totalScore=0;
-  const perQSeconds = scaleSeconds(config.seconds || 15);
+  let destroyed=false; let qIndex=0; let streak=0; let totalScore=0;
   const limitQuestions = config.count || 12;
-  if(config.timed===false){ const tp = stage.closest('.game-screen')?.querySelector('#gs-timer'); if(tp) tp.style.display='none'; }
 
   function nextQuestion(){
     if(destroyed) return;
@@ -497,7 +455,7 @@ function mountTypeAnswerTemplate(stage, config, hooks){
     input.focus();
     let answered=false;
     function submit(){
-      if(answered) return; answered=true; timer && timer.stop();
+      if(answered) return; answered=true;
       const val = (input.value||'').trim().replace(',', '.');
       const ok = q.check ? q.check(val) : (parseFloat(val)===q.answer);
       if(ok){ Sound.correct(); streak++; totalScore += 10 + Math.min(streak,5)*2; if(State.settings.fx) Confetti.burst();
@@ -507,14 +465,6 @@ function mountTypeAnswerTemplate(stage, config, hooks){
     }
     stage.querySelector('#ta-submit').addEventListener('click', submit);
     input.addEventListener('keydown', e=>{ if(e.key==='Enter') submit(); });
-    if(State.settings.timerOn && config.timed!==false){
-      timer = createTimer(perQSeconds, (r)=>setTimerDisplay(stage.closest('.game-screen'), r, r<=5), ()=>{
-        if(answered) return; answered=true; streak=0;
-        Sound.wrong(); fb.className='feedback bad'; fb.innerHTML='נגמר הזמן! התשובה: '+fracify(ltr(q.displayAnswer??q.answer))+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
-        setTimeout(nextQuestion, 1300);
-      });
-      timer.start();
-    }
   }
   function finish(){
     stage.innerHTML =
@@ -528,7 +478,7 @@ function mountTypeAnswerTemplate(stage, config, hooks){
     stage.querySelector('#ta-again').addEventListener('click', ()=>{ qIndex=0; streak=0; totalScore=0; nextQuestion(); });
   }
   nextQuestion();
-  return function unmount(){ destroyed=true; timer && timer.stop(); };
+  return function unmount(){ destroyed=true; };
 }
 
 /* ---------------------------------------------------------------------- */
@@ -1317,18 +1267,21 @@ const GAME_ENGINES = {
 };
 
 /* ---- bespoke generic engines needing custom flow ---- */
+// Marathon — fixed question count, no clock. Was originally a 60-second
+// countdown ("how many can you solve"); changed to a plain 12-question set
+// per the no-timer-anywhere decision, so the identity becomes "how many did
+// you get right" instead of a race against time.
+const MARATHON_QUESTIONS = 12;
 function mountMarathon(stage, e){
-  let destroyed=false; let score=0; let timeLeft=60;
-  function tick(){
-    const c = stage.closest('.game-screen'); setTimerDisplay(c, timeLeft, timeLeft<=10);
-    if(timeLeft<=0){ finish(); return; }
-  }
+  let destroyed=false; let score=0; let correctCount=0; let qIndex=0;
   function nextQ(){
     if(destroyed) return;
+    if(qIndex>=MARATHON_QUESTIONS){ finish(); return; }
     const q = e.config.gen();
+    qIndex++;
     stage.innerHTML =
       '<div class="game-card-stage">'+
-        '<div style="font-size:13px;font-weight:800;color:var(--text-soft);margin-bottom:10px">ניקוד: <span class="ltr-num">'+score+'</span></div>'+
+        '<div style="font-size:13px;font-weight:800;color:var(--text-soft);margin-bottom:10px">שאלה '+qIndex+'/'+MARATHON_QUESTIONS+' · ניקוד: <span class="ltr-num">'+score+'</span></div>'+
         '<div class="q-prompt">'+fracify(q.prompt)+'</div>'+
         '<div class="type-answer-row"><input type="text" inputmode="decimal" id="mm-input" autocomplete="off"><button class="btn" id="mm-submit">✓</button></div>'+
       '</div>';
@@ -1338,26 +1291,21 @@ function mountMarathon(stage, e){
       if(answered || destroyed) return; answered=true;
       const val = (input.value||'').replace(',','.');
       const ok = q.check ? q.check(val) : parseFloat(val)===parseFloat(q.answer);
-      if(ok){ score+=10; Sound.correct(); } else { timeLeft=Math.max(0,timeLeft-3); Sound.wrong(); }
+      if(ok){ score+=10; correctCount++; Sound.correct(); } else { Sound.wrong(); }
       nextQ();
     }
     stage.querySelector('#mm-submit').addEventListener('click', submit);
     input.addEventListener('keydown', ev=>{ if(ev.key==='Enter') submit(); });
   }
   function finish(){
-    stage.innerHTML = '<div class="game-card-stage"><div style="font-size:54px">⏱️</div><h2 style="font-size:26px;margin:10px 0">נגמר הזמן!</h2>'+
-      '<div style="font-size:18px">ניקוד סופי: <b class="ltr-num">'+score+'</b></div>'+
+    stage.innerHTML = '<div class="game-card-stage"><div style="font-size:54px">🏁</div><h2 style="font-size:26px;margin:10px 0">סיימת!</h2>'+
+      '<div style="font-size:18px">'+correctCount+' מתוך '+MARATHON_QUESTIONS+' נכונות · ניקוד: <b class="ltr-num">'+score+'</b></div>'+
       '<button class="btn big" id="mm-again" style="margin-top:18px">סבב נוסף</button></div>';
     Sound.win(); if(State.settings.fx) Confetti.burst();
-    stage.querySelector('#mm-again').addEventListener('click', ()=>{ score=0; timeLeft=60; startTimer(); nextQ(); });
+    stage.querySelector('#mm-again').addEventListener('click', ()=>{ score=0; correctCount=0; qIndex=0; nextQ(); });
   }
-  let interval=null;
-  function startTimer(){
-    if(interval) clearInterval(interval);
-    interval = setInterval(()=>{ timeLeft--; tick(); if(timeLeft<=0){ clearInterval(interval); finish(); } },1000);
-  }
-  startTimer(); nextQ();
-  return function unmount(){ destroyed=true; if(interval) clearInterval(interval); };
+  nextQ();
+  return function unmount(){ destroyed=true; };
 }
 
 function mountMysteryNumber(stage, e){
@@ -1779,7 +1727,7 @@ function screenGradeGrid(container){
         Object.keys(LEVELS).map(k=>(
           '<button class="level-btn'+(State.settings.level===k?' active':'')+'" data-level="'+k+'">'+LEVELS[k].label+'</button>'
         )).join('')+
-        '<span class="level-hint">הרמה קובעת את הזמן לכל שאלה ואת גודל המספרים בתרגילים — אפשר להחליף גם באמצע.</span>'+
+        '<span class="level-hint">הרמה קובעת את גודל המספרים בתרגילים — אפשר להחליף גם באמצע.</span>'+
       '</div>'+
       '<div class="game-grid">'+
         list.map(g=>(
@@ -1829,13 +1777,11 @@ function openSettingsModal(container, onClose){
   overlay.innerHTML =
     '<div class="setup-card" style="margin:0;max-width:420px;width:100%">'+
       '<h3>הגדרות</h3>'+
-      '<div class="setting-row"><span>טיימר לשאלה</span><div class="switch '+(State.settings.timerOn?'on':'')+'" id="m-sw-timer"></div></div>'+
       '<div class="setting-row"><span>אפקטים (קונפטי)</span><div class="switch '+(State.settings.fx?'on':'')+'" id="m-sw-fx"></div></div>'+
       '<div class="setting-row"><span>סאונד</span><div class="switch '+(State.settings.sound?'on':'')+'" id="m-sw-sound"></div></div>'+
       '<button class="btn big" id="m-close" style="width:100%;margin-top:18px">סגור</button>'+
     '</div>';
   document.body.appendChild(overlay);
-  overlay.querySelector('#m-sw-timer').addEventListener('click', e=>{ State.settings.timerOn=!State.settings.timerOn; e.target.classList.toggle('on'); saveSettings(); });
   overlay.querySelector('#m-sw-fx').addEventListener('click', e=>{ State.settings.fx=!State.settings.fx; e.target.classList.toggle('on'); saveSettings(); });
   overlay.querySelector('#m-sw-sound').addEventListener('click', e=>{ State.settings.sound=!State.settings.sound; Sound.setEnabled(State.settings.sound); e.target.classList.toggle('on'); saveSettings(); });
   overlay.querySelector('#m-close').addEventListener('click', ()=>{ overlay.remove(); });
