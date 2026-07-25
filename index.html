@@ -809,13 +809,12 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
         <div class="relative max-w-5xl mx-auto px-5 sm:px-8">
 
-            <!-- הכרזת פיצ'ר: דוח חודשי מהמורה להורה -->
-            <button onclick="document.getElementById('monthlyReportModal').classList.remove('hidden')" class="inline-flex items-center gap-2 bg-gradient-to-r from-fuchsia-600 to-purple-600 border border-fuchsia-400 text-white text-sm font-bold px-4 py-1.5 rounded-full mb-5 hover:scale-105 transition-transform shadow-[0_0_20px_rgba(192,38,211,0.6)] animate-pulse hover:animate-none">
-                <span class="bg-white text-purple-800 text-[11px] px-2 py-0.5 rounded-full font-black tracking-wide">חדש!</span>
-                <span class="hidden sm:inline">דוח חודשי אישי מהמורה — אתם תמיד יודעים איפה הילד עומד</span>
-                <span class="sm:hidden">דוח חודשי מהמורה להורה</span>
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
-            </button><br>
+            <!-- תג תוצאות: אחוז המשפרים וממוצע השיפור בנקודות -->
+            <div class="inline-flex items-center gap-2.5 bg-gradient-to-r from-fuchsia-600 to-purple-600 border border-fuchsia-400 text-white text-sm font-bold px-4 py-1.5 rounded-full mb-5 shadow-[0_0_20px_rgba(192,38,211,0.6)]">
+                <span class="bg-white text-purple-800 text-[13px] px-2 py-0.5 rounded-full font-black tracking-wide"><span data-target="98">98</span>%</span>
+                <span class="hidden sm:inline">מהתלמידים משפרים את הציון — שיפור ממוצע של <span data-target="20">20</span> נקודות</span>
+                <span class="sm:hidden">משפרים את הציון · ממוצע <span data-target="20">20</span> נק׳</span>
+            </div><br>
 
             <!-- תג עדות מספרית עם counter מונפש -->
             <div class="inline-block bg-white/15 border border-white/25 text-white text-sm font-semibold px-5 py-2 rounded-full mb-8">
@@ -1876,24 +1875,47 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
         document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-        // ─── Animated counter for the "300 תלמידים" badge ───
-        // נטענה רק פעם אחת כשהדף עולה — הזחיחה הזו תופסת את העין מיד.
+        // ─── Animated counters — every [data-target] number in the hero ───
+        // (מספר התלמידים, אחוז המשפרים, ממוצע השיפור). נטען פעם אחת כשהדף
+        // עולה — הזחיחה הזו תופסת את העין מיד.
         // אם המשתמש מבקש reduced motion — מציגים את הערך הסופי מיד.
-        const counterEl = document.getElementById('studentsCounter');
-        if (counterEl && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            const target = parseInt(counterEl.dataset.target || counterEl.textContent, 10) || 0;
-            const duration = 1500; // ms
-            const startTime = performance.now();
-            counterEl.textContent = '0';
-            function tick(now) {
-                const elapsed = now - startTime;
-                const progress = Math.min(1, elapsed / duration);
-                // ease-out-quart לאותו easing כמו ה-fade-up
-                const eased = 1 - Math.pow(1 - progress, 4);
-                counterEl.textContent = Math.round(target * eased).toLocaleString('he-IL');
-                if (progress < 1) requestAnimationFrame(tick);
+        function runCounters() {
+            document.querySelectorAll('[data-target]').forEach(function (counterEl) {
+                const target = parseInt(counterEl.dataset.target || counterEl.textContent, 10) || 0;
+                const duration = 1500; // ms
+                const startTime = performance.now();
+                counterEl.textContent = '0';
+                function tick(now) {
+                    const elapsed = now - startTime;
+                    const progress = Math.min(1, elapsed / duration);
+                    // ease-out-quart לאותו easing כמו ה-fade-up
+                    const eased = 1 - Math.pow(1 - progress, 4);
+                    counterEl.textContent = Math.round(target * eased).toLocaleString('he-IL');
+                    if (progress < 1) requestAnimationFrame(tick);
+                }
+                requestAnimationFrame(tick);
+                // רשת ביטחון: אם הטאב עובר לרקע באמצע, requestAnimationFrame
+                // קופא והמספר נתקע (למשל על "0%") — setTimeout כן פועל בטאב
+                // רקע, ולכן מבטיח שהערך האמיתי יוצג בכל מקרה.
+                setTimeout(function () {
+                    counterEl.textContent = target.toLocaleString('he-IL');
+                }, duration + 200);
+            });
+        }
+        // חשוב: requestAnimationFrame קפוא בטאב רקע. אם היינו מאפסים ל-0 מיד,
+        // מבקר שפתח את הדף בטאב רקע היה רואה "0% מהתלמידים משפרים את הציון"
+        // — בדיוק ההפך מהמסר. לכן משאירים את המספרים האמיתיים שב-HTML
+        // ומתחילים להנפיש רק כשהדף באמת נצפה (וגם אז רק אם אין reduced motion).
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            if (document.visibilityState === 'visible') {
+                runCounters();
+            } else {
+                document.addEventListener('visibilitychange', function onVisible() {
+                    if (document.visibilityState !== 'visible') return;
+                    document.removeEventListener('visibilitychange', onVisible);
+                    runCounters();
+                });
             }
-            requestAnimationFrame(tick);
         }
 
         // ─── Auto-scroll to contact form when coming back from the quiz ───
