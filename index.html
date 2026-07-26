@@ -255,17 +255,95 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             flex-shrink: 0;
         }
 
-        /* סרגל סטטיסטיקות */
-        .stat-item {
+        /* הוכחות קצרות — כרטיסים בהירים במקום סרגל סטטיסטיקות כבד */
+        .stats-section {
+            position: relative;
+            overflow: hidden;
+            padding: 3.5rem 0;
+            background:
+                radial-gradient(circle at 12% 0%, rgba(216, 180, 254, 0.24), transparent 22rem),
+                radial-gradient(circle at 88% 100%, rgba(196, 181, 253, 0.22), transparent 20rem),
+                #faf8ff;
+            border-top: 1px solid #f3e8ff;
+            border-bottom: 1px solid #ede9fe;
+        }
+        .stats-grid {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1rem;
+        }
+        .stat-card {
+            position: relative;
             display: flex;
+            min-width: 0;
+            min-height: 11.5rem;
             flex-direction: column;
             align-items: center;
-            padding: 1.25rem 1rem;
+            justify-content: center;
+            padding: 1.65rem 1.2rem 1.5rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(221, 214, 254, 0.95);
+            border-radius: 1.4rem;
+            box-shadow:
+                0 1px 0 rgba(255, 255, 255, 0.9) inset,
+                0 14px 34px -22px rgba(76, 29, 149, 0.38);
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         }
-        .stat-divider {
-            width: 1px;
-            background: rgba(255,255,255,0.2);
-            align-self: stretch;
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 50%;
+            width: 3.2rem;
+            height: 3px;
+            border-radius: 0 0 999px 999px;
+            background: linear-gradient(90deg, #7c3aed, #c026d3);
+            transform: translateX(50%);
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: #c4b5fd;
+            box-shadow: 0 20px 42px -24px rgba(76, 29, 149, 0.5);
+        }
+        .stat-kicker {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.8rem;
+            padding: 0.3rem 0.72rem;
+            color: #6d28d9;
+            background: #f3e8ff;
+            border-radius: 999px;
+            font-size: 0.73rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+        }
+        .stat-value {
+            color: #4c1d95;
+            font-size: clamp(1.65rem, 2.3vw, 2.15rem);
+            font-weight: 900;
+            line-height: 1.15;
+            letter-spacing: -0.035em;
+        }
+        .stat-description {
+            max-width: 15rem;
+            margin-top: 0.55rem;
+            color: #5b5567;
+            font-size: 0.94rem;
+            font-weight: 600;
+            line-height: 1.55;
+        }
+        @media (max-width: 767px) {
+            .stats-section { padding: 2.75rem 0; }
+            .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .stat-card {
+                min-height: 10.75rem;
+                padding: 1.4rem 0.85rem 1.3rem;
+            }
+            .stat-value { font-size: clamp(1.35rem, 6vw, 1.75rem); }
+            .stat-description { font-size: 0.84rem; }
         }
 
         /* כרטיסי ייחוד */
@@ -916,27 +994,31 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     <!-- ============================================================ -->
 
     <!-- ============================================================ -->
-    <!-- STATS BAR                                                    -->
+    <!-- TRUST PROOFS                                                 -->
     <!-- ============================================================ -->
-    <section class="py-10 bg-gradient-to-l from-purple-700 to-purple-900 text-white">
-        <div class="max-w-5xl mx-auto px-6">
-            <div class="flex flex-wrap justify-center divide-x divide-x-reverse divide-white/20">
-                <div class="stat-item fade-up px-6 sm:px-10">
-                    <span class="text-3xl sm:text-4xl font-extrabold">300+</span>
-                    <span class="text-xs sm:text-sm font-medium mt-1 opacity-80 text-center">תלמידים שליווינו</span>
-                </div>
-                <div class="stat-item fade-up px-6 sm:px-10">
-                    <span class="text-3xl sm:text-4xl font-extrabold">כיתה א׳ – י״ב</span>
-                    <span class="text-xs sm:text-sm font-medium mt-1 opacity-80 text-center">לכל שכבות הגיל</span>
-                </div>
-                <div class="stat-item fade-up px-6 sm:px-10">
-                    <span class="text-3xl sm:text-4xl font-extrabold">100%</span>
-                    <span class="text-xs sm:text-sm font-medium mt-1 opacity-80 text-center">אונליין — מכל מקום בארץ</span>
-                </div>
-                <div class="stat-item fade-up px-6 sm:px-10">
-                    <span class="text-3xl sm:text-4xl font-extrabold">מורה קבוע</span>
-                    <span class="text-xs sm:text-sm font-medium mt-1 opacity-80 text-center">מהשיעור הראשון עד הסוף</span>
-                </div>
+    <section class="stats-section" aria-label="היתרונות של MathBoost">
+        <div class="max-w-6xl mx-auto px-5 sm:px-8">
+            <div class="stats-grid">
+                <article class="stat-card fade-up">
+                    <span class="stat-kicker">ניסיון מוכח</span>
+                    <strong class="stat-value">300+ תלמידים</strong>
+                    <span class="stat-description">שכבר ליווינו במתמטיקה</span>
+                </article>
+                <article class="stat-card fade-up" style="animation-delay:0.06s">
+                    <span class="stat-kicker">לכל הרמות</span>
+                    <strong class="stat-value">כיתות א׳–י״ב</strong>
+                    <span class="stat-description">מיסודי ועד 5 יחידות ובגרות</span>
+                </article>
+                <article class="stat-card fade-up" style="animation-delay:0.12s">
+                    <span class="stat-kicker">אחד על אחד</span>
+                    <strong class="stat-value">שיעור אישי</strong>
+                    <span class="stat-description">אונליין, מכל מקום בארץ</span>
+                </article>
+                <article class="stat-card fade-up" style="animation-delay:0.18s">
+                    <span class="stat-kicker">קשר רציף</span>
+                    <strong class="stat-value">ליווי מותאם אישית</strong>
+                    <span class="stat-description">אותו מורה, משיעור ההיכרות ולאורך כל הדרך</span>
+                </article>
             </div>
         </div>
     </section>
