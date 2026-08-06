@@ -912,11 +912,11 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
         <div class="relative max-w-5xl mx-auto px-5 sm:px-8">
 
-            <!-- תג תוצאות: ממוצע השיפור בציון -->
+            <!-- תג תוצאות: אחוז המשפרים וממוצע השיפור בנקודות -->
             <div class="inline-flex items-center gap-2.5 bg-gradient-to-r from-fuchsia-600 to-purple-600 border border-fuchsia-400 text-white text-sm font-bold px-4 py-1.5 rounded-full mb-5 shadow-[0_0_20px_rgba(192,38,211,0.6)]">
-                <span class="bg-white text-purple-800 text-[13px] px-2 py-0.5 rounded-full font-black tracking-wide"><span data-target="15">15</span> נק׳</span>
-                <span class="hidden sm:inline">נקודות שיפור בממוצע בציון</span>
-                <span class="sm:hidden">שיפור ממוצע בציון</span>
+                <span class="bg-white text-purple-800 text-[13px] px-2 py-0.5 rounded-full font-black tracking-wide"><span data-target="98">98</span>%</span>
+                <span class="hidden sm:inline">מהתלמידים משפרים את הציון — שיפור ממוצע של <span data-target="15">15</span> נקודות</span>
+                <span class="sm:hidden">משפרים את הציון · ממוצע <span data-target="15">15</span> נק׳</span>
             </div><br>
 
             <!-- תג עדות מספרית עם counter מונפש -->
@@ -1984,7 +1984,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
         // ─── Animated counters — every [data-target] number in the hero ───
-        // (מספר התלמידים וממוצע השיפור). נטען פעם אחת כשהדף
+        // (מספר התלמידים, אחוז המשפרים וממוצע השיפור). נטען פעם אחת כשהדף
         // עולה — הזחיחה הזו תופסת את העין מיד.
         // אם המשתמש מבקש reduced motion — מציגים את הערך הסופי מיד.
         function runCounters() {
@@ -2011,7 +2011,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             });
         }
         // חשוב: requestAnimationFrame קפוא בטאב רקע. אם היינו מאפסים ל-0 מיד,
-        // מבקר שפתח את הדף בטאב רקע היה רואה "0 נקודות שיפור בממוצע"
+        // מבקר שפתח את הדף בטאב רקע היה רואה "0% מהתלמידים משפרים את הציון"
         // — בדיוק ההפך מהמסר. לכן משאירים את המספרים האמיתיים שב-HTML
         // ומתחילים להנפיש רק כשהדף באמת נצפה (וגם אז רק אם אין reduced motion).
         if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
