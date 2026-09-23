@@ -7,6 +7,23 @@
 <meta name="description" content="שאלון אבחון קצר של MathBoost שיעזור להבין את הקושי במתמטיקה ולזהות את נקודת הפתיחה המתאימה לתלמיד או לתלמידה.">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
 <link rel="canonical" href="https://www.mathboost.co.il/quiz/">
+<!-- Meta Pixel Code (same pixel as the home page) -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1651905856154869');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   /* ═══════════════ Design system ═══════════════ */
@@ -1121,6 +1138,10 @@
       });
 
       if (!res.ok) throw new Error('שגיאה בשרת');
+      // The CRM returns the event_id it sent to Meta's Conversions API; the
+      // browser Lead reuses it so Meta counts the two copies as one lead.
+      const result = await res.json().catch(() => ({}));
+      const leadEventId = result?.tracking?.siteEvent?.eventId;
 
       // Hide form, show success
       document.getElementById('leadFormCard').style.display = 'none';
@@ -1130,7 +1151,7 @@
 
       // Fire pixel events if available (consistent with main site form)
       try {
-        if (typeof window.fbq === 'function') window.fbq('track', 'Lead');
+        if (typeof window.fbq === 'function') window.fbq('track', 'Lead', {}, leadEventId ? { eventID: leadEventId } : undefined);
         if (typeof window.gtag === 'function') window.gtag('event', 'generate_lead', { event_category: 'quiz' });
         if (window.MathBoostTracking) window.MathBoostTracking.track('quiz_lead_submit_success', { quiz_session_id: quizSessionId });
       } catch {}

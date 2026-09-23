@@ -69,6 +69,17 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '1651905856154869');
 fbq('track', 'PageView');
+// After the contact form, the CRM redirects back with ?submitted=1&eid=<id>.
+// Fire the browser Lead with the SAME id the server sent via the Conversions
+// API, so Meta merges the two into one lead (once per submission).
+(function () {
+  try {
+    var p = new URLSearchParams(location.search), eid = p.get('eid');
+    if (p.get('submitted') !== '1' || !eid || sessionStorage.getItem('mb_lead_' + eid)) return;
+    sessionStorage.setItem('mb_lead_' + eid, '1');
+    fbq('track', 'Lead', {}, { eventID: eid });
+  } catch (e) {}
+})();
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
