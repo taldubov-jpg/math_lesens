@@ -410,6 +410,12 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     animation: spin 0.8s linear infinite;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+  .lead-form-card .lf-consent {
+    display: flex; align-items: center; gap: 10px;
+    margin: 4px 0 12px; font-size: 13px; color: var(--text-soft); cursor: pointer; text-align: right;
+  }
+  .lead-form-card .lf-consent input { width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--purple); }
+  .lead-form-card .form-trust + .form-trust { margin-top: 6px; }
   .lead-form-card .form-trust {
     margin-top: 14px;
     text-align: center;
@@ -827,6 +833,11 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         <input type="hidden" name="רוצים שנחזור אליכם" value="כן" />
         <input type="hidden" name="מקור" value="quiz" />
 
+        <label class="lf-consent">
+          <input type="checkbox" name="מאשר/ת דיוור" value="כן" />
+          <span>אשמח לקבל טיפים ועדכונים בוואטסאפ ובמייל. אפשר להסיר בכל עת.</span>
+        </label>
+
         <button type="submit" class="btn-submit" id="lf_submit">
           <span class="btn-text">שלחו פרטים</span>
         </button>
@@ -837,6 +848,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
       <p class="form-trust">
         ללא התחייבות · השליחה מאובטחת · או דברו איתנו <a class="wa-link" href="https://wa.me/972586276476" target="_blank" rel="noopener">בוואטסאפ</a>
       </p>
+      <p class="form-trust">בשליחה אתם מסכימים ל<a class="wa-link" href="/privacy/">מדיניות הפרטיות</a> ול<a class="wa-link" href="/terms/">תנאי השימוש</a></p>
     </div>
 
     <!-- Success state — replaces the form after submit -->

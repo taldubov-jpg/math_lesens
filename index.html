@@ -1416,11 +1416,12 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 </div>
 
                 <!-- checkbox -->
-                <label for="callback" class="flex items-center gap-3 cursor-pointer mt-1 mb-2 sm:mb-3 bg-purple-50 border border-purple-100 rounded-xl p-2 sm:p-2.5">
-                    <input type="checkbox" id="callback" name="רוצים שנחזור אליכם" class="form-checkbox" checked>
-                    <span class="text-sm text-gray-700">
-                        <strong class="text-purple-900">כן</strong>, אשמח שתחזרו אליי בהקדם
-                    </span>
+                <!-- Every submission is a callback request; the visible box is the separate,
+                     opt-in consent for marketing messages (Communications Law 30A) — never pre-checked. -->
+                <input type="hidden" name="רוצים שנחזור אליכם" value="כן">
+                <label for="marketingConsent" class="flex items-center gap-3 cursor-pointer mt-1 mb-2 sm:mb-3 bg-purple-50 border border-purple-100 rounded-xl px-2 py-1.5 sm:p-2.5">
+                    <input type="checkbox" id="marketingConsent" name="מאשר/ת דיוור" value="כן" class="form-checkbox">
+                    <span class="text-[13px] sm:text-sm leading-snug text-gray-700">אשמח לקבל טיפים ועדכונים בוואטסאפ ובמייל. אפשר להסיר בכל עת.</span>
                 </label>
 
                 <!-- כפתור שליחה -->
@@ -1431,8 +1432,8 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
                 <!-- חתימת אמון -->
                 <div class="flex items-center justify-center gap-2 text-xs text-gray-500 mt-2">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    שליחה מאובטחת · ליצירת קשר בלבד
+                    
+                    <span>בשליחה מסכימים ל<a href="/privacy/" class="underline hover:text-purple-700">מדיניות הפרטיות</a> ול<a href="/terms/" class="underline hover:text-purple-700">תנאים</a></span>
                 </div>
             </form>
 
@@ -1562,6 +1563,12 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             M<span class="mb-footer-logo-plus">+</span>
           </div>
         </div>
+        <nav class="mb-footer-links" aria-label="מידע משפטי">
+          <a href="/privacy/">מדיניות פרטיות</a>
+          <a href="/terms/">תנאי שימוש ושירות</a>
+          <a href="/accessibility/">הצהרת נגישות</a>
+        </nav>
+        <p class="mb-footer-biz">MathBoost, עוסק פטור. <a href="mailto:mathboost100@gmail.com">mathboost100@gmail.com</a></p>
       </div>
     </footer>
 
@@ -1634,6 +1641,11 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         align-items: center;
         gap: 1.25rem;
       }
+
+      .mb-footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.35rem 1.25rem; font-size: 0.9rem; }
+      .mb-footer-links a, .mb-footer-biz a { color: rgba(255,255,255,0.85); text-decoration: underline; text-underline-offset: 3px; }
+      .mb-footer-links a:hover, .mb-footer-biz a:hover { color: #fff; }
+      .mb-footer-biz { margin: 0; font-size: 0.8rem; color: rgba(255,255,255,0.65); }
 
       /* Logo */
       .mb-footer-logo-wrap { position: relative; }
@@ -2203,6 +2215,56 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             window.addEventListener('scroll', update, { passive: true });
             window.addEventListener('resize', update);
             update();
+        })();
+    </script>
+
+    <!-- ===== הודעת עוגיות ופיקסלים (נדרשת גם לפי תנאי Meta) ===== -->
+    <style>
+        .cookie-note{
+            position:fixed; z-index:70; bottom:12px; left:12px; right:12px; margin:0 auto; max-width:40rem;
+            display:flex; align-items:center; gap:.75rem;
+            background:#fff; color:#374151; font-size:.85rem; line-height:1.5;
+            border:1px solid rgba(126,34,206,.18); border-radius:1rem; padding:.65rem .75rem .65rem 1rem;
+            box-shadow:0 12px 32px -12px rgba(59,7,100,.35);
+        }
+        .cookie-note[hidden]{ display:none; }
+        .cookie-note a{ color:#6B21A8; text-decoration:underline; }
+        .cookie-note button{
+            flex-shrink:0; background:#6B21A8; color:#fff; font-weight:700; font-size:.85rem;
+            border:0; border-radius:.75rem; padding:.5rem .9rem; cursor:pointer;
+        }
+        .cookie-note button:focus-visible{ outline:3px solid #A855F7; outline-offset:2px; }
+        /* keep the floating CTA above the note while it is open */
+        body.cookie-note-open .sticky-cta{ bottom:calc(var(--cookie-note-h, 64px) + 20px); }
+    </style>
+    <div id="cookieNote" class="cookie-note" role="region" aria-label="הודעה על עוגיות" hidden>
+        <p style="margin:0">האתר משתמש בעוגיות ובקודי מדידה של Meta, Google ו-TikTok למדידה ולפרסום. <a href="/privacy/#cookies">פרטים ואפשרויות</a></p>
+        <button type="button" id="cookieNoteOk">הבנתי</button>
+    </div>
+    <script>
+        (function(){
+            var note = document.getElementById('cookieNote');
+            var seen = false;
+            try { seen = localStorage.getItem('mb_cookie_note') === '1'; } catch (e) {}
+            if (!note || seen) return;
+            note.hidden = false;
+            document.body.classList.add('cookie-note-open');
+            function setH(){ document.documentElement.style.setProperty('--cookie-note-h', note.offsetHeight + 'px'); }
+            setH(); window.addEventListener('resize', setH);
+            var dismissed = false;
+            document.getElementById('cookieNoteOk').addEventListener('click', function(){
+                try { localStorage.setItem('mb_cookie_note', '1'); } catch (e) {}
+                dismissed = true;
+                note.hidden = true;
+                document.body.classList.remove('cookie-note-open');
+            });
+            // Never cover the contact form: step aside while it is on screen.
+            var contact = document.getElementById('contact');
+            if (contact && 'IntersectionObserver' in window) {
+                new IntersectionObserver(function(entries){
+                    if (!dismissed) note.hidden = entries[0].isIntersecting;
+                }, { threshold: 0.05 }).observe(contact);
+            }
         })();
     </script>
 
