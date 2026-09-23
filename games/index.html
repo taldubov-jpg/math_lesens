@@ -2,14 +2,14 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>משחקי מתמטיקה לפי כיתה | MathBoost</title>
 <meta name="description" content="משחקי מתמטיקה אינטראקטיביים של MathBoost לתרגול מהנה לפי כיתה ורמת לימוד.">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
 <link rel="canonical" href="https://www.mathboost.co.il/games/">
 <style>
 :root{
-  --bg:#F7F8FA; --surface:#FFFFFF; --text:#1E293B; --text-soft:#64748B;
+  --bg:#F7F8FA; --surface:#FFFFFF; --text:#1E293B; --text-soft:#475569;
   --border:#E5E7EB; --green:#10B981; --green-dark:#0B815A; --blue:#1CB0F6; --blue-dark:#0E86C2;
   --amber:#F59E0B; --red:#EF4444; --purple:#A570FF; --pink:#CC348D;
   --radius:16px; --radius-sm:10px; --shadow:0 4px 16px rgba(0,0,0,0.07);
@@ -198,9 +198,9 @@ h1,h2,h3{margin:0; font-weight:800;}
 </head>
 <body>
 
-<canvas id="confetti-canvas"></canvas>
+<canvas id="confetti-canvas" aria-hidden="true"></canvas>
 
-<div id="app"></div>
+<main id="app"></main>
 
 <script>
 'use strict';
@@ -411,7 +411,7 @@ function mountMCQTemplate(stage, config, hooks){
         '<div class="choices-grid">'+
           choices.map((c,i)=>'<button class="choice-btn" data-i="'+i+'">'+fracify(ltr(c))+'</button>').join('')+
         '</div>'+
-        '<div class="feedback" id="mcq-fb"></div>'+
+        '<div class="feedback" role="status" id="mcq-fb"></div>'+
       '</div>';
     const fb = stage.querySelector('#mcq-fb');
     let answered=false;
@@ -451,7 +451,7 @@ function mountTypeAnswerTemplate(stage, config, hooks){
           '<input type="text" inputmode="decimal" id="ta-input" autocomplete="off">'+
           '<button class="btn" id="ta-submit">בדוק</button>'+
         '</div>'+
-        '<div class="feedback" id="ta-fb"></div>'+
+        '<div class="feedback" role="status" id="ta-fb"></div>'+
       '</div>';
     qIndex++;
     const input = stage.querySelector('#ta-input'); const fb=stage.querySelector('#ta-fb');
@@ -505,7 +505,7 @@ function mountMatchTemplate(stage, config, hooks){
       '<div class="game-card-stage">'+
         '<div style="font-size:13px;font-weight:800;color:var(--text-soft);margin-bottom:14px">'+config.skillLabel+' · התאם זוגות</div>'+
         '<div class="match-grid" id="match-grid"></div>'+
-        '<div class="feedback" id="match-fb"></div>'+
+        '<div class="feedback" role="status" id="match-fb"></div>'+
       '</div>';
     const grid = stage.querySelector('#match-grid');
     cards.forEach((c,i)=>{
@@ -587,7 +587,7 @@ function mountJeopardyTemplate(stage, config){
         '<div style="font-size:13px;font-weight:800;color:var(--amber);margin-bottom:10px">שאלה ב-<span class="ltr-num">'+cell.value+'</span> נקודות</div>'+
         '<div class="q-prompt">'+fracify(q.prompt)+'</div>'+
         '<button class="btn" id="jp-reveal">חשוף תשובה</button>'+
-        '<div class="feedback" id="jp-fb"></div>'+
+        '<div class="feedback" role="status" id="jp-fb"></div>'+
       '</div>';
     stage.querySelector('#jp-reveal').addEventListener('click', ()=>{
       const fb = stage.querySelector('#jp-fb');
@@ -712,7 +712,7 @@ function mountWheelTemplate(stage, config){
       const q = seg.generator ? seg.generator() : null;
       if(q){
         result.innerHTML = '<div class="q-prompt" style="font-size:24px">'+fracify(q.prompt)+'</div>'+
-          '<button class="btn" id="wheel-reveal">חשוף תשובה</button><div class="feedback" id="wheel-fb"></div>';
+          '<button class="btn" id="wheel-reveal">חשוף תשובה</button><div class="feedback" role="status" id="wheel-fb"></div>';
         document.getElementById('wheel-reveal').addEventListener('click', ()=>{
           document.getElementById('wheel-fb').innerHTML = 'התשובה: '+fracify(ltr(q.answer))+(q.explain?'<div class="explain">'+q.explain+'</div>':'');
           Sound.correct(); if(State.settings.fx) Confetti.burst();
@@ -747,7 +747,7 @@ function mountBuzzerTemplate(stage, config){
         '<div class="q-prompt">'+fracify(q.prompt)+'</div>'+
         (displayChoices.length? '<div class="choices-grid">'+displayChoices.map(c=>'<div class="choice-btn" style="cursor:default;opacity:.85">'+ltr(c)+'</div>').join('')+'</div>' : '')+
         '<button class="btn" id="bz-reveal" style="margin-top:22px">חשוף תשובה</button>'+
-        '<div class="feedback" id="bz-fb"></div>'+
+        '<div class="feedback" role="status" id="bz-fb"></div>'+
         '<div class="answer-judge" id="bz-judge" style="display:none;margin-top:14px;gap:10px;justify-content:center"></div>'+
       '</div>';
     stage.querySelector('#bz-reveal').addEventListener('click', ()=>{
@@ -1319,7 +1319,7 @@ function mountMysteryNumber(stage, e){
       '<div class="game-card-stage">'+
         '<div class="q-prompt">חשבתי על מספר בין '+min+' ל-'+max+'. ניחוש?</div>'+
         '<div class="type-answer-row"><input type="text" inputmode="numeric" id="my-input" autocomplete="off"><button class="btn" id="my-submit">נחש</button></div>'+
-        '<div class="feedback" id="my-fb">ניחושים: <span class="ltr-num">'+guesses+'</span></div>'+
+        '<div class="feedback" role="status" id="my-fb">ניחושים: <span class="ltr-num">'+guesses+'</span></div>'+
       '</div>';
     const input=stage.querySelector('#my-input'); input.focus();
     function submit(){

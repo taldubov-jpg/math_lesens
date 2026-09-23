@@ -62,7 +62,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
   }
   .floating-math span {
     position: absolute; font-size: 50px; font-weight: 200; color: var(--purple);
-    font-family: 'Times New Roman', serif; animation: float 20s infinite ease-in-out;
+    font-family: 'Times New Roman', serif;
   }
   .floating-math span:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
   .floating-math span:nth-child(2) { top: 20%; right: 8%; animation-delay: 2s; font-size: 70px; }
@@ -131,7 +131,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
   .intro-emoji {
     font-size: 72px; margin-bottom: 16px;
     display: inline-block;
-    animation: bounce 2s infinite ease-in-out;
+    animation: bounce 2s 2 ease-in-out;
   }
   @keyframes bounce {
     0%, 100% { transform: translateY(0); }
@@ -161,6 +161,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     font-size: 13px; color: var(--text-mute); font-weight: 600;
     letter-spacing: 0.05em; margin-bottom: 10px;
   }
+  .step h1:focus, .step h2:focus { outline: none; }
   .q-title {
     font-size: clamp(22px, 4vw, 28px); font-weight: 700; line-height: 1.3;
     margin-bottom: 8px; letter-spacing: -0.02em;
@@ -275,7 +276,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     display: inline-flex; align-items: center; justify-content: center;
     margin-bottom: 18px;
     box-shadow: 0 16px 40px -10px rgba(126, 34, 206, 0.4);
-    animation: bounce 2s infinite ease-in-out;
+    animation: bounce 2s 2 ease-in-out;
   }
   .result-hero h2 {
     font-size: clamp(26px, 5vw, 34px); font-weight: 800;
@@ -537,7 +538,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     background: var(--green); color: #fff;
     display: inline-flex; align-items: center; justify-content: center;
     font-size: 50px; margin-bottom: 20px;
-    animation: pulse 2s infinite;
+    animation: pulse 2s 2;
     box-shadow: 0 16px 40px -10px rgba(16, 185, 129, 0.4);
   }
   @keyframes pulse {
@@ -624,13 +625,14 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 </div>
 
 <!-- Top nav -->
-<div class="topnav">
+<header class="topnav">
   <div class="brand">MathBoost</div>
-  <button class="close-btn" onclick="location.href='../'" title="חזרה לאתר">✕</button>
-</div>
+  <button class="close-btn" onclick="location.href='../'" title="חזרה לאתר" aria-label="חזרה לאתר">✕</button>
+</header>
+<div role="region" aria-label="התקדמות בשאלון">
 
 <!-- Progress bar -->
-<div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+<div class="progress-bar-wrap" role="progressbar" aria-label="התקדמות בשאלון" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
 
 <!-- Step dots (steps 1–7) -->
 <div class="step-dots hidden" id="stepDots">
@@ -644,7 +646,8 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 </div>
 
 <!-- Encouragement toast -->
-<div class="encourage-toast" id="encourageToast"></div>
+<div class="encourage-toast" id="encourageToast" role="status"></div>
+</div>
 
 <main>
 
@@ -776,7 +779,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     <div class="q-counter">שאלה אחרונה</div>
     <h2 class="q-title">משהו נוסף שכדאי לנו לדעת?</h2>
     <p class="q-subtitle">לא חובה — אבל עוזר לנו להתאים את המורה המתאים</p>
-    <textarea class="input-field" id="freeText"
+    <textarea class="input-field" id="freeText" aria-label="משהו נוסף שכדאי לנו לדעת (לא חובה)"
       placeholder="לדוגמה: הבן שלי בכיתה ז׳, מתקשה במיוחד עם שברים ופונקציות. הוא ביישן ומעדיף מורה רגוע."
       rows="5"></textarea>
     <div class="btn-row">
@@ -812,12 +815,12 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
       <form id="leadInlineForm" novalidate>
         <div class="lead-form-row">
-          <input type="text" class="input-field" name="שם פרטי" id="lf_firstName" placeholder="שם פרטי" autocomplete="given-name" required />
-          <input type="text" class="input-field" name="שם משפחה" id="lf_lastName" placeholder="שם משפחה" autocomplete="family-name" required />
+          <input type="text" class="input-field" name="שם פרטי" id="lf_firstName" placeholder="שם פרטי" aria-label="שם פרטי" autocomplete="given-name" required />
+          <input type="text" class="input-field" name="שם משפחה" id="lf_lastName" placeholder="שם משפחה" aria-label="שם משפחה" autocomplete="family-name" required />
         </div>
-        <input type="tel" class="input-field" name="טלפון" id="lf_phone" placeholder="050-000-0000" autocomplete="tel" inputmode="tel" pattern="^05[0-9]{8}$|^0[2-9][0-9]{7}$" required />
+        <input type="tel" class="input-field" name="טלפון" id="lf_phone" placeholder="050-000-0000" aria-label="מספר טלפון" autocomplete="tel" inputmode="tel" pattern="^05[0-9]{8}$|^0[2-9][0-9]{7}$" required />
 
-        <select class="input-field" name="שעה מועדפת לחזרה" id="lf_callTime">
+        <select class="input-field" name="שעה מועדפת לחזרה" id="lf_callTime" aria-label="שעה מועדפת לחזרה (לא חובה)">
           <option value="" disabled selected>שעה מועדפת לחזרה (אופציונלי)</option>
           <option value="בוקר 08:00–10:00">בוקר · 08:00 – 10:00</option>
           <option value="בוקר 10:00–12:00">בוקר · 10:00 – 12:00</option>
@@ -842,7 +845,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
           <span class="btn-text">שלחו פרטים</span>
         </button>
 
-        <div id="lf_error" class="form-error" style="display:none"></div>
+        <div id="lf_error" class="form-error" role="alert" style="display:none"></div>
       </form>
 
       <p class="form-trust">
@@ -897,6 +900,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
   function updateProgress() {
     const pct = (currentStep / TOTAL_STEPS) * 100;
     document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('progressWrap').setAttribute('aria-valuenow', String(Math.round(pct)));
   }
 
   function updateDots(step) {
@@ -931,6 +935,8 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     void next.offsetWidth; // force reflow for animation restart
     next.classList.add('active', direction === 'forward' ? 'dir-forward' : 'dir-backward');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    const heading = next.querySelector('h1, h2');
+    if (heading) { heading.setAttribute('tabindex', '-1'); heading.focus({ preventScroll: true }); }
     updateProgress();
     updateDots(currentStep);
     if (direction === 'forward' && ENCOURAGEMENTS[currentStep]) {
@@ -955,6 +961,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
   // ════════════════ Option selection ════════════════
   document.querySelectorAll('.options').forEach(group => {
+    group.querySelectorAll('.option').forEach(o => o.setAttribute('aria-pressed', 'false'));
     group.addEventListener('click', (e) => {
       const opt = e.target.closest('.option');
       if (!opt) return;
@@ -963,9 +970,11 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
       // Deselect others, re-trigger animation on newly selected
       group.querySelectorAll('.option').forEach(o => {
         o.classList.remove('selected');
+        o.setAttribute('aria-pressed', 'false');
         void o.offsetWidth;
       });
       opt.classList.add('selected');
+      opt.setAttribute('aria-pressed', 'true');
       // Store
       answers[key] = value;
       if (window.MathBoostTracking) {

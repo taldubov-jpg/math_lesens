@@ -219,7 +219,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             gap: 0.4rem;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.18);
-            color: rgba(255, 255, 255, 0.88);
+            color: rgba(255, 255, 255, 0.97);
             font-size: 0.78rem;
             font-weight: 600;
             padding: 0.4rem 0.85rem;
@@ -230,7 +230,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
         .purple-glow { box-shadow: 0 10px 30px -10px rgba(109, 40, 217, 0.35); }
 
-        #menu-toggle:checked ~ .mobile-menu { display: flex; }
+        @media (max-width: 767px) { .mobile-menu.is-open { display: flex; } }
 
         .card-hover {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -474,6 +474,18 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             transform: translateY(0);
         }
         /* ביטול אנימציה למשתמשים שמבקשים פחות תנועה (Accessibility) */
+        .skip-link {
+            position: absolute; right: 1rem; top: -4rem; z-index: 100;
+            background: #6B21A8; color: #fff; font-weight: 700;
+            padding: 0.6rem 1rem; border-radius: 0.75rem; text-decoration: none;
+        }
+        .skip-link:focus { top: 1rem; }
+        #main:focus { outline: none; }
+        #menuToggle:focus-visible, .review-card iframe:focus-visible { outline: 3px solid #A855F7; outline-offset: 2px; }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto !important; }
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+        }
         @media (prefers-reduced-motion: reduce) {
             .fade-up {
                 opacity: 1;
@@ -844,6 +856,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased">
+    <a href="#main" class="skip-link">דילוג לתוכן הראשי</a>
 
     <!-- ============================================================ -->
     <!-- Navbar                                                       -->
@@ -897,16 +910,15 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.297-.497.099-.198.05-.371-.025-.52-.074-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                         </svg>
                     </a>
-                    <label for="menu-toggle" class="cursor-pointer p-1.5">
-                        <svg class="w-7 h-7 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button type="button" id="menuToggle" class="cursor-pointer p-1.5 rounded-lg" aria-label="פתיחת התפריט" aria-expanded="false" aria-controls="mobileMenu">
+                        <svg class="w-7 h-7 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"/>
                         </svg>
-                    </label>
+                    </button>
                 </div>
             </div>
 
-            <input type="checkbox" id="menu-toggle" class="hidden peer" />
-            <div class="mobile-menu hidden md:hidden flex-col bg-white border-t border-purple-100 py-5 px-5 space-y-4 font-semibold text-gray-700 peer-checked:flex">
+            <div id="mobileMenu" class="mobile-menu hidden md:hidden flex-col bg-white border-t border-purple-100 py-5 px-5 space-y-4 font-semibold text-gray-700">
                 <a href="#pain" class="hover:text-purple-700 transition py-1">מכירים את זה?</a>
                 <a href="#unique" class="hover:text-purple-700 transition py-1">השיטה שלנו</a>
                 <a href="#reviews" class="hover:text-purple-700 transition py-1">המלצות</a>
@@ -919,6 +931,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             </div>
         </div>
     </nav>
+    <main id="main" tabindex="-1">
 
     <!-- ============================================================ -->
     <!-- HERO                                                         -->
@@ -959,7 +972,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
             <!-- רצועת כיתות -->
             <div class="mb-10">
-                <p class="text-white/70 text-sm font-medium mb-3 uppercase tracking-widest">מתאים לכל הגילאים</p>
+                <p class="text-white text-sm font-medium mb-3">מתאים לכל הגילאים</p>
                 <div class="flex flex-wrap justify-center gap-2">
                     <span class="grade-pill">כיתה א׳–ו׳</span>
                     <span class="grade-pill">כיתה ז׳–ט׳</span>
@@ -1099,7 +1112,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                     <div class="review-card-inner">
                         <iframe
                             class="w-full rounded-2xl aspect-video mb-5"
-                            src="https://www.youtube.com/embed/ITjR5q0zYNA?rel=0&modestbranding=1&iv_load_policy=3&autoplay=0&playsinline=1"
+                            src="https://www.youtube.com/embed/ITjR5q0zYNA?rel=0&cc_load_policy=1&cc_lang_pref=iw&hl=iw&modestbranding=1&iv_load_policy=3&autoplay=0&playsinline=1"
                             title="אופק שהגיע אלינו להשלמת בגרויות לאחר שירות קרבי"
                             frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -1120,7 +1133,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                     <div class="review-card-inner">
                         <iframe
                             class="w-full rounded-2xl aspect-video mb-5"
-                            src="https://www.youtube.com/embed/md97Qd6cTiE?rel=0&modestbranding=1&iv_load_policy=3&autoplay=0&playsinline=1"
+                            src="https://www.youtube.com/embed/md97Qd6cTiE?rel=0&cc_load_policy=1&cc_lang_pref=iw&hl=iw&modestbranding=1&iv_load_policy=3&autoplay=0&playsinline=1"
                             title="ניקה המקסימה ממליצה על הליווי שלנו במתמטיקה"
                             frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -1141,7 +1154,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                     <div class="review-card-inner">
                         <iframe
                             class="w-full rounded-2xl aspect-video mb-5"
-                            src="https://www.youtube.com/embed/j4-qj6UzcRU?rel=0&modestbranding=1&iv_load_policy=3&autoplay=0&playsinline=1"
+                            src="https://www.youtube.com/embed/j4-qj6UzcRU?rel=0&cc_load_policy=1&cc_lang_pref=iw&hl=iw&modestbranding=1&iv_load_policy=3&autoplay=0&playsinline=1"
                             title="המלצה חמה מגלית – אחרי 5 חודשים של ליווי אישי לבן שלה"
                             frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -1411,7 +1424,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
                 <!-- ספרו על המצב -->
                 <div class="form-group">
-                    <label for="mathHistory" class="form-label">ספרו קצת על המצב הנוכחי <span style="font-weight:400;color:#9ca3af;font-size:0.85em">(אופציונלי)</span></label>
+                    <label for="mathHistory" class="form-label">ספרו קצת על המצב הנוכחי <span style="font-weight:400;color:#6b7280;font-size:0.85em">(אופציונלי)</span></label>
                     <textarea id="mathHistory" name="סיפור על המתמטיקה" rows="1" class="form-textarea" placeholder="למשל: כיתה ז׳, מתקשה עם שברים"></textarea>
                 </div>
 
@@ -1545,6 +1558,8 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     <!-- ============================================================ -->
     <!-- Footer — minimal premium                                      -->
     <!-- ============================================================ -->
+    </main>
+
     <footer class="mb-footer">
       <!-- Shimmer accent line on top -->
       <div class="mb-footer-accent"></div>
@@ -1593,7 +1608,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
           #7E22CE 75%,
           transparent 100%);
         background-size: 200% 100%;
-        animation: mb-shimmer 6s linear infinite;
+        animation: mb-shimmer 4s linear 1;
       }
       @keyframes mb-shimmer {
         from { background-position: 200% 0; }
@@ -2175,7 +2190,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         }
     </style>
     <div id="stickyCta" class="sticky-cta" aria-hidden="true">
-        <a href="#contact" class="sticky-cta__btn">
+        <a href="#contact" class="sticky-cta__btn" tabindex="-1">
             <span class="sticky-cta__icon">←</span>
             <span>לקביעת שיעור היכרות</span>
         </a>
@@ -2196,12 +2211,15 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
             function update(){
                 const pastHero = window.scrollY > (window.innerHeight * 0.6);
+                const link = cta.querySelector('a');
                 if (pastHero && !contactVisible) {
                     cta.classList.add('is-visible');
                     cta.setAttribute('aria-hidden', 'false');
+                    link.tabIndex = 0;
                 } else {
                     cta.classList.remove('is-visible');
                     cta.setAttribute('aria-hidden', 'true');
+                    link.tabIndex = -1; // hidden → not reachable by keyboard either
                 }
             }
 
@@ -2215,6 +2233,25 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             window.addEventListener('scroll', update, { passive: true });
             window.addEventListener('resize', update);
             update();
+        })();
+    </script>
+
+    <!-- ===== תפריט נייד: כפתור אמיתי (מקלדת + קורא מסך) ===== -->
+    <script>
+        (function(){
+            var btn = document.getElementById('menuToggle');
+            var menu = document.getElementById('mobileMenu');
+            if (!btn || !menu) return;
+            function setOpen(open){
+                menu.classList.toggle('is-open', open);
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+                btn.setAttribute('aria-label', open ? 'סגירת התפריט' : 'פתיחת התפריט');
+            }
+            btn.addEventListener('click', function(){ setOpen(btn.getAttribute('aria-expanded') !== 'true'); });
+            menu.addEventListener('click', function(e){ if (e.target.closest('a')) setOpen(false); });
+            document.addEventListener('keydown', function(e){
+                if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') { setOpen(false); btn.focus(); }
+            });
         })();
     </script>
 
