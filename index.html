@@ -2305,5 +2305,112 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         })();
     </script>
 
+    <!-- WhatsApp: before opening the chat, ask the grade and a convenient hour to call,
+         and put both into the prefilled message. "דלג" opens WhatsApp exactly as before. -->
+    <style>
+        .wac-scrim { position: fixed; inset: 0; z-index: 2147483000; background: rgba(31,20,51,.45); display: flex; align-items: flex-end; justify-content: center; }
+        .wac-scrim[hidden] { display: none; }
+        .wac-sheet { position: relative; width: 100%; max-width: 440px; max-height: 92vh; overflow-y: auto; background: #fff; border-radius: 22px 22px 0 0; padding: 10px 18px calc(18px + env(safe-area-inset-bottom)); font-family: 'Heebo', system-ui, sans-serif; color: #1f1433; animation: wac-up .22s ease-out; }
+        @media (min-width: 640px) { .wac-scrim { align-items: center; } .wac-sheet { border-radius: 22px; padding: 22px 24px 20px; } .wac-grab { display: none; } }
+        @keyframes wac-up { from { transform: translateY(24px); opacity: 0; } }
+        @media (prefers-reduced-motion: reduce) { .wac-sheet { animation: none; } }
+        .wac-grab { width: 40px; height: 4px; border-radius: 2px; background: #ddd; margin: 0 auto 12px; }
+        .wac-close { position: absolute; top: 10px; inset-inline-end: 10px; width: 40px; height: 40px; border: 0; border-radius: 50%; background: transparent; color: #6b6280; font-size: 22px; line-height: 1; cursor: pointer; }
+        .wac-close:hover { background: #f3f0f7; }
+        .wac-sheet h2 { margin: 0; font-size: 1.2rem; font-weight: 800; }
+        .wac-sub { margin: 4px 0 6px; color: #6b6280; font-size: .9rem; line-height: 1.5; }
+        .wac-label { font-size: .88rem; font-weight: 700; margin: 14px 0 8px; }
+        .wac-grades { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+        .wac-hours { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .wac-chip { font: inherit; font-size: .95rem; min-height: 44px; border-radius: 12px; border: 1px solid #E6E1EE; background: #fff; color: #1f1433; cursor: pointer; display: flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums; }
+        .wac-chip.wac-wide { grid-column: span 3; }
+        .wac-chip[aria-pressed="true"] { border-color: #7E22CE; background: #f3e8ff; color: #4c1d95; font-weight: 700; }
+        .wac-go { margin-top: 18px; width: 100%; min-height: 50px; border: 0; border-radius: 999px; background: #25D366; color: #fff; font: inherit; font-weight: 800; font-size: 1rem; display: flex; gap: 8px; align-items: center; justify-content: center; cursor: pointer; }
+        .wac-go:hover { background: #1fbe5a; }
+        .wac-go svg { width: 18px; height: 18px; fill: currentColor; }
+        .wac-skip { display: block; margin: 10px auto 0; background: none; border: 0; font: inherit; font-size: .88rem; color: #6b6280; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 8px; }
+        .wac-sheet button:focus-visible { outline: 2px solid #7E22CE; outline-offset: 2px; }
+    </style>
+    <div class="wac-scrim" id="wacScrim" hidden>
+        <div class="wac-sheet" role="dialog" aria-modal="true" aria-labelledby="wacTitle">
+            <div class="wac-grab"></div>
+            <button type="button" class="wac-close" id="wacClose" aria-label="סגירה">×</button>
+            <h2 id="wacTitle">שני פרטים, ונמשיך לוואטסאפ</h2>
+            <p class="wac-sub">כדי שנחזור אליכם מוכנים. אפשר גם לדלג.</p>
+            <div class="wac-label" id="wacGradeLabel">כיתה</div>
+            <div class="wac-grades" id="wacGrades" role="group" aria-labelledby="wacGradeLabel"></div>
+            <div class="wac-label" id="wacHourLabel">באיזו שעה נוח שנתקשר?</div>
+            <div class="wac-hours" id="wacHours" role="group" aria-labelledby="wacHourLabel"></div>
+            <button type="button" class="wac-go" id="wacGo">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Z"/></svg>
+                המשך לוואטסאפ
+            </button>
+            <button type="button" class="wac-skip" id="wacSkip">דלג ופתח וואטסאפ</button>
+        </div>
+    </div>
+    <script>
+        (function(){
+            var GRADES = ['א׳','ב׳','ג׳','ד׳','ה׳','ו׳','ז׳','ח׳','ט׳','י׳','י״א','י״ב','אחר'];
+            var HOURS = [[10,12],[12,14],[14,16],[16,18],[18,20],[20,22]];
+            var scrim = document.getElementById('wacScrim');
+            var state = { grade: null, hour: null, href: null, opener: null };
+
+            function chips(box, items, key, label, extraClass) {
+                items.forEach(function(v, i){
+                    var b = document.createElement('button');
+                    b.type = 'button'; b.className = 'wac-chip' + (extraClass ? ' ' + (extraClass(v) || '') : '');
+                    b.setAttribute('aria-pressed', 'false');
+                    b.innerHTML = label(v);
+                    b.addEventListener('click', function(){
+                        state[key] = state[key] === i ? null : i;
+                        box.querySelectorAll('.wac-chip').forEach(function(c, k){ c.setAttribute('aria-pressed', String(state[key] === k)); });
+                    });
+                    box.appendChild(b);
+                });
+            }
+            chips(document.getElementById('wacGrades'), GRADES, 'grade',
+                function(g){ return g === 'אחר' ? 'אחר / השלמות' : g; },
+                function(g){ return g === 'אחר' ? 'wac-wide' : ''; });
+            chips(document.getElementById('wacHours'), HOURS, 'hour',
+                function(h){ return '<span dir="ltr">' + h[0] + '–' + h[1] + '</span>'; });
+
+            function open(url) {
+                var w = window.open(url, '_blank');
+                if (w) w.opener = null; else location.href = url;
+            }
+            function close() {
+                scrim.hidden = true;
+                document.removeEventListener('keydown', onKey);
+                if (state.opener) state.opener.focus();
+            }
+            function onKey(e) {
+                if (e.key === 'Escape') return close();
+                if (e.key !== 'Tab') return;
+                var f = scrim.querySelectorAll('button'), first = f[0], last = f[f.length - 1];
+                if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+                else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+            }
+
+            document.addEventListener('click', function(e){
+                var a = e.target.closest && e.target.closest('a[href^="https://wa.me/"]');
+                if (!a || e.ctrlKey || e.metaKey || e.shiftKey) return;
+                e.preventDefault();
+                state.href = a.href; state.opener = a;
+                scrim.hidden = false;
+                document.addEventListener('keydown', onKey);
+                scrim.querySelector('.wac-chip').focus({ preventScroll: true });
+            });
+            scrim.addEventListener('click', function(e){ if (e.target === scrim) close(); });
+            document.getElementById('wacClose').addEventListener('click', close);
+            document.getElementById('wacSkip').addEventListener('click', function(){ close(); open(state.href); });
+            document.getElementById('wacGo').addEventListener('click', function(){
+                var lines = ['היי, אני רוצה שיעור הכרות.'];
+                if (state.grade != null) lines.push(GRADES[state.grade] === 'אחר' ? 'השלמות / אחר.' : 'כיתה ' + GRADES[state.grade] + '.');
+                if (state.hour != null) lines.push('נוח לי שתתקשרו בין ' + HOURS[state.hour][0] + ':00 ל־' + HOURS[state.hour][1] + ':00.');
+                var url = state.href.split('?')[0] + '?text=' + encodeURIComponent(lines.join('\n'));
+                close(); open(url);
+            });
+        })();
+    </script>
 </body>
 </html>
