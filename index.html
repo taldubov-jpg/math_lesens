@@ -117,25 +117,88 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
+      "@id": "https://www.mathboost.co.il/#website",
       "name": "MathBoost",
       "alternateName": "MathBoost מתמטיקה",
-      "url": "https://www.mathboost.co.il/"
+      "url": "https://www.mathboost.co.il/",
+      "inLanguage": "he",
+      "publisher": {
+        "@id": "https://www.mathboost.co.il/#organization"
+      }
     }
     </script>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "EducationalOrganization",
+      "@id": "https://www.mathboost.co.il/#organization",
       "name": "MathBoost",
+      "alternateName": "MathBoost מתמטיקה",
       "url": "https://www.mathboost.co.il/",
       "logo": "https://www.mathboost.co.il/favicon-512.png",
-      "description": "שיעורי מתמטיקה פרטיים אונליין מכיתה א׳ ועד בגרות",
-      "address": { "@type": "PostalAddress", "addressCountry": "IL" },
+      "description": "שיעורים פרטיים במתמטיקה, אחד על אחד ואונליין בלבד, מכיתה א׳ ועד הבגרות, כולל השלמת בגרויות וקורסי מבוא. מתחילים בשיעור היכרות ואבחון, עם מורה קבוע ותוכנית אישית.",
+      "email": "mathboost100@gmail.com",
+      "telephone": "+972-58-627-6476",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "IL"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Israel"
+      },
+      "knowsAbout": [
+        "מתמטיקה",
+        "הכנה לבגרות במתמטיקה",
+        "מתמטיקה 5 יחידות",
+        "השלמת בגרויות",
+        "שיעורים פרטיים אונליין"
+      ],
       "contactPoint": {
         "@type": "ContactPoint",
         "telephone": "+972-58-627-6476",
+        "email": "mathboost100@gmail.com",
         "contactType": "customer service",
-        "availableLanguage": "Hebrew"
+        "availableLanguage": "Hebrew",
+        "areaServed": "IL"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "@id": "https://www.mathboost.co.il/#service",
+      "name": "שיעורים פרטיים במתמטיקה אונליין",
+      "serviceType": "שיעורים פרטיים במתמטיקה",
+      "provider": {
+        "@id": "https://www.mathboost.co.il/#organization"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Israel"
+      },
+      "availableChannel": {
+        "@type": "ServiceChannel",
+        "serviceUrl": "https://www.mathboost.co.il/#contact",
+        "servicePhone": "+972-58-627-6476"
+      },
+      "audience": {
+        "@type": "EducationalAudience",
+        "educationalRole": "student",
+        "audienceType": "כיתות א׳–ו׳, כיתות ז׳–ט׳, כיתות י׳–י״ב והכנה לבגרות (כולל 5 יחידות), השלמת בגרויות, קורסי מבוא במתמטיקה"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "תוכניות MathBoost",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "name": "שיעור היכרות ואבחון (60 דקות)",
+            "description": "אבחון רמה, מיפוי פערים ובניית תוכנית אישית. מי שלא ממשיך לתוכנית מקבל החזר מלא על שיעור ההיכרות.",
+            "url": "https://www.mathboost.co.il/#contact"
+          }
+        ]
       }
     }
     </script>
@@ -146,18 +209,51 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "כמה עולה שיעור מתמטיקה פרטי אונליין?",
-          "acceptedAnswer": { "@type": "Answer", "text": "המחיר משתנה לפי כיתה וצרכים. צרו קשר לקבלת הצעת מחיר מותאמת." }
+          "name": "לאיזה גיל מתאים הליווי?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "לכל שכבת גיל — מכיתה א׳ ועד בגרות. בבית הספר היסודי אנחנו בונים בסיס חזק ומונעים צבירת פערים. בחטיבה אנחנו סוגרים פערים ומכינים לתיכון. בתיכון — הכנה ממוקדת לבגרות ולכל רמות הלימוד, כולל השלמות ומבוגרים."
+          }
         },
         {
           "@type": "Question",
-          "name": "לאיזה כיתות מתאים MathBoost?",
-          "acceptedAnswer": { "@type": "Answer", "text": "מכיתה א׳ ועד בגרות, כולל 5 יחידות לימוד ומחזורי השלמות למבוגרים." }
+          "name": "מה בדיוק קורה בשיעור ההכרות?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "המורה מתייחד עם התלמיד לשיחה מעמיקה — עוברים על מבחנים אחרונים, מזהים קשיים ספציפיים, עושים כמה תרגילים לאבחון, ובסוף בונים יחד תוכנית אישית. אם בסיום השיעור תחליטו שלא להמשיך לתוכנית הליווי — מקבלים את מלוא התשלום בחזרה."
+          }
         },
         {
           "@type": "Question",
-          "name": "איך מתחילים?",
-          "acceptedAnswer": { "@type": "Answer", "text": "ממלאים שאלון אבחון קצר באתר, ולאחר מכן טל יחזור אליכם לתיאום שיעור ניסיון." }
+          "name": "האם השיעורים פרונטליים או אונליין?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "כל השיעורים מתקיימים אונליין בלבד. זה מאפשר גמישות מלאה בשעות, נוחות מהבית וגישה למורים מנוסים מכל רחבי הארץ."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "האם יש זמינות של המורה מחוץ לשיעורים?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "כן. המורים זמינים בוואטסאפ גם אחרי השיעור. אם התלמיד נתקל בשאלה בין שיעור לשיעור — שולח הודעה והמורה עונה בהקדם."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "האם המורה משתנה במהלך הליווי?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "לא. המורה שמבצע את שיעור ההכרות הוא אותו מורה שמלווה את התלמיד לאורך כל התהליך. אנחנו מאמינים שיציבות ואמון הם חלק מהתוצאה."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "ניסינו כבר מורה פרטי — למה זה יעבוד הפעם?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "רוב המורים הפרטיים \"מסבירים את החומר של השבוע\". אנחנו קודם כל מוצאים מאיפה מגיע הקושי. לעיתים קרובות, מקור הבעיה אינו בחומר הנוכחי אלא בפערים שנצברו שנים קודם. ברגע שמזהים ומטפלים בשורש — הכל משתנה."
+          }
         }
       ]
     }
