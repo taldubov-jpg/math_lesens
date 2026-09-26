@@ -1172,7 +1172,8 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
       // Fire pixel events if available (consistent with main site form)
       try {
-        if (typeof window.fbq === 'function') window.fbq('track', 'Lead', {}, leadEventId ? { eventID: leadEventId } : undefined);
+        // A repeat submission is not a new lead — the CRM didn't send it to Meta, so neither does the browser.
+        if (typeof window.fbq === 'function' && !result.duplicate) window.fbq('track', 'Lead', {}, leadEventId ? { eventID: leadEventId } : undefined);
         if (typeof window.gtag === 'function') window.gtag('event', 'generate_lead', { event_category: 'quiz' });
         if (window.MathBoostTracking) window.MathBoostTracking.track('quiz_lead_submit_success', { quiz_session_id: quizSessionId });
       } catch {}
