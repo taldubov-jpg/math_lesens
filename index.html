@@ -262,7 +262,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Caveat:wght@700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Heebo', system-ui, -apple-system, sans-serif; scroll-behavior: smooth; }
 
@@ -1373,63 +1373,214 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
     </section>
 
     <!-- ============================================================ -->
-    <!-- המטרה האמיתית שלנו                                           -->
+    <!-- לוח משותף בשיעור — המורה והתלמיד כותבים על אותו לוח           -->
     <!-- ============================================================ -->
-    <section id="aim" class="py-20 sm:py-24 bg-white">
-        <div class="max-w-3xl mx-auto px-6 text-center">
+    <section id="board" class="sb" aria-labelledby="sb-title">
+        <style>
+            /* Scoped to #board (prefix sb-). The board rests on the solved state;
+               .sb-play (added when the section scrolls into view) runs three
+               rounds of the demo and then returns to rest. */
+            #board { --sb-teacher: #7E22CE; --sb-student: #C2410C; --sb-deep: #3B0764; --sb-muted: #5E5670; background: #FBF9FE; padding: 88px 20px; overflow: hidden; font-family: 'Heebo', sans-serif; }
+            #board * { box-sizing: border-box; }
+            #board .sb-wrap { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 5fr 7fr; grid-template-areas: "head board" "rest board"; column-gap: 64px; align-items: center; }
+            #board .sb-head { grid-area: head; align-self: end; }
+            #board .sb-rest { grid-area: rest; align-self: start; }
+            #board .sb-visual { grid-area: board; margin: 0; }
+            #board h2 { font-size: clamp(30px, 4vw, 44px); line-height: 1.2; font-weight: 800; color: var(--sb-deep); margin: 0 0 18px; }
+            #board h2 em { font-style: normal; color: var(--sb-teacher); white-space: nowrap; }
+            #board .sb-lead { font-size: 18px; line-height: 1.75; color: var(--sb-muted); margin: 0 0 32px; max-width: 44ch; }
+            #board .sb-points { list-style: none; margin: 0 0 36px; padding: 0; display: grid; gap: 20px; max-width: 46ch; }
+            #board .sb-points b { display: block; font-size: 17px; font-weight: 700; color: #1F1633; margin-bottom: 2px; }
+            #board .sb-points span { font-size: 15.5px; line-height: 1.65; color: var(--sb-muted); }
+            #board .sb-cta { display: inline-flex; align-items: center; min-height: 52px; padding: 0 28px; border-radius: 999px; background: var(--sb-teacher); color: #fff; font-weight: 700; font-size: 16px; text-decoration: none; }
+            #board .sb-cta:hover { background: #6B21A8; color: #fff; }
+            #board .sb-cta:focus-visible { outline: 3px solid #D8B4FE; outline-offset: 3px; }
 
-            <!-- כותרת + subtitle -->
-            <div class="fade-up mb-12">
-                <h2 class="text-4xl sm:text-5xl font-extrabold text-purple-900 mb-5 leading-tight">
-                    המטרה האמיתית שלנו
-                </h2>
-                <p class="text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
-                    אנחנו לא רק רוצים לשפר ציונים — אנחנו רוצים לבנות תהליך
-                    למידה נכון, כזה שמחזיר ביטחון ומפתח יכולות לאורך זמן.
-                </p>
+            #board .sb-call { background: #1E1A29; border-radius: 22px; padding: 12px; box-shadow: 0 30px 60px -30px rgba(59,7,100,.45); }
+            #board .sb-call-top { display: flex; align-items: center; gap: 8px; padding: 4px 8px 12px; color: #C9C3D6; font-size: 13px; }
+            #board .sb-call-top::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #34D399; }
+            #board .sb-call-body { display: grid; grid-template-columns: 1fr 132px; gap: 10px; direction: ltr; }
+            #board .sb-board { background: #fff; border-radius: 14px; overflow: hidden; }
+            #board .sb-board svg { display: block; width: 100%; height: auto; }
+            #board .sb-cams { display: grid; gap: 10px; align-content: start; direction: rtl; }
+            #board .sb-cam { position: relative; aspect-ratio: 4 / 3.4; border-radius: 12px; overflow: hidden; display: grid; place-items: center; }
+            #board .sb-cam-t { background: #2E1A45; }
+            #board .sb-cam-s { background: #3A2419; }
+            #board .sb-face { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 20px; color: #fff; transform: translateY(-10px); }
+            #board .sb-cam-t .sb-face { background: #9333EA; }
+            #board .sb-cam-s .sb-face { background: #C2410C; }
+            #board .sb-who { position: absolute; bottom: 6px; inset-inline-start: 8px; font-size: 12px; color: #fff; background: rgba(0,0,0,.4); padding: 2px 8px; border-radius: 999px; }
+            #board .sb-cam::after { content: ''; position: absolute; inset: 0; border-radius: 12px; }
+            #board .sb-caption { margin: 14px 4px 0; font-size: 14px; color: var(--sb-muted); display: flex; gap: 18px; flex-wrap: wrap; }
+            #board .sb-caption i { display: inline-block; width: 22px; height: 4px; border-radius: 2px; vertical-align: middle; margin-inline-end: 6px; }
+
+            /* resting state = the solved board */
+            #board .sb-hand { font-family: 'Caveat', cursive; font-weight: 700; }
+            #board .sb-reveal { transform-box: fill-box; transform-origin: left center; }
+            #board .sb-pop { transform-box: fill-box; transform-origin: center; }
+            #board .sb-draw { stroke-dasharray: 520; stroke-dashoffset: 0; }
+            #board #sb-parabola { stroke-dasharray: 720; stroke-dashoffset: 0; }
+            #board #sb-cur-t { transform: translate(548px, 140px); }
+            #board #sb-cur-s { transform: translate(318px, 330px); }
+
+            /* the demo: 16s × 3 */
+            #board.sb-play #sb-c1 { animation: sb-w1 16s 3; }
+            #board.sb-play #sb-c2 { animation: sb-w2 16s 3; }
+            #board.sb-play #sb-c3 { animation: sb-w3 16s 3; }
+            #board.sb-play #sb-c4 { animation: sb-w4 16s 3; }
+            #board.sb-play #sb-c5 { animation: sb-w5 16s 3; }
+            #board.sb-play .sb-ink { animation: sb-fade 16s 3; }
+            #board.sb-play #sb-axes { animation: sb-axes 16s 3; }
+            #board.sb-play #sb-check { animation: sb-check 16s 3; }
+            #board.sb-play #sb-circle { animation: sb-circle 16s 3; }
+            #board.sb-play #sb-parabola { animation: sb-parabola 16s 3; }
+            #board.sb-play .sb-pop { animation: sb-pop 16s 3; }
+            #board.sb-play #sb-cur-t { animation: sb-cur-t 16s 3; }
+            #board.sb-play #sb-cur-s { animation: sb-cur-s 16s 3; }
+            #board.sb-play .sb-cam-t::after { animation: sb-talk 16s 3; }
+            #board.sb-play .sb-cam-s::after { animation: sb-talk-s 16s 3; }
+
+            @keyframes sb-w1 { 0%, 3% { transform: scaleX(0); } 14%, 100% { transform: scaleX(1); } }
+            @keyframes sb-w2 { 0%, 19% { transform: scaleX(0); } 26%, 100% { transform: scaleX(1); } }
+            @keyframes sb-w3 { 0%, 29% { transform: scaleX(0); } 34%, 100% { transform: scaleX(1); } }
+            @keyframes sb-w4 { 0%, 49% { transform: scaleX(0); } 56%, 100% { transform: scaleX(1); } }
+            @keyframes sb-w5 { 0%, 72% { transform: scaleX(0); } 79%, 100% { transform: scaleX(1); } }
+            @keyframes sb-axes { 0%, 47% { opacity: 0; } 50%, 100% { opacity: 1; } }
+            @keyframes sb-check { 0%, 36% { stroke-dashoffset: 520; } 40%, 100% { stroke-dashoffset: 0; } }
+            @keyframes sb-circle { 0%, 40% { stroke-dashoffset: 520; } 45%, 100% { stroke-dashoffset: 0; } }
+            @keyframes sb-parabola { 0%, 57% { stroke-dashoffset: 720; } 66%, 100% { stroke-dashoffset: 0; } }
+            @keyframes sb-pop { 0%, 67% { transform: scale(0); } 71%, 100% { transform: scale(1); } }
+            @keyframes sb-fade { 0%, 93% { opacity: 1; } 99%, 100% { opacity: 0; } }
+            @keyframes sb-cur-t {
+                0% { transform: translate(60px, 70px); opacity: 0; }
+                3% { transform: translate(60px, 70px); opacity: 1; }
+                14% { transform: translate(285px, 96px); }
+                20%, 35% { transform: translate(300px, 40px); }
+                36% { transform: translate(175px, 228px); }
+                40% { transform: translate(222px, 214px); }
+                45% { transform: translate(150px, 300px); }
+                49% { transform: translate(362px, 48px); }
+                56% { transform: translate(570px, 62px); }
+                57% { transform: translate(392px, 140px); }
+                61.5% { transform: translate(470px, 372px); }
+                66%, 92% { transform: translate(548px, 140px); opacity: 1; }
+                97%, 100% { transform: translate(548px, 140px); opacity: 0; }
+            }
+            @keyframes sb-cur-s {
+                0%, 18% { transform: translate(60px, 150px); opacity: 0; }
+                19% { transform: translate(60px, 160px); opacity: 1; }
+                26% { transform: translate(190px, 176px); }
+                29% { transform: translate(60px, 236px); }
+                34% { transform: translate(160px, 256px); }
+                38%, 66% { transform: translate(318px, 330px); }
+                68% { transform: translate(418px, 264px); }
+                70% { transform: translate(522px, 264px); }
+                72% { transform: translate(540px, 338px); }
+                79% { transform: translate(622px, 350px); }
+                83%, 92% { transform: translate(318px, 330px); opacity: 1; }
+                97%, 100% { transform: translate(318px, 330px); opacity: 0; }
+            }
+            @keyframes sb-talk { 0%, 2% { box-shadow: none; } 3%, 14% { box-shadow: inset 0 0 0 3px #A855F7; } 15%, 35% { box-shadow: none; } 36%, 66% { box-shadow: inset 0 0 0 3px #A855F7; } 67%, 100% { box-shadow: none; } }
+            @keyframes sb-talk-s { 0%, 18% { box-shadow: none; } 19%, 34% { box-shadow: inset 0 0 0 3px #FB923C; } 35%, 67% { box-shadow: none; } 68%, 79% { box-shadow: inset 0 0 0 3px #FB923C; } 80%, 100% { box-shadow: none; } }
+
+            @media (max-width: 900px) {
+                #board { padding: 56px 16px; }
+                #board .sb-wrap { grid-template-columns: 1fr; grid-template-areas: "head" "board" "rest"; row-gap: 24px; }
+                #board .sb-lead { margin-bottom: 0; }
+                #board .sb-call-body { grid-template-columns: 1fr; }
+                #board .sb-cams { grid-template-columns: 1fr 1fr; order: -1; }
+                #board .sb-cam { aspect-ratio: 16 / 9; }
+                #board .sb-face { width: 40px; height: 40px; font-size: 17px; transform: translateY(-8px); }
+            }
+        </style>
+
+        <div class="sb-wrap">
+            <div class="sb-head">
+                <h2 id="sb-title">בשיעור, גם התלמיד <em>כותב על הלוח</em></h2>
+                <p class="sb-lead">השיעורים נעשים בשיחת וידאו עם לוח משותף. התלמיד פותר את התרגיל בעצמו על הלוח, והמורה כותב איתו על אותו לוח.</p>
             </div>
 
-            <!-- 3 ערכים — שורה אופקית עם אייקון + טקסט קצר -->
-            <div class="fade-up grid sm:grid-cols-3 gap-8 sm:gap-6">
-
-                <div class="text-center">
-                    <div class="w-12 h-12 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center mx-auto mb-4">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-gray-900 text-base mb-2">בגובה העיניים</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">
-                        בונים לכל תלמיד דרך למידה אישית בקצב שלו — עד שהוא חוזר להאמין ביכולת שלו.
-                    </p>
-                </div>
-
-                <div class="text-center">
-                    <div class="w-12 h-12 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center mx-auto mb-4">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="4"/>
-                            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-gray-900 text-base mb-2">חוויה חיובית</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">
-                        להפוך את המתמטיקה מחוויה מתסכלת לחוויה שמקדמת — לא רק לבגרות, אלא לכל החיים.
-                    </p>
-                </div>
-
-                <div class="text-center">
-                    <div class="w-12 h-12 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center mx-auto mb-4">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
-                        </svg>
-                    </div>
-                    <h3 class="font-bold text-gray-900 text-base mb-2">תוצאות שמחזיקות</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">
-                        כשהתהליך נכון — הציונים עולים באופן טבעי, מתהליך בריא ולא מלחץ של הרגע האחרון.
-                    </p>
-                </div>
+            <div class="sb-rest">
+                <ul class="sb-points">
+                    <li><b>רואים איפה הקושי מתחיל</b><span>המורה רואה את הפתרון נכתב שורה אחרי שורה, ועוצר בשלב שבו משהו לא ברור. שניהם במצלמה לאורך כל השיעור.</span></li>
+                    <li><b>הלוח נשלח לתלמיד אחרי השיעור</b><span>המורה יכול לשלוח לתלמיד את הלוח שעבדו עליו, לחזרה לפני מבחן.</span></li>
+                </ul>
+                <a class="sb-cta" href="#contact">לקביעת שיעור היכרות</a>
             </div>
+
+            <figure class="sb-visual">
+                <div class="sb-call" role="img" aria-label="הדגמה: המורה והתלמידה במצלמה, ופותרים יחד על לוח משותף משוואה ופונקציה">
+                    <div class="sb-call-top">שיעור מתמטיקה</div>
+                    <div class="sb-call-body">
+                        <div class="sb-board">
+                            <svg viewBox="0 0 640 400" aria-hidden="true">
+                                <defs>
+                                    <pattern id="sb-dots" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.4" fill="#E4DDEF"/></pattern>
+                                    <clipPath id="sb-clip1"><rect id="sb-c1" class="sb-reveal" x="40" y="60" width="270" height="70"/></clipPath>
+                                    <clipPath id="sb-clip2"><rect id="sb-c2" class="sb-reveal" x="40" y="140" width="170" height="70"/></clipPath>
+                                    <clipPath id="sb-clip3"><rect id="sb-c3" class="sb-reveal" x="40" y="220" width="150" height="70"/></clipPath>
+                                    <clipPath id="sb-clip4"><rect id="sb-c4" class="sb-reveal" x="350" y="30" width="260" height="56"/></clipPath>
+                                    <clipPath id="sb-clip5"><rect id="sb-c5" class="sb-reveal" x="535" y="315" width="100" height="60"/></clipPath>
+                                </defs>
+                                <rect width="640" height="400" fill="url(#sb-dots)"/>
+                                <g class="sb-ink">
+                                    <text class="sb-hand" x="50" y="112" font-size="46" fill="#7E22CE" clip-path="url(#sb-clip1)">2x + 6 = 14</text>
+                                    <text class="sb-hand" x="50" y="190" font-size="46" fill="#C2410C" clip-path="url(#sb-clip2)">2x = 8</text>
+                                    <text class="sb-hand" x="50" y="270" font-size="46" fill="#C2410C" clip-path="url(#sb-clip3)">x = 4</text>
+                                    <path id="sb-check" class="sb-draw" d="M184 250 l13 15 l28 -36" fill="none" stroke="#7E22CE" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <ellipse id="sb-circle" class="sb-draw" cx="100" cy="256" rx="66" ry="32" fill="none" stroke="#7E22CE" stroke-width="3.5" transform="rotate(-4 100 256)"/>
+                                    <g id="sb-axes" stroke="#B8AFC8" stroke-width="2" fill="none" stroke-linecap="round">
+                                        <path d="M345 270 H615 M608 264 l7 6 l-7 6"/>
+                                        <path d="M470 392 V110 M464 117 l6 -7 l6 7"/>
+                                    </g>
+                                    <text class="sb-hand" x="358" y="72" font-size="36" fill="#7E22CE" clip-path="url(#sb-clip4)">f(x) = x² − 4</text>
+                                    <path id="sb-parabola" d="M392 140 Q470 608 548 140" fill="none" stroke="#7E22CE" stroke-width="4" stroke-linecap="round"/>
+                                    <circle class="sb-pop" cx="418" cy="270" r="7" fill="#C2410C"/>
+                                    <circle class="sb-pop" cx="522" cy="270" r="7" fill="#C2410C"/>
+                                    <text class="sb-hand" x="540" y="362" font-size="36" fill="#C2410C" clip-path="url(#sb-clip5)">x = ±2</text>
+                                </g>
+                                <g id="sb-cur-t">
+                                    <path d="M0 0 L0 24 L7 18 L12 30 L17 28 L12 16 L21 16 Z" fill="#7E22CE" stroke="#fff" stroke-width="1.5"/>
+                                    <rect x="16" y="24" width="74" height="30" rx="15" fill="#7E22CE"/>
+                                    <text x="53" y="45" font-family="Heebo" font-size="17" font-weight="700" fill="#fff" text-anchor="middle">המורה</text>
+                                </g>
+                                <g id="sb-cur-s">
+                                    <path d="M0 0 L0 24 L7 18 L12 30 L17 28 L12 16 L21 16 Z" fill="#C2410C" stroke="#fff" stroke-width="1.5"/>
+                                    <rect x="16" y="24" width="64" height="30" rx="15" fill="#C2410C"/>
+                                    <text x="48" y="45" font-family="Heebo" font-size="17" font-weight="700" fill="#fff" text-anchor="middle">נועה</text>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="sb-cams">
+                            <div class="sb-cam sb-cam-t"><span class="sb-face">מ</span><span class="sb-who">המורה</span></div>
+                            <div class="sb-cam sb-cam-s"><span class="sb-face">נ</span><span class="sb-who">נועה</span></div>
+                        </div>
+                    </div>
+                </div>
+                <figcaption class="sb-caption">
+                    <span>הדגמה:</span>
+                    <span><i style="background:#7E22CE"></i>המורה בסגול</span>
+                    <span><i style="background:#C2410C"></i>התלמידה בכתום</span>
+                </figcaption>
+            </figure>
         </div>
+
+        <script>
+            // Play the demo when the board scrolls into view: three rounds (48s),
+            // then rest on the solved board. Never with reduced motion.
+            (function () {
+                var section = document.getElementById('board');
+                if (!section || !('IntersectionObserver' in window)) return;
+                if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                var io = new IntersectionObserver(function (entries) {
+                    if (!entries[0].isIntersecting) return;
+                    io.disconnect();
+                    section.classList.add('sb-play');
+                    setTimeout(function () { section.classList.remove('sb-play'); }, 48000);
+                }, { threshold: 0.35 });
+                io.observe(section.querySelector('.sb-call'));
+            })();
+        </script>
     </section>
 
     <!-- ============================================================ -->
