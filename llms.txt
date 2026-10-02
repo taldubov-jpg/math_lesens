@@ -43,7 +43,6 @@ MathBoost (mathboost.co.il) is an Israeli online private math tutoring service, 
 
 - [דף הבית](https://www.mathboost.co.il/): השירות, השיטה, המלצות ושאלות נפוצות.
 - [שאלון אבחון](https://www.mathboost.co.il/quiz/): שאלון קצר שעוזר להבין את הקושי ואת נקודת הפתיחה.
-- [משחקי מתמטיקה לפי כיתה](https://www.mathboost.co.il/games/): תרגול אינטראקטיבי בחינם.
 - [תנאי שימוש ושירות](https://www.mathboost.co.il/terms/): כולל מדיניות ביטולים והחזרים.
 - [מדיניות פרטיות](https://www.mathboost.co.il/privacy/)
 - [הצהרת נגישות](https://www.mathboost.co.il/accessibility/)
