@@ -2544,10 +2544,22 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         #deskNav a, .btn-cta-primary{ white-space:nowrap; }
         @media (max-width: 1150px){ #deskNav{ gap:1.1rem; font-size:.95rem; } }
         @media (min-width: 768px){ .sticky-cta{ display:none; } }
-        @media (max-width:640px){
-            .sticky-cta{ left:16px; right:16px; transform:translateY(24px); }
+        /* phones: a light app-style dock at the bottom; it slides away while the reader scrolls down */
+        .sticky-cta__wa{ display:none; }
+        @media (max-width:767px){
+            .sticky-cta{ left:0; right:0; bottom:0; display:flex; gap:10px; align-items:center;
+                         padding:10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+                         background:rgba(255,255,255,.9); -webkit-backdrop-filter:blur(14px) saturate(1.4); backdrop-filter:blur(14px) saturate(1.4);
+                         border-top:1px solid rgba(126,34,206,.12); box-shadow:0 -10px 30px -18px rgba(59,7,100,.35);
+                         transform:translateY(100%); }
             .sticky-cta.is-visible{ transform:translateY(0); }
-            .sticky-cta__btn{ width:100%; justify-content:center; padding:1rem; font-size:1.05rem; border-radius:1rem; }
+            .sticky-cta.is-visible.is-tucked{ transform:translateY(100%); opacity:0; pointer-events:none; }
+            .sticky-cta__btn{ flex:1; justify-content:center; height:50px; padding:0 18px; border-radius:14px; font-size:1rem;
+                              background:#7E22CE; box-shadow:0 8px 18px -10px rgba(126,34,206,.7); }
+            .sticky-cta__btn:hover{ transform:none; }
+            .sticky-cta__wa{ display:grid; place-items:center; flex:none; width:50px; height:50px; border-radius:14px;
+                             background:#F0FBF4; border:1px solid #CDEFD9; color:#128C4B; }
+            .sticky-cta__wa svg{ width:22px; height:22px; }
         }
     </style>
     <div id="stickyCta" class="sticky-cta" aria-hidden="true">
@@ -2555,13 +2567,16 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             <span class="sticky-cta__icon">←</span>
             <span>לקביעת שיעור היכרות</span>
         </a>
+        <a href="https://wa.me/972586276476?text=%D7%94%D7%99%D7%99%2C%20%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%A9%D7%99%D7%A2%D7%95%D7%A8%20%D7%94%D7%99%D7%9B%D7%A8%D7%95%D7%AA" class="sticky-cta__wa" target="_blank" rel="noopener" tabindex="-1" aria-label="פנו אלינו בוואטסאפ">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        </a>
     </div>
     <script>
         (function(){
             const cta = document.getElementById('stickyCta');
             const contact = document.getElementById('contact');
             if (!cta || !contact) return;
-            let contactVisible = false;
+            let contactVisible = false, tucked = false, lastY = window.scrollY, idle = null;
 
             if ('IntersectionObserver' in window) {
                 new IntersectionObserver((entries) => {
@@ -2572,15 +2587,16 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
 
             function update(){
                 const pastHero = window.scrollY > (window.innerHeight * 0.6);
-                const link = cta.querySelector('a');
+                const links = cta.querySelectorAll('a');
+                cta.classList.toggle('is-tucked', tucked);
                 if (pastHero && !contactVisible) {
                     cta.classList.add('is-visible');
                     cta.setAttribute('aria-hidden', 'false');
-                    link.tabIndex = 0;
+                    links.forEach(l => { l.tabIndex = 0; });
                 } else {
                     cta.classList.remove('is-visible');
                     cta.setAttribute('aria-hidden', 'true');
-                    link.tabIndex = -1; // hidden → not reachable by keyboard either
+                    links.forEach(l => { l.tabIndex = -1; }); // hidden → not reachable by keyboard either
                 }
             }
 
@@ -2591,7 +2607,16 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 if (window.matchMedia('(hover: hover)').matches) window.setTimeout(() => document.getElementById('fullName')?.focus({ preventScroll: true }), 600);
             });
 
-            window.addEventListener('scroll', update, { passive: true });
+            cta.addEventListener('focusin', () => { tucked = false; update(); }); // keyboard focus always shows it
+            // Scrolling down = reading: tuck the button away. Scrolling up, or pausing, brings it back.
+            window.addEventListener('scroll', () => {
+                const y = window.scrollY;
+                if (y > lastY + 6) tucked = true; else if (y < lastY - 6) tucked = false;
+                lastY = y;
+                clearTimeout(idle);
+                idle = setTimeout(() => { tucked = false; update(); }, 900);
+                update();
+            }, { passive: true });
             window.addEventListener('resize', update);
             update();
         })();
@@ -2634,6 +2659,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
         .cookie-note button:focus-visible{ outline:3px solid #A855F7; outline-offset:2px; }
         /* keep the floating CTA above the note while it is open */
         body.cookie-note-open .sticky-cta{ bottom:calc(var(--cookie-note-h, 64px) + 20px); }
+        @media (max-width:767px){ body.cookie-note-open .sticky-cta{ display:none; } } /* one bottom bar at a time on phones */
     </style>
     <div id="cookieNote" class="cookie-note" role="region" aria-label="הודעה על עוגיות" hidden>
         <p style="margin:0">האתר משתמש בעוגיות ובקודי מדידה של Meta, Google ו-TikTok למדידה ולפרסום. <a href="/privacy/#cookies">פרטים ואפשרויות</a></p>
