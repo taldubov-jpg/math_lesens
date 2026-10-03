@@ -1485,6 +1485,110 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 </div>
 
             </div>
+
+            <!-- הודעות מהוואטסאפ: קרוסלה -->
+            <div class="wa" id="waReviews" role="region" aria-roledescription="קרוסלה" aria-labelledby="waTitle">
+                <style>
+                    /* Scoped to .wa. The current message sits large in the middle, its neighbours
+                       smaller and faded at the sides. Turns every 5s while on screen; the mouse resting on it
+                       pauses it, and clicking, swiping or keyboard focus stops it for good. */
+                    .wa { margin-top: 80px; padding: 56px 0 44px; border-radius: 32px; overflow: hidden;
+                          background: #fff; border: 1px solid #EFE7F8; }
+                    .wa h3 { margin: 0 0 36px; padding: 0 20px; text-align: center; font-size: clamp(24px, 2.8vw, 32px); font-weight: 800; color: #3B0764; }
+                    .wa-stage { display: grid; place-items: center; touch-action: pan-y; }
+                    .wa-slide { grid-area: 1 / 1; width: min(470px, 80vw); margin: 0; border-radius: 22px; overflow: hidden; background: #fff;
+                                border: 1px solid #E9DDF7; box-shadow: 0 30px 60px -30px rgba(59, 7, 100, .55), 0 2px 8px rgba(59, 7, 100, .08);
+                                transition: transform .65s cubic-bezier(.22,.8,.24,1), opacity .65s, filter .65s; cursor: pointer; }
+                    .wa-slide img { display: block; width: 100%; height: auto; pointer-events: none; user-select: none; }
+                    .wa-slide[data-o="0"]  { transform: none; z-index: 3; cursor: default; }
+                    /* RTL: the next message waits on the left, the previous one on the right */
+                    .wa-slide[data-o="1"]  { transform: translateX(-74%) scale(.78); opacity: .5; filter: saturate(.7); z-index: 2; }
+                    .wa-slide[data-o="-1"] { transform: translateX(74%) scale(.78); opacity: .5; filter: saturate(.7); z-index: 2; }
+                    .wa-slide[data-o="2"]  { transform: scale(.6); opacity: 0; z-index: 1; pointer-events: none; }
+                    .wa-slide:not([data-o="0"]):hover { opacity: .75; }
+                    .wa-ctrl { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 34px; }
+                    .wa-btn { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; border: 1px solid #D8C7F0; background: #fff;
+                              color: #6B21A8; font-size: 20px; line-height: 1; cursor: pointer; transition: background-color .2s, border-color .2s; }
+                    .wa-btn:hover { background: #FAF5FF; border-color: #B79BE3; }
+                    .wa-dots { display: flex; gap: 2px; }
+                    .wa-dots button { position: relative; width: 24px; height: 24px; padding: 0; border: 0; background: none; cursor: pointer; }
+                    .wa-dots button::after { content: ''; position: absolute; top: 50%; right: 50%; width: 9px; height: 9px; border-radius: 999px; background: #D8C7F0;
+                                             transform: translate(50%, -50%); transition: width .3s, background-color .3s; }
+                    .wa-dots button[aria-current="true"] { width: 38px; }
+                    .wa-dots button[aria-current="true"]::after { width: 28px; background: #7E22CE; }
+                    .wa-btn:focus-visible, .wa-dots button:focus-visible, .wa-slide:focus-visible { outline: 2px solid #7E22CE; outline-offset: 3px; }
+                    @media (max-width: 600px) {
+                        .wa { margin-top: 56px; padding: 40px 0 32px; border-radius: 24px; }
+                        .wa h3 { margin-bottom: 26px; font-size: 22px; }
+                        .wa-slide[data-o="1"]  { transform: translateX(-72%) scale(.8); opacity: .45; }
+                        .wa-slide[data-o="-1"] { transform: translateX(72%) scale(.8); opacity: .45; }
+                    }
+                    @media (prefers-reduced-motion: reduce) { .wa-slide { transition: none; } }
+                </style>
+                <h3 id="waTitle">רגעים ששיתפו איתנו הורים ותלמידים</h3>
+                <div class="wa-stage">
+                    <figure class="wa-slide" data-o="0" role="group" aria-roledescription="שקופית" aria-label="1 מתוך 4"><img src="/reviews/wa-1.jpg" width="720" height="554" loading="lazy" decoding="async" alt="הודעת וואטסאפ מהורים: צילום ממשו״ב עם 100 בבגרות במתמטיקה, בציון השנתי ובמבחן"></figure>
+                    <figure class="wa-slide" data-o="1" role="group" aria-roledescription="שקופית" aria-label="2 מתוך 4"><img src="/reviews/wa-2.jpg" width="720" height="603" loading="lazy" decoding="async" alt="הודעת וואטסאפ: 100 במתכונת במתמטיקה, ותלמיד שכותב למורה: תודה על העזרה, אתה מורה טוב נקודה"></figure>
+                    <figure class="wa-slide" data-o="2" role="group" aria-roledescription="שקופית" aria-label="3 מתוך 4"><img src="/reviews/wa-3.jpg" width="720" height="541" loading="lazy" decoding="async" alt="הודעת וואטסאפ מהורה: טל היקר, אתם נהדרים. תודה רבה רבה על הליווי המקצועי והאחראי"></figure>
+                    <figure class="wa-slide" data-o="-1" role="group" aria-roledescription="שקופית" aria-label="4 מתוך 4"><img src="/reviews/wa-4.jpg" width="720" height="555" loading="lazy" decoding="async" alt="הודעת וואטסאפ מהורה: תודה רבה מקרב לב על העזרה והדחיפה בתהליך ועל המורים המסורים שלכם"></figure>
+                </div>
+                <div class="wa-ctrl">
+                    <button type="button" class="wa-btn" data-dir="-1" aria-label="ההודעה הקודמת">→</button>
+                    <div class="wa-dots"></div>
+                    <button type="button" class="wa-btn" data-dir="1" aria-label="ההודעה הבאה">←</button>
+                </div>
+                <script>
+                    (function () {
+                        var box = document.getElementById('waReviews');
+                        if (!box) return;
+                        var slides = [].slice.call(box.querySelectorAll('.wa-slide'));
+                        var n = slides.length, cur = 0, timer = null, touched = false;
+                        var dotsBox = box.querySelector('.wa-dots');
+                        var dots = slides.map(function (s, i) {
+                            var d = document.createElement('button');
+                            d.type = 'button'; d.setAttribute('aria-label', 'הודעה ' + (i + 1) + ' מתוך ' + n);
+                            d.addEventListener('click', function () { stop(); show(i); });
+                            dotsBox.appendChild(d); return d;
+                        });
+                        function show(i) {
+                            cur = (i + n) % n;
+                            slides.forEach(function (s, k) {
+                                var o = (k - cur + n) % n; if (o > n / 2) o -= n;   // shortest way round: -1, 0, 1, 2
+                                s.setAttribute('data-o', o);
+                                s.setAttribute('aria-hidden', o === 0 ? 'false' : 'true');
+                            });
+                            dots.forEach(function (d, k) { d.setAttribute('aria-current', k === cur ? 'true' : 'false'); });
+                        }
+                        function stop() { touched = true; clearInterval(timer); timer = null; }
+                        box.querySelectorAll('.wa-btn').forEach(function (b) {
+                            b.addEventListener('click', function () { stop(); show(cur + +b.getAttribute('data-dir')); });
+                        });
+                        var swiped = false;
+                        slides.forEach(function (s, k) { s.addEventListener('click', function () { if (swiped) { swiped = false; return; } if (k !== cur) { stop(); show(k); } }); });
+                        // swipe on phones (RTL: swiping left brings the next message)
+                        var stage = box.querySelector('.wa-stage'), x0 = null;
+                        stage.addEventListener('pointerdown', function (e) { x0 = e.clientX; stop(); });
+                        stage.addEventListener('pointerup', function (e) {
+                            if (x0 === null) return; var dx = e.clientX - x0; x0 = null;
+                            swiped = Math.abs(dx) > 40; if (swiped) show(cur + (dx < 0 ? 1 : -1));
+                        });
+                        box.addEventListener('focusin', stop);
+                        show(0);
+                        if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                        if (!('IntersectionObserver' in window)) return;
+                        var seen = false, over = false;
+                        function run() {
+                            var want = seen && !over && !touched;
+                            if (want && !timer) timer = setInterval(function () { show(cur + 1); }, 5000);
+                            else if (!want && timer) { clearInterval(timer); timer = null; }
+                        }
+                        // the mouse resting on the carousel pauses it while someone reads
+                        box.addEventListener('mouseenter', function () { over = true; run(); });
+                        box.addEventListener('mouseleave', function () { over = false; run(); });
+                        new IntersectionObserver(function (e) { seen = e[0].isIntersecting; run(); }, { threshold: 0.5 }).observe(stage);
+                    })();
+                </script>
+            </div>
         </div>
     </section>
 
