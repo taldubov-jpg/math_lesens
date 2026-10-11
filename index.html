@@ -2663,6 +2663,17 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 note.hidden = true;
                 document.body.classList.remove('cookie-note-open');
             });
+            // On phones the note and the bottom dock share one strip. Most visitors never tap
+            // "הבנתי", so the dock stayed hidden for them: step aside once they start scrolling.
+            if (window.matchMedia('(max-width:767px)').matches) {
+                window.addEventListener('scroll', function onScroll(){
+                    if (dismissed || window.scrollY < 120) return;
+                    dismissed = true;
+                    note.hidden = true;
+                    document.body.classList.remove('cookie-note-open');
+                    window.removeEventListener('scroll', onScroll);
+                }, { passive: true });
+            }
             // Never cover the contact form: step aside while it is on screen.
             var contact = document.getElementById('contact');
             if (contact && 'IntersectionObserver' in window) {
