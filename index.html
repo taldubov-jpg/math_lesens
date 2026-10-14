@@ -1750,7 +1750,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                         <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400" style="pointer-events:none;">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                         </span>
-                        <input type="tel" id="phone" name="טלפון" required pattern="^05[0-9]{8}$|^0[2-9][0-9]{7}$" title="מספר טלפון ישראלי תקין" class="form-input" placeholder="050-000-0000" style="padding-right: 2.5rem; direction: ltr; text-align: right;">
+                        <input type="tel" id="phone" name="טלפון" required inputmode="numeric" pattern="^0[0-9]{9}$" title="מספר טלפון של 10 ספרות" class="form-input" placeholder="050-000-0000" style="padding-right: 2.5rem; direction: ltr; text-align: right;">
                     </div>
                 </div>
                 </div>
@@ -2841,6 +2841,90 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             if (d.readyState === 'complete') scheduleTikTok();
             else w.addEventListener('load', scheduleTikTok, { once: true });
         })(window, document, 'ttq');
+    </script>
+
+    <!-- Phones: "לקביעת שיעור היכרות" opens the contact form in a bottom sheet instead of scrolling
+         ~9 screens down. It is the same <form> element, moved into the sheet and back, so submit,
+         validation, tracking and the Meta Lead dedup all stay exactly as they are. -->
+    <style>
+        .form-sheet .wac-sheet h2 { margin: 0 0 10px; color: #3B0764; }
+        .form-sheet form { box-shadow: none !important; border: 0 !important; padding: 0 !important; opacity: 1 !important; transform: none !important; }
+        .form-sheet .form-sheet-wa { display: flex; justify-content: center; margin-top: 14px; }
+    </style>
+    <div class="wac-scrim form-sheet" id="formScrim" hidden>
+        <div class="wac-sheet" role="dialog" aria-modal="true" aria-labelledby="formSheetTitle">
+            <div class="wac-grab"></div>
+            <button type="button" class="wac-close" id="formSheetClose" aria-label="סגירה">×</button>
+            <h2 id="formSheetTitle">השאירו פרטים, ונחזור אליכם עוד היום</h2>
+            <div id="formSheetBody"></div>
+            <div class="form-sheet-wa" id="formSheetWa"></div>
+        </div>
+    </div>
+    <script type="module">
+        (function(){
+            var phone = window.matchMedia('(max-width:767px)');
+            var scrim = document.getElementById('formScrim');
+            var body = document.getElementById('formSheetBody');
+            var contact = document.getElementById('contact');
+            var form = contact && contact.querySelector('form');
+            // Phone must be exactly 10 digits: keep digits only as they type (a pasted +972 becomes 0…)
+            // and say so in Hebrew instead of the browser's generic "match the format".
+            var tel = document.getElementById('phone');
+            if (tel) {
+                var check = function(){
+                    var n = tel.value.length;
+                    tel.setCustomValidity(!n || /^0\d{9}$/.test(tel.value) ? '' : 'מספר הטלפון צריך להכיל 10 ספרות (כרגע ' + n + ')');
+                };
+                tel.addEventListener('input', function(){
+                    var d = tel.value.replace(/\D/g, '');
+                    if (d.indexOf('972') === 0) d = '0' + d.slice(3);
+                    tel.value = d;
+                    check();
+                });
+                check();
+            }
+            if (!scrim || !form) return;
+            var home = document.createComment('form-home'), opener = null;
+            // The same "or WhatsApp" option that sits under the form on the page. Closing first lets
+            // the existing WhatsApp sheet (grade + call hour) open on top as usual.
+            var wa = contact.querySelector('.btn-whatsapp-inline');
+            if (wa) {
+                var waBox = wa.parentNode.cloneNode(true);
+                document.getElementById('formSheetWa').appendChild(waBox);
+                waBox.querySelector('a').addEventListener('click', function(){ close(); });
+            }
+
+            function open(from) {
+                opener = from;
+                form.parentNode.insertBefore(home, form);
+                body.appendChild(form);
+                scrim.hidden = false;
+                document.documentElement.style.overflow = 'hidden';
+            }
+            function close() {
+                if (scrim.hidden) return;
+                home.parentNode.insertBefore(form, home);
+                home.remove();
+                scrim.hidden = true;
+                document.documentElement.style.overflow = '';
+                if (opener) opener.focus({ preventScroll: true });
+            }
+
+            // Capture phase: runs before the links' own scroll handlers, which are muted for this one click.
+            document.addEventListener('click', function(e){
+                var a = e.target.closest && e.target.closest('a[href="#contact"], [onclick*="getElementById(\'contact\')"]');
+                if (!a || !phone.matches || a.closest('#contact')) return;
+                e.preventDefault();
+                var scroll = contact.scrollIntoView;
+                contact.scrollIntoView = function(){};
+                setTimeout(function(){ contact.scrollIntoView = scroll; }, 0);
+                open(a);
+            }, true);
+
+            document.getElementById('formSheetClose').addEventListener('click', close);
+            scrim.addEventListener('click', function(e){ if (e.target === scrim) close(); });
+            document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
+        })();
     </script>
 </body>
 </html>
