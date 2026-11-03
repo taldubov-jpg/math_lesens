@@ -1736,60 +1736,68 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 class="fade-up lg:col-start-2 lg:row-start-1 lg:row-span-2"
                 style="background: #FFFFFF; border: 1px solid rgba(126,34,206,0.12); border-radius: 1.75rem; padding: 1.1rem 1.25rem 1.1rem; box-shadow: 0 20px 60px -15px rgba(109,40,217,0.18), 0 0 0 1px rgba(255,255,255,0.4);"
             >
-                <!-- שם + טלפון באותה שורה (מ-360px) -->
+                <!-- שם פרטי ושם משפחה — שניהם חובה -->
                 <div class="field-pair grid grid-cols-1 min-[360px]:grid-cols-2 gap-x-3">
-                <!-- שם מלא -->
-                <div class="form-group">
-                    <label for="fullName" class="form-label">שם מלא</label>
-                    <div class="relative">
-                        <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400" style="pointer-events:none;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                        </span>
-                        <input type="text" id="fullName" name="שם" required class="form-input" placeholder="שם ומשפחה" style="padding-right: 2.5rem;">
+                    <div class="form-group">
+                        <label for="firstName" class="form-label">שם פרטי</label>
+                        <div class="relative">
+                            <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400" style="pointer-events:none;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            </span>
+                            <input type="text" id="firstName" name="שם פרטי" required autocomplete="given-name" maxlength="50" class="form-input" placeholder="שם פרטי" style="padding-right: 2.5rem;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName" class="form-label">שם משפחה</label>
+                        <div class="relative">
+                            <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400" style="pointer-events:none;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            </span>
+                            <input type="text" id="lastName" name="שם משפחה" required autocomplete="family-name" maxlength="50" class="form-input" placeholder="שם משפחה" style="padding-right: 2.5rem;">
+                        </div>
                     </div>
                 </div>
 
-                <!-- טלפון -->
-                <div class="form-group">
-                    <label for="phone" class="form-label">מספר טלפון</label>
-                    <div class="relative">
-                        <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400" style="pointer-events:none;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                        </span>
-                        <input type="tel" id="phone" name="טלפון" required inputmode="numeric" pattern="^0[0-9]{9}$" title="מספר טלפון של 10 ספרות" class="form-input" placeholder="050-000-0000" style="padding-right: 2.5rem; direction: ltr; text-align: right;">
+                <!-- טלפון וכיתה באותה שורה -->
+                <div class="field-pair grid grid-cols-1 min-[360px]:grid-cols-2 gap-x-3">
+                    <div class="form-group">
+                        <label for="phone" class="form-label">מספר טלפון</label>
+                        <div class="relative">
+                            <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400" style="pointer-events:none;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 1 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            </span>
+                            <input type="tel" id="phone" name="טלפון" required autocomplete="tel" inputmode="numeric" pattern="^0[0-9]{9}$" title="מספר טלפון של 10 ספרות" class="form-input" placeholder="050-000-0000" style="padding-right: 2.5rem; direction: ltr; text-align: right;">
+                        </div>
                     </div>
-                </div>
-                </div>
-
-                <!-- כיתה — select קומפקטי -->
-                <div class="form-group">
-                    <label for="grade" class="form-label">באיזו כיתה הלומד/ת?</label>
-                    <div class="relative">
-                        <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 z-10" style="pointer-events:none;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-                        </span>
-                        <select id="grade" name="כיתה" required class="form-select" style="padding-right: 2.5rem;">
-                            <option value="" disabled selected>בחרו כיתה</option>
-                            <optgroup label="יסודי">
-                                <option value="א׳">א׳</option>
-                                <option value="ב׳">ב׳</option>
-                                <option value="ג׳">ג׳</option>
-                                <option value="ד׳">ד׳</option>
-                                <option value="ה׳">ה׳</option>
-                                <option value="ו׳">ו׳</option>
-                            </optgroup>
-                            <optgroup label="חטיבה">
-                                <option value="ז׳">ז׳</option>
-                                <option value="ח׳">ח׳</option>
-                                <option value="ט׳">ט׳</option>
-                            </optgroup>
-                            <optgroup label="תיכון ובגרות">
-                                <option value="י׳">י׳</option>
-                                <option value="י״א">י״א</option>
-                                <option value="י״ב">י״ב</option>
-                                <option value="אחר">אחר / השלמות</option>
-                            </optgroup>
-                        </select>
+                    <div class="form-group">
+                        <label for="grade" class="form-label">באיזו כיתה הלומד/ת?</label>
+                        <div class="relative">
+                            <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 z-10" style="pointer-events:none;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                            </span>
+                            <select id="grade" name="כיתה" required class="form-select" style="padding-right: 2.5rem;">
+                                <option value="" disabled selected>בחרו כיתה</option>
+                                <optgroup label="יסודי">
+                                    <option value="א׳">א׳</option>
+                                    <option value="ב׳">ב׳</option>
+                                    <option value="ג׳">ג׳</option>
+                                    <option value="ד׳">ד׳</option>
+                                    <option value="ה׳">ה׳</option>
+                                    <option value="ו׳">ו׳</option>
+                                </optgroup>
+                                <optgroup label="חטיבה">
+                                    <option value="ז׳">ז׳</option>
+                                    <option value="ח׳">ח׳</option>
+                                    <option value="ט׳">ט׳</option>
+                                </optgroup>
+                                <optgroup label="תיכון ובגרות">
+                                    <option value="י׳">י׳</option>
+                                    <option value="י״א">י״א</option>
+                                    <option value="י״ב">י״ב</option>
+                                    <option value="אחר">אחר / השלמות</option>
+                                </optgroup>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -1840,7 +1848,28 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             (function initSubmitUX(){
                 const form = document.getElementById('grade') ? document.getElementById('grade').closest('form') : null;
                 if (!form) return;
-                form.addEventListener('submit', () => {
+                const requiredNameFields = [
+                    document.getElementById('firstName'),
+                    document.getElementById('lastName')
+                ].filter(Boolean);
+
+                requiredNameFields.forEach((field) => {
+                    field.addEventListener('input', () => field.setCustomValidity(''));
+                });
+
+                form.addEventListener('submit', (event) => {
+                    const missingNameField = requiredNameFields.find((field) => !field.value.trim());
+                    if (missingNameField) {
+                        event.preventDefault();
+                        missingNameField.setCustomValidity('יש למלא את השדה הזה');
+                        missingNameField.reportValidity();
+                        missingNameField.focus();
+                        return;
+                    }
+
+                    requiredNameFields.forEach((field) => {
+                        field.value = field.value.trim();
+                    });
                     const btn = form.querySelector('button[type="submit"]');
                     if (btn && !btn.dataset.sending) {
                         btn.dataset.sending = '1';
@@ -2351,7 +2380,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
             const activeTrack = diagnosticTracks[diagnosticState.trackKey];
             const gradeField = document.getElementById('grade');
             const historyField = document.getElementById('mathHistory');
-            const firstNameField = document.getElementById('fullName');
+            const firstNameField = document.getElementById('firstName');
             const contactSection = document.getElementById('contact');
             const diagnosticNote = diagnosticElements.leadButton.dataset.diagnosticNote;
 
@@ -2591,7 +2620,7 @@ src="https://www.facebook.com/tr?id=1651905856154869&ev=PageView&noscript=1"
                 e.preventDefault();
                 contact.scrollIntoView({ behavior: 'smooth' });
                 // On touch screens the keyboard would cover half the form — only auto-focus with a mouse.
-                if (window.matchMedia('(hover: hover)').matches) window.setTimeout(() => document.getElementById('fullName')?.focus({ preventScroll: true }), 600);
+                if (window.matchMedia('(hover: hover)').matches) window.setTimeout(() => document.getElementById('firstName')?.focus({ preventScroll: true }), 600);
             });
 
             cta.addEventListener('focusin', () => { tucked = false; update(); }); // keyboard focus always shows it
